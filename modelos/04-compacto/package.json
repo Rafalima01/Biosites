@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Modelo 04 · Compacto — biblioteca de bio sites premium (demo: Bianca Moraes)",
+  "homepage": "https://biosite-04-compacto.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=18"

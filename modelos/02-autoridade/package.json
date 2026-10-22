@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Modelo 02 · Autoridade — biblioteca de bio sites premium (demo: Agatha Rigazzi)",
+  "homepage": "https://biosite-02-autoridade.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=18"

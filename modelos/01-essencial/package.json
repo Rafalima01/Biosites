@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Modelo 01 · Essencial — biblioteca de bio sites premium (demo: Studio Suelen Bezerra)",
+  "homepage": "https://biosite-01-essencial.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=18"

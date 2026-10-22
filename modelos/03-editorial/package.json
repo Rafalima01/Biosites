@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Modelo 03 · Editorial — biblioteca de bio sites premium (demo: Marina Albuquerque)",
+  "homepage": "https://biosite-03-editorial.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=18"
