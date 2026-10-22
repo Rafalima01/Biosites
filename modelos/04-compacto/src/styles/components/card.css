@@ -1,0 +1,415 @@
+/*
+ * Cartão de visita digital: foto do studio no topo, retrato em moldura circular
+ * sobre a faixa marrom, logotipo, quatro botões, texto e barra de redes.
+ * Medidas em `cqi` (largura do cartão) para manter as proporções da referência.
+ */
+.page {
+  max-width: var(--column);
+  margin-inline: auto;
+  min-height: 100vh;
+  background: var(--color-brown);
+  overflow: hidden;
+}
+
+/* Capa */
+.cover {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: var(--color-cream-deep);
+}
+
+.cover__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(243, 232, 217, 0.1), rgba(107, 55, 38, 0.18));
+  pointer-events: none;
+}
+
+.cover__monogram {
+  position: absolute;
+  z-index: 1;
+  right: -4%;
+  top: 2%;
+  width: 52%;
+  height: auto;
+  color: rgba(255, 248, 238, 0.75);
+}
+
+.monogram__letter {
+  font-family: var(--font-display);
+  font-size: 150px;
+  font-weight: 400;
+}
+
+/* Cartão */
+.card {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, var(--color-brown) 0%, var(--color-brown-deep) 100%);
+}
+
+/* Retrato esmaecido ao fundo, como na referência */
+.card__ghost {
+  position: absolute;
+  right: -34%;
+  top: 46%;
+  width: 95%;
+  height: auto;
+  opacity: 0.05;
+  filter: grayscale(1) sepia(0.4);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+
+/* Faixa + moldura do retrato */
+.profile {
+  position: relative;
+  width: 100%;
+  height: 38cqi;
+}
+
+.profile__band {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 10cqi;
+  background: var(--color-band);
+  box-shadow: 0 6px 12px -8px rgba(30, 10, 4, 0.6);
+}
+
+.profile__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5.2cqi;
+  height: 1.5px;
+  background: var(--color-line);
+}
+
+/* Pontos nas pontas da linha, junto à moldura */
+.profile__line::before,
+.profile__line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 2.4cqi;
+  height: 2.4cqi;
+  border-radius: 50%;
+  background: var(--color-cream);
+  transform: translateY(-50%);
+}
+
+.profile__line::before {
+  left: 23cqi;
+}
+
+.profile__line::after {
+  right: 23cqi;
+}
+
+.profile__ring {
+  position: absolute;
+  left: 50%;
+  top: -15cqi;
+  width: 50cqi;
+  aspect-ratio: 1;
+  padding: 2.4cqi;
+  border-radius: 50%;
+  background: var(--color-brown);
+  box-shadow:
+    0 0 0 0.6cqi var(--color-cream-deep),
+    0 0 0 1cqi var(--color-brown),
+    0 18px 34px -16px rgba(30, 10, 4, 0.7);
+  transform: translateX(-50%);
+}
+
+.profile__ring::before {
+  content: '';
+  position: absolute;
+  inset: 1cqi;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+}
+
+.profile__photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Logotipo: monograma + nome */
+.brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 6cqi;
+}
+
+.brand__monogram {
+  width: 27cqi;
+  height: auto;
+  margin-right: -4cqi;
+}
+
+.brand__text {
+  position: relative;
+  padding-top: 1cqi;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 7.6cqi;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  white-space: nowrap;
+}
+
+.brand__role {
+  margin-top: 1.6cqi;
+  padding-top: 1.4cqi;
+  border-top: 1px solid var(--color-line);
+  font-size: 2.15cqi;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-on-brown-soft);
+  white-space: nowrap;
+}
+
+/* Botões principais */
+.actions {
+  width: 100%;
+  margin-top: 10cqi;
+  padding-inline: 7cqi;
+}
+
+.actions ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5cqi 7cqi;
+}
+
+.action {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 48px;
+  height: 8cqi;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: var(--color-glass);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 238, 0.25),
+    var(--shadow-soft);
+  color: var(--color-cream);
+  font-size: clamp(14px, 4.1cqi, 19px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition:
+    background-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.action:hover {
+  background: var(--color-glass-hover);
+  transform: translateY(-2px);
+}
+
+.action:active {
+  transform: scale(0.97);
+}
+
+.card__text {
+  position: relative;
+  max-width: 36ch;
+  margin-top: 10cqi;
+  padding-inline: 6cqi;
+  font-size: clamp(14px, 3.35cqi, 16.5px);
+  line-height: 1.65;
+  text-align: center;
+  color: var(--color-on-brown-soft);
+  text-wrap: balance;
+}
+
+/* Barra de redes com botão central elevado */
+.dock {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 16cqi;
+  padding: 2.4cqi 2.8cqi;
+  border: 1.5px solid var(--color-line);
+  border-radius: 999px;
+}
+
+.dock__side {
+  display: flex;
+  gap: 4.5cqi;
+}
+
+.dock__link,
+.dock__main {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-beige);
+  color: var(--color-brown);
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.dock__link {
+  width: 12cqi;
+  height: 12cqi;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.dock__link .icon {
+  width: 50%;
+  height: auto;
+}
+
+.dock__center {
+  position: absolute;
+  left: 50%;
+  top: -9cqi;
+  transform: translateX(-50%);
+}
+
+.dock__main {
+  width: 16cqi;
+  height: 16cqi;
+  min-width: 56px;
+  min-height: 56px;
+  border: 0.8cqi solid var(--color-cream);
+  background: var(--color-beige);
+}
+
+.dock__main .icon {
+  width: 52%;
+  height: auto;
+}
+
+.dock__link:hover,
+.dock__main:hover {
+  background: var(--color-cream);
+  transform: translateY(-2px);
+}
+
+.dock__link:active,
+.dock__main:active {
+  transform: scale(0.95);
+}
+
+/* Rodapé */
+.footer {
+  position: relative;
+  margin-top: 12cqi;
+  padding-inline: 6cqi;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--color-on-brown-soft);
+}
+
+.footer__demo {
+  margin-top: 6px;
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Desktop: foto do studio ocupa a metade esquerda; o cartão fica à direita */
+@media (min-width: 960px) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 470px);
+    max-width: none;
+  }
+
+  .cover {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    aspect-ratio: auto;
+  }
+
+  .cover::after {
+    background: linear-gradient(90deg, transparent 70%, rgba(85, 40, 25, 0.55));
+  }
+
+  .cover__monogram {
+    right: auto;
+    left: 6%;
+    top: auto;
+    bottom: 6%;
+    width: 36%;
+  }
+
+  .card {
+    justify-content: center;
+    min-height: 100vh;
+    padding-block: 40px 28px;
+  }
+
+  .profile {
+    height: 42cqi;
+  }
+
+  .profile__ring {
+    top: 0;
+    width: 42cqi;
+  }
+
+  .profile__line::before {
+    left: 27cqi;
+  }
+
+  .profile__line::after {
+    right: 27cqi;
+  }
+
+  .brand {
+    margin-top: 4cqi;
+  }
+
+  .actions,
+  .card__text {
+    margin-top: 8cqi;
+  }
+
+  .dock {
+    margin-top: 14cqi;
+  }
+
+  .footer {
+    margin-top: 9cqi;
+  }
+
+  .profile__band {
+    top: 18cqi;
+    background: transparent;
+    box-shadow: none;
+  }
+}

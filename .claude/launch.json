@@ -45,6 +45,21 @@
         "--strictPort"
       ],
       "port": 5175
+    },
+    {
+      "name": "04-compacto",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/04-compacto",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5176",
+        "--strictPort"
+      ],
+      "port": 5176
     }
   ]
 }
