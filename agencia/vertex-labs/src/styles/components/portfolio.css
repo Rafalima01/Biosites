@@ -1,0 +1,195 @@
+/* Abas de categoria */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.tab__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.tab[aria-selected='true'] {
+  border-color: var(--vx-accent);
+  color: var(--text);
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--vx-gradient) border-box;
+  border-color: transparent;
+}
+
+.tab[aria-selected='true'] .tab__count {
+  color: var(--vx-accent);
+  opacity: 1;
+}
+
+.panel {
+  margin-top: 18px;
+}
+
+/* Trabalhos: carrossel por rolagem no celular, grade no desktop */
+.works {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 72%;
+  gap: 14px;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 4px var(--gutter) 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.works::-webkit-scrollbar {
+  display: none;
+}
+
+.work {
+  scroll-snap-align: start;
+}
+
+.work__link {
+  display: grid;
+  gap: 12px;
+}
+
+/* Palco com grade e brilho laranja, celular no centro */
+.work__stage {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  aspect-ratio: 4 / 5;
+  padding-top: 22px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(70% 55% at 50% 100%, rgba(255, 74, 20, 0.35), transparent 70%),
+    linear-gradient(var(--bg-grid) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--surface);
+}
+
+.work__phone {
+  width: 62%;
+  margin-bottom: -18%;
+  overflow: hidden;
+  border-radius: 26px 26px 0 0;
+  border: 6px solid #111113;
+  border-bottom: 0;
+  background: #111113;
+  box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.8);
+  transition: transform 500ms var(--ease);
+}
+
+.work__phone img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px 20px 0 0;
+}
+
+.work__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.work__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.work__segment {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: right;
+}
+
+.work__visit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vx-accent);
+}
+
+@media (hover: hover) {
+  .work__link:hover .work__phone {
+    transform: translateY(-10px);
+  }
+
+  .work__link:hover .work__title {
+    color: var(--vx-accent);
+  }
+}
+
+/* Categoria sem itens */
+.soon {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 28px 22px;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.soon__badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--vx-gradient);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .works {
+    grid-auto-columns: 46%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .works {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}

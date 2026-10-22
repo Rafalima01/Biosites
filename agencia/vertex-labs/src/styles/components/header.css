@@ -1,0 +1,126 @@
+/* Barra superior */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 0 8px;
+}
+
+/* Símbolo + palavra VERTEX LABS */
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lockup__mark {
+  width: 40px;
+  height: auto;
+}
+
+.lockup__word {
+  display: grid;
+  line-height: 1;
+}
+
+.lockup__vertex {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 112%;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.lockup__labs {
+  margin-top: 3px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.62em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lockup--sm .lockup__mark {
+  width: 34px;
+}
+
+.lockup--sm .lockup__vertex {
+  font-size: 17px;
+}
+
+.topbar__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Seletor de idioma */
+.lang {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.lang__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.lang__btn[aria-pressed='true'] {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.lang__flag {
+  width: 20px;
+  height: auto;
+  border-radius: 3px;
+}
+
+/* Tema */
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+
+.theme-toggle:hover {
+  color: var(--vx-accent);
+}
+
+[data-theme='dark'] .theme-toggle__moon,
+[data-theme='light'] .theme-toggle__sun {
+  display: none;
+}
+
+@media (max-width: 359px) {
+  .lang__flag {
+    display: none;
+  }
+
+  .lockup__word {
+    display: none;
+  }
+}

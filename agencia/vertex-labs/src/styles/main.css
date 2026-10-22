@@ -1,0 +1,7 @@
+@import './tokens.css';
+@import './base.css';
+@import './components/header.css';
+@import './components/profile.css';
+@import './components/sections.css';
+@import './components/portfolio.css';
+@import './components/footer.css';

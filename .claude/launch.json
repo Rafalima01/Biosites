@@ -90,6 +90,21 @@
         "--strictPort"
       ],
       "port": 5178
+    },
+    {
+      "name": "agencia-vertex-labs",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "agencia/vertex-labs",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5179",
+        "--strictPort"
+      ],
+      "port": 5179
     }
   ]
 }

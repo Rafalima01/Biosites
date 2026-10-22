@@ -1,0 +1,254 @@
+/* Perfil: símbolo em anel laranja, status, nome, slogan e redes */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 28px;
+  text-align: center;
+}
+
+.profile__avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 35%, var(--surface-2), var(--surface) 70%) padding-box,
+    var(--vx-gradient) border-box;
+  border: 3px solid transparent;
+  box-shadow: 0 0 0 6px var(--glow), 0 24px 50px -20px rgba(255, 60, 20, 0.55);
+}
+
+.profile__avatar img {
+  width: 62%;
+  height: auto;
+}
+
+.profile__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.profile__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vx-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .profile__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--vx-accent);
+    animation: pulse 2s var(--ease) infinite;
+  }
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+.profile__name {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(30px, 9vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.profile__sep {
+  width: 2px;
+  height: 0.9em;
+  background: var(--border);
+}
+
+.profile__role {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Nome e função empilhados: evita o separador sobrando no fim da linha */
+.profile__name {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile__sep {
+  display: none;
+}
+
+.profile__role {
+  font-size: 0.6em;
+  letter-spacing: 0;
+}
+
+.profile__handle {
+  margin-top: 6px;
+  font-weight: 600;
+  background: var(--vx-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--vx-accent);
+  -webkit-text-fill-color: transparent;
+}
+
+.profile__handle:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--vx-accent);
+}
+
+/* Slogan em caixa alta condensada; a segunda parte em laranja, como no post */
+.profile__slogan {
+  margin-top: 22px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 68%;
+  font-size: clamp(28px, 8.6vw, 46px);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+
+.profile__slogan em {
+  display: block;
+  font-style: normal;
+  background: var(--vx-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--vx-accent);
+  -webkit-text-fill-color: transparent;
+}
+
+.profile__bio {
+  max-width: 40ch;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 15.5px;
+  text-wrap: balance;
+}
+
+.profile .socials {
+  margin-top: 22px;
+}
+
+/* Chamada principal: orçamento */
+.cta {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 20px 18px 20px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--vx-gradient);
+  color: #fff;
+  box-shadow: 0 24px 48px -22px rgba(255, 60, 20, 0.75);
+  overflow: hidden;
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+/* Linhas técnicas finas sobre o degradê */
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, transparent 62%, rgba(255, 255, 255, 0.22) 62.3%, transparent 62.6%),
+    linear-gradient(115deg, transparent 74%, rgba(255, 255, 255, 0.14) 74.3%, transparent 74.6%);
+  pointer-events: none;
+}
+
+.cta__icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.cta__icon img {
+  width: 60%;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.cta__body {
+  position: relative;
+  display: grid;
+  gap: 2px;
+}
+
+.cta__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 21px;
+  line-height: 1.15;
+}
+
+.cta__text {
+  font-size: 14px;
+  opacity: 0.92;
+}
+
+.cta__arrow {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: transform var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 30px 56px -22px rgba(255, 60, 20, 0.85);
+  }
+
+  .cta:hover .cta__arrow {
+    transform: translate(2px, -2px);
+  }
+}
+
+.cta:active {
+  transform: scale(0.985);
+}
+
+.cta:focus-visible {
+  outline-color: var(--text);
+}
+
+@media (min-width: 1024px) {
+  .profile {
+    padding-top: 40px;
+  }
+}

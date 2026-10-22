@@ -1,0 +1,57 @@
+/*
+ * Identidade Vertex Labs: preto, branco e o degradê laranja→vermelho do símbolo.
+ * Tema escuro é o padrão; [data-theme='light'] troca as superfícies.
+ */
+:root {
+  /* Marca */
+  --vx-orange: #ff7e12;
+  --vx-red: #ff2a12;
+  --vx-crimson: #d9061f;
+  --vx-gradient: linear-gradient(120deg, var(--vx-orange) 0%, var(--vx-red) 48%, var(--vx-crimson) 100%);
+  --vx-accent: #ff4a14;
+
+  /* Tipografia */
+  --font-display: 'Archivo', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  /* Forma e movimento */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+
+  /* Layout */
+  --column: 560px;
+  --gutter: clamp(16px, 4.5vw, 28px);
+  --content-max: 1180px;
+}
+
+/* Tema escuro (padrão) */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0a0a0b;
+  --bg-grid: rgba(255, 255, 255, 0.035);
+  --surface: #141416;
+  --surface-2: #1d1d20;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #f5f5f4;
+  --muted: #a3a3ab;
+  --glow: rgba(255, 74, 20, 0.22);
+  --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.9);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f3f1;
+  --bg-grid: rgba(10, 10, 11, 0.05);
+  --surface: #ffffff;
+  --surface-2: #efedea;
+  --border: rgba(10, 10, 11, 0.1);
+  --text: #0b0b0c;
+  --muted: #5b5b62;
+  --glow: rgba(255, 74, 20, 0.14);
+  --shadow: 0 20px 40px -26px rgba(40, 20, 10, 0.35);
+}

@@ -15,6 +15,12 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 05 | **Premium** | [`modelos/05-premium`](modelos/05-premium) | Larissa Prado · Estrategista digital | Vitrine de produtos digitais: capa clara com linhas douradas e foto, cards de vidro sobre fundo dourado com imagem saltando para fora e botão de acesso. Creme e dourado com Bodoni Moda. |
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
 
+## Site da agência
+
+| Projeto | Pasta | Descrição |
+| --- | --- | --- |
+| **Vertex Labs** | [`agencia/vertex-labs`](agencia/vertex-labs) | Bio site da própria agência: orçamento, serviços e portfólio com os modelos acima. PT/EN e tema claro/escuro. |
+
 ## Convenções
 
 - Novo modelo → nova pasta `modelos/NN-nome` (número sequencial + nome curto em minúsculas, sem acentos).
@@ -45,6 +51,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 04 · Compacto | `biosite-04-compacto` | https://biosite-04-compacto.vercel.app |
 | 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 | 06 · Delivery | `biosite-06-delivery` | https://biosite-06-delivery.vercel.app |
+| Agência · Vertex Labs | `vertexlabs` | (ver abaixo) |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.

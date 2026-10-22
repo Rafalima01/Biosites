@@ -1,0 +1,20 @@
+{
+  "name": "vertex-labs-bio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bio site da agência Vertex Labs",
+  "homepage": "https://vertexlabs.vercel.app",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,131 @@
+.section {
+  padding-top: 56px;
+  scroll-margin-top: 16px;
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section__index {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.section__intro {
+  max-width: 46ch;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+/* Serviços numerados */
+.services {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.service {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 16px 18px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition:
+    border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.service__num {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--vx-accent);
+}
+
+.service__body {
+  display: grid;
+  gap: 3px;
+}
+
+.service__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.service__title .icon {
+  color: var(--vx-accent);
+}
+
+.service__text {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.service__arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: var(--surface-2);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .service:hover {
+    border-color: color-mix(in srgb, var(--vx-accent) 60%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .service:hover .service__arrow {
+    background: var(--vx-gradient);
+    color: #fff;
+  }
+}
+
+.service:active {
+  transform: scale(0.985);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: 40px;
+  }
+
+  #servicos {
+    padding-top: 48px;
+  }
+
+  .section__title {
+    font-size: 34px;
+  }
+}
