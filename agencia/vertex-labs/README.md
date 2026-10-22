@@ -55,6 +55,7 @@ o arquivo. `favicon.png` e `vertex-mark-1200.png` (imagem de compartilhamento) f
 ## Publicação
 
 Projeto Vercel `vertexlabs`, ligado ao repositório com **Root Directory** `agencia/vertex-labs`.
+Produção: https://vertexlabs-omega.vercel.app
 
 ## Pendências
 

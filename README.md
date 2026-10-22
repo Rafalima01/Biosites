@@ -51,7 +51,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 04 · Compacto | `biosite-04-compacto` | https://biosite-04-compacto.vercel.app |
 | 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 | 06 · Delivery | `biosite-06-delivery` | https://biosite-06-delivery.vercel.app |
-| Agência · Vertex Labs | `vertexlabs` | (ver abaixo) |
+| Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.

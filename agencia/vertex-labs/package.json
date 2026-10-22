@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Bio site da agência Vertex Labs",
-  "homepage": "https://vertexlabs.vercel.app",
+  "homepage": "https://vertexlabs-omega.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=18"
