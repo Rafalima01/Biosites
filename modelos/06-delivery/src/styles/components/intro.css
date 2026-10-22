@@ -1,0 +1,142 @@
+/* Selo da marca sobreposto ao carrossel, nome e horário */
+.content {
+  position: relative;
+  z-index: 1;
+  container-type: inline-size;
+  padding: 0 4cqi calc(28px + env(safe-area-inset-bottom));
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.intro__logo {
+  margin-top: -21cqi;
+}
+
+.logo {
+  width: 38cqi;
+  height: auto;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.6));
+}
+
+.logo__top {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  fill: var(--color-ink-deep);
+}
+
+.logo__middle {
+  font-family: var(--font-condensed);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  fill: var(--color-ink-deep);
+}
+
+.logo__band {
+  font-family: var(--font-condensed);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--color-ink-deep);
+}
+
+.intro__name {
+  margin-top: 4cqi;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: max(24px, 7.6cqi);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.intro__subtitle {
+  margin-top: 1.4cqi;
+  font-family: var(--font-condensed);
+  font-style: italic;
+  font-weight: 800;
+  font-size: max(16px, 4.6cqi);
+  letter-spacing: 0.06em;
+  color: var(--yellow);
+}
+
+.intro__desc {
+  max-width: 40ch;
+  margin-top: 3cqi;
+  font-size: max(14px, 3.6cqi);
+  color: var(--color-muted);
+  text-wrap: balance;
+}
+
+/* Selo de horário com estado "aberto/fechado" */
+.status {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px 8px;
+  margin-top: 4cqi;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.32);
+  font-size: max(13px, 3.2cqi);
+  font-weight: 500;
+}
+
+.status__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-muted);
+}
+
+.status[data-open='true'] .status__dot {
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(47, 207, 106, 0.18);
+}
+
+.status[data-open='false'] .status__dot {
+  background: #e5484d;
+}
+
+.status__state:empty {
+  display: none;
+}
+
+.status__state {
+  font-weight: 600;
+  color: var(--yellow);
+}
+
+.status[data-open='true'] .status__state {
+  color: var(--green);
+}
+
+@media (min-width: 960px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 32px 32px;
+  }
+
+  .intro__logo {
+    margin-top: 0;
+  }
+
+  .logo {
+    width: 160px;
+  }
+}

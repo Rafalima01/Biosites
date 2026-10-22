@@ -1,0 +1,20 @@
+{
+  "name": "biosite-modelo-06-delivery",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modelo 06 · Delivery — biblioteca de bio sites premium (demo: Brasa & Massa)",
+  "homepage": "https://biosite-06-delivery.vercel.app",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
