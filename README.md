@@ -29,8 +29,17 @@ npm run dev
 
 ## Publicar na Vercel
 
-1. **Add New → Project** e importe este repositório.
-2. **Root Directory**: a pasta do modelo (ex.: `modelos/01-essencial`).
-3. **Deploy** e, em **Settings → Domains**, adicione o domínio do cliente.
+Cada modelo é um projeto Vercel ligado a este repositório (branch `main`), com **Root Directory**
+apontando para a pasta do modelo. Todo push na `main` publica automaticamente; o `ignoreCommand`
+do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 
-Detalhes no README de cada modelo.
+| Modelo | Projeto Vercel | Produção |
+| --- | --- | --- |
+| 01 · Essencial | `biosite-01-essencial` | https://biosite-01-essencial.vercel.app |
+| 02 · Autoridade | `biosite-02-autoridade` | https://biosite-02-autoridade.vercel.app |
+
+Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
+(`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.
+
+Publicação manual pela CLI: rode a partir da **raiz do repositório** (o Root Directory já aponta
+para a pasta do modelo), por exemplo `vercel deploy --prod --cwd .` após `vercel link --project biosite-02-autoridade`.
