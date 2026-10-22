@@ -87,6 +87,8 @@ Ações disponíveis para cards e CTAs:
 
 ## Publicar na Vercel
 
+Projeto `biosite-01-essencial` · Produção: https://biosite-01-essencial.vercel.app
+
 O arquivo `vercel.json` já define build (`npm run check && npm run build`), saída (`dist`), cache
 dos assets e cabeçalhos de segurança.
 

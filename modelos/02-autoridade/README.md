@@ -70,6 +70,8 @@ são ilustrativos. Só desligue depois de trocar tudo por dados reais e autoriza
 
 ## Publicar na Vercel
 
+Projeto `biosite-02-autoridade` · Produção: https://biosite-02-autoridade.vercel.app
+
 1. **Add New → Project** e importe o repositório da biblioteca.
 2. **Root Directory**: `modelos/02-autoridade` (o `vercel.json` define build, saída e cabeçalhos).
 3. **Deploy** e, em **Settings → Domains**, adicione o domínio do cliente.
