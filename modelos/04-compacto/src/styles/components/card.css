@@ -152,40 +152,46 @@
 }
 
 /* Logotipo: monograma + nome */
+/* Logotipo horizontal: monograma | filete vertical | nome e especialidade (sem sobreposição) */
 .brand {
   position: relative;
   display: flex;
   align-items: center;
-  margin-top: 6cqi;
+  gap: 4.2cqi;
+  margin-top: 7cqi;
 }
 
 .brand__monogram {
-  width: 27cqi;
+  flex: none;
+  width: 19cqi;
   height: auto;
-  margin-right: -4cqi;
+}
+
+.brand__divider {
+  flex: none;
+  width: 1px;
+  height: 15cqi;
+  background: linear-gradient(to bottom, transparent, var(--color-line) 20%, var(--color-line) 80%, transparent);
 }
 
 .brand__text {
   position: relative;
-  padding-top: 1cqi;
 }
 
 .brand__name {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 7.6cqi;
+  font-size: 7.2cqi;
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-cream);
   white-space: nowrap;
 }
 
 .brand__role {
-  margin-top: 1.6cqi;
-  padding-top: 1.4cqi;
-  border-top: 1px solid var(--color-line);
-  font-size: 2.15cqi;
+  margin-top: 2.2cqi;
+  font-size: 2.05cqi;
   font-weight: 500;
   letter-spacing: 0.42em;
   text-transform: uppercase;

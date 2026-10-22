@@ -23,6 +23,7 @@ function Profile(site) {
 function Brand({ brand }) {
   return `<header class="brand reveal">
     ${Monogram(brand.monogram, { className: 'brand__monogram' })}
+    <span class="brand__divider" aria-hidden="true"></span>
     <div class="brand__text">
       <h1 class="brand__name">${esc(brand.name)}</h1>
       <p class="brand__role">${esc(brand.role)}</p>
