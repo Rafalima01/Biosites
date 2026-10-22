@@ -1,0 +1,50 @@
+/*
+ * Tokens de design do modelo. Cada cliente pode sobrescrever qualquer variável
+ * em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Superfícies */
+  --color-bg: #f5ede9;
+  --color-bg-deep: #efe4de;
+  --color-surface: #f9f4f0;
+  --color-surface-raised: #fdfaf7;
+  --color-footer: #faf5f1;
+
+  /* Texto e ícones */
+  --color-ink: #4e3e2e;
+  --color-ink-soft: #66584a;
+  --color-ink-muted: #8b7b6b;
+
+  /* Dourado envelhecido */
+  --color-gold: #a88b68;
+  --color-gold-light: #d6c1a2;
+  --color-gold-dark: #7d6044;
+  --color-line: rgba(150, 122, 92, 0.42);
+  --color-decor: #dcc5b1;
+
+  /* Tipografia */
+  --font-display: 'Marcellus', 'Cormorant Garamond', Georgia, serif;
+  --font-monogram: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-card: 24px;
+  --radius-chip: 10px;
+  --radius-media: 28px;
+
+  /* Sombras difusas */
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 18px 34px -22px rgba(104, 74, 46, 0.38),
+    0 4px 10px -6px rgba(104, 74, 46, 0.16);
+  --shadow-card-hover: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 24px 40px -22px rgba(104, 74, 46, 0.45),
+    0 6px 14px -6px rgba(104, 74, 46, 0.2);
+  --shadow-soft: 0 8px 18px -8px rgba(104, 74, 46, 0.32), inset 0 1px 0 #fff;
+  --shadow-chip: 0 4px 10px -4px rgba(104, 74, 46, 0.3), inset 0 1px 0 #fff;
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 320ms;
+
+  /* Layout */
+  --gutter: clamp(16px, 5.5vw, 32px);
+  --content-max: 1180px;
+}

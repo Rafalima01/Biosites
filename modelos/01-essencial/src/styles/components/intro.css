@@ -1,0 +1,271 @@
+/*
+ * Apresentação: fotografia à esquerda (fundindo-se ao fundo) e identidade da marca à direita.
+ * No mobile/tablet as medidas usam `cqi` (largura do container .intro, máx. 640px),
+ * preservando as proporções da referência em qualquer celular.
+ */
+.intro {
+  position: relative;
+  max-width: 640px;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+.intro__hero {
+  position: relative;
+  min-height: 82cqi;
+  padding: 7cqi var(--gutter) 5cqi 45cqi;
+}
+
+.intro__portrait {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  width: 48cqi;
+  height: calc(100% + 10cqi);
+  pointer-events: none;
+}
+
+.intro__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-mask-image: linear-gradient(to right, #000 68%, transparent 99%),
+    linear-gradient(to bottom, #000 72%, transparent 98%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, #000 68%, transparent 99%), linear-gradient(to bottom, #000 72%, transparent 98%);
+  mask-composite: intersect;
+}
+
+.intro__decor {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  width: 19cqi;
+  height: auto;
+  color: var(--color-decor);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* Identidade da marca */
+.brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.brand__mark .monogram {
+  width: clamp(54px, 15.5cqi, 104px);
+  height: auto;
+}
+
+.monogram__letter {
+  font-family: var(--font-monogram);
+  font-size: 112px;
+  font-weight: 500;
+}
+
+.brand__eyebrow,
+.brand__specialty {
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brand__eyebrow {
+  margin-top: 4.6cqi;
+  font-size: clamp(8.5px, 2.25cqi, 12.5px);
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+  color: var(--color-ink-soft);
+}
+
+.brand__name {
+  margin-top: 1.6cqi;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(21px, 6.4cqi, 41px);
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  color: #7f644c;
+  background: linear-gradient(180deg, #957760 0%, #765a43 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand__specialty {
+  margin-top: 1.9cqi;
+  font-size: clamp(8px, 2.1cqi, 12px);
+  letter-spacing: 0.56em;
+  padding-left: 0.56em;
+  color: var(--color-ink);
+}
+
+.brand__ornament {
+  margin-block: 5cqi 4.4cqi;
+}
+
+.brand__ornament .ornament__line {
+  width: clamp(40px, 12cqi, 84px);
+}
+
+.brand__tagline {
+  max-width: 36ch;
+  font-size: clamp(12.5px, 3.25cqi, 16px);
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  text-wrap: balance;
+}
+
+.brand__socials {
+  display: flex;
+  gap: clamp(8px, 2.6cqi, 14px);
+  margin-top: 5cqi;
+}
+
+.chip {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-chip);
+  background: var(--color-surface-raised);
+  color: var(--color-ink);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-chip);
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.chip:hover {
+  transform: translateY(-2px);
+  color: var(--color-gold-dark);
+  box-shadow: 0 10px 18px -8px rgba(104, 74, 46, 0.38), inset 0 1px 0 #fff;
+}
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+/* Tablet: a coluna centralizada não toca a borda da tela, então a foto também se dissolve à esquerda */
+@media (min-width: 680px) and (max-width: 1023px) {
+  .intro__portrait img {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 68%, transparent 99%),
+      linear-gradient(to bottom, #000 72%, transparent 98%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 68%, transparent 99%),
+      linear-gradient(to bottom, #000 72%, transparent 98%);
+  }
+}
+
+/* Celulares muito estreitos: compacta a coluna da marca */
+@container (max-width: 359px) {
+  .intro__hero {
+    padding-left: 43cqi;
+    padding-right: 12px;
+  }
+
+  .brand__name {
+    font-size: 6.1cqi;
+  }
+
+  .chip {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Desktop: fotografia fixa à esquerda, marca e cards à direita */
+@media (min-width: 1024px) {
+  .intro {
+    max-width: var(--content-max);
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(40px, 5vw, 88px);
+    padding: 0 var(--gutter);
+    container-type: normal;
+  }
+
+  .intro__hero {
+    display: contents;
+  }
+
+  .intro__portrait {
+    position: sticky;
+    top: 0;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    width: 100%;
+    height: min(100vh, 980px);
+    margin-left: calc(-1 * var(--gutter));
+  }
+
+  .intro__portrait img {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 14%, #000 76%, transparent 100%),
+      linear-gradient(to bottom, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 14%, #000 76%, transparent 100%),
+      linear-gradient(to bottom, #000 80%, transparent 100%);
+  }
+
+  .intro__decor {
+    width: 120px;
+    right: max(0px, calc((100vw - var(--content-max)) / -2));
+  }
+
+  .brand {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: clamp(56px, 8vh, 96px);
+  }
+
+  .brand__mark .monogram {
+    width: 96px;
+  }
+
+  .brand__eyebrow {
+    margin-top: 28px;
+    font-size: 12px;
+  }
+
+  .brand__name {
+    margin-top: 12px;
+    font-size: clamp(40px, 3.6vw, 52px);
+  }
+
+  .brand__specialty {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+
+  .brand__ornament {
+    margin-block: 30px 24px;
+  }
+
+  .brand__ornament .ornament__line {
+    width: 92px;
+  }
+
+  .brand__tagline {
+    font-size: 16px;
+  }
+
+  .brand__socials {
+    margin-top: 28px;
+  }
+
+  .chip {
+    width: 44px;
+    height: 44px;
+  }
+}
