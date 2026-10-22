@@ -69,6 +69,7 @@ inventados. Com `demo: true`, o rodapé avisa que nome, textos e fotos são ilus
 ## Publicar na Vercel
 
 Projeto `biosite-04-compacto`, ligado ao repositório com **Root Directory** `modelos/04-compacto`.
+Produção: https://biosite-04-compacto.vercel.app
 
 ## Conteúdo demonstrativo a substituir
 

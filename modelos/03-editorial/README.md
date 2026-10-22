@@ -72,6 +72,7 @@ ilustrativos. Só desligue depois de trocar tudo por dados reais.
 ## Publicar na Vercel
 
 Projeto `biosite-03-editorial`, ligado ao repositório com **Root Directory** `modelos/03-editorial`.
+Produção: https://biosite-03-editorial.vercel.app
 Todo push na `main` que altere esta pasta publica automaticamente.
 
 ## Conteúdo demonstrativo a substituir
