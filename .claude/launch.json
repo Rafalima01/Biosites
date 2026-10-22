@@ -60,6 +60,21 @@
         "--strictPort"
       ],
       "port": 5176
+    },
+    {
+      "name": "05-premium",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/05-premium",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5177",
+        "--strictPort"
+      ],
+      "port": 5177
     }
   ]
 }

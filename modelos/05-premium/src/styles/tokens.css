@@ -1,0 +1,38 @@
+/*
+ * Tokens de design do Modelo 05 · Premium. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Dourados */
+  --gold-light: #ecd6a4;
+  --gold: #c39a5b;
+  --gold-dark: #8c6431;
+  --gold-deep: #6e4c22;
+  --gold-text: linear-gradient(100deg, #b98a46 0%, #e2c48a 45%, #a67734 100%);
+
+  /* Superfícies */
+  --color-paper: #f7f2eb;
+  --color-backdrop: #e9ddcd;
+  --color-page: #efe6da;
+
+  /* Texto */
+  --color-ink: #3d2a17;
+  --color-ink-soft: #6b5640;
+  --color-on-gold: #fffaf1;
+  --color-on-gold-soft: rgba(255, 250, 241, 0.9);
+
+  /* Tipografia */
+  --font-display: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Sombras */
+  --shadow-card: 0 22px 40px -24px rgba(60, 36, 10, 0.75), inset 0 1px 0 rgba(255, 245, 225, 0.45);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 320ms;
+
+  /* Layout */
+  --column: 480px;
+  --content-max: 1140px;
+}

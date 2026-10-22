@@ -12,6 +12,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 02 | **Autoridade** | [`modelos/02-autoridade`](modelos/02-autoridade) | Agatha Rigazzi · Mentora de negócios | Para especialistas que vendem conhecimento: prova social sobre a foto, cards com foto alternando bege/chocolate, "Quem é", serviços, depoimentos e chamada final. Creme, bege e chocolate com Poppins. |
 | 03 | **Editorial** | [`modelos/03-editorial`](modelos/03-editorial) | Marina Albuquerque · Mentora de marketing digital | Linguagem de revista: nome em serifa sobre a foto, números com botão, faixas de foto e cetim, "Quem é" em duotone, serviços e retrato final. Azul-marinho com Playfair Display. |
 | 04 | **Compacto** | [`modelos/04-compacto`](modelos/04-compacto) | Bianca Moraes · Designer de sobrancelhas | Cartão de visita digital em uma tela: foto do studio, retrato em moldura circular, monograma, quatro botões, painéis de Serviços/Sobre e barra de redes. Marrom, creme e bege. |
+| 05 | **Premium** | [`modelos/05-premium`](modelos/05-premium) | Larissa Prado · Estrategista digital | Vitrine de produtos digitais: capa clara com linhas douradas e foto, cards de vidro sobre fundo dourado com imagem saltando para fora e botão de acesso. Creme e dourado com Bodoni Moda. |
 
 ## Convenções
 
@@ -41,6 +42,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 02 · Autoridade | `biosite-02-autoridade` | https://biosite-02-autoridade.vercel.app |
 | 03 · Editorial | `biosite-03-editorial` | https://biosite-03-editorial.vercel.app |
 | 04 · Compacto | `biosite-04-compacto` | https://biosite-04-compacto.vercel.app |
+| 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.

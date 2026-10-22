@@ -1,0 +1,150 @@
+/*
+ * Capa: texto à esquerda, foto à direita sobre um painel claro, com linhas
+ * curvas douradas. Medidas em `cqi` (largura da coluna) no celular.
+ */
+.hero {
+  position: relative;
+  container-type: inline-size;
+  height: 128cqi;
+  overflow: hidden;
+  background: radial-gradient(120% 80% at 20% 30%, #fffdf9 0%, var(--color-paper) 60%);
+}
+
+/* Base da capa dissolve no dourado da seção de produtos */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  height: 22cqi;
+  background: linear-gradient(to bottom, rgba(214, 180, 122, 0), #d6b47a 96%);
+  pointer-events: none;
+}
+
+.hero__backdrop {
+  position: absolute;
+  right: 3cqi;
+  top: 0;
+  width: 44cqi;
+  height: 74cqi;
+  background: linear-gradient(180deg, var(--color-backdrop), rgba(233, 221, 205, 0.3));
+}
+
+.hero__swirls {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero__media {
+  position: absolute;
+  right: 0;
+  top: 9cqi;
+  width: 60cqi;
+  height: 119cqi;
+}
+
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 14%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%), linear-gradient(to right, transparent 0%, #000 14%);
+  mask-composite: intersect;
+}
+
+.hero__text {
+  position: absolute;
+  z-index: 1;
+  left: 6cqi;
+  top: 26cqi;
+  width: 44cqi;
+}
+
+.hero__greeting {
+  font-size: max(11px, 3.3cqi);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+}
+
+.hero__name {
+  margin-top: 0.5cqi;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 11cqi;
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--gold-dark);
+  -webkit-text-fill-color: transparent;
+}
+
+.hero__bio {
+  margin-top: 7cqi;
+  font-size: max(12px, 3.2cqi);
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+}
+
+.hero__bio strong {
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+
+/* Desktop: texto amplo à esquerda e foto alta à direita */
+@media (min-width: 960px) {
+  .hero {
+    container-type: normal;
+    height: auto;
+    min-height: min(88vh, 820px);
+  }
+
+  .hero::after {
+    height: 140px;
+  }
+
+  .hero__backdrop {
+    right: 8vw;
+    width: 26vw;
+    height: 70%;
+  }
+
+  .hero__media {
+    right: max(4vw, calc((100vw - var(--content-max)) / 2));
+    top: 6%;
+    width: min(44vw, 560px);
+    height: 94%;
+  }
+
+  .hero__text {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(46vw, 560px);
+    margin-left: max(6vw, calc((100vw - var(--content-max)) / 2));
+    padding-block: 18vh 12vh;
+  }
+
+  .hero__greeting {
+    font-size: 18px;
+  }
+
+  .hero__name {
+    font-size: clamp(72px, 7.4vw, 116px);
+  }
+
+  .hero__bio {
+    margin-top: 32px;
+    max-width: 34ch;
+    font-size: 18px;
+  }
+}
