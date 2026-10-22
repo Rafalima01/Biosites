@@ -1,7 +1,50 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "01-essencial", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "modelos/01-essencial", "run", "dev", "--", "--port", "5173", "--strictPort"], "port": 5173 },
-    { "name": "02-autoridade", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "modelos/02-autoridade", "run", "dev", "--", "--port", "5174", "--strictPort"], "port": 5174 }
+    {
+      "name": "01-essencial",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/01-essencial",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5173",
+        "--strictPort"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "02-autoridade",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/02-autoridade",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5174",
+        "--strictPort"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "03-editorial",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/03-editorial",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5175",
+        "--strictPort"
+      ],
+      "port": 5175
+    }
   ]
 }

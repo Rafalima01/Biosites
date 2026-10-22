@@ -1,0 +1,236 @@
+/* Faixas editoriais: foto + título em itálico, ou textura de cetim com botão */
+.banners {
+  padding: 18px var(--gutter) 28px;
+}
+
+.banners__list {
+  display: grid;
+  gap: 10px;
+}
+
+.banner {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 112px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+  box-shadow: var(--shadow);
+  text-align: left;
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.banner__media {
+  position: relative;
+  display: block;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.banner--photo-left .banner__media img,
+.banner--photo-right .banner__media img {
+  position: absolute;
+  inset: 0;
+}
+
+.banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease);
+}
+
+.banner__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 18px;
+}
+
+.banner__title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(30px, 9vw, 40px);
+  line-height: 0.95;
+}
+
+.banner__subtitle {
+  margin-top: 6px;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-on-navy-soft);
+}
+
+.banner__cta {
+  align-self: center;
+  margin-top: 10px;
+  padding: 3px 14px;
+  border-radius: 2px;
+  background: var(--color-paper);
+  color: var(--color-navy);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Foto à esquerda, fundindo-se ao azul */
+.banner--photo-left {
+  grid-template-columns: 46% 1fr;
+}
+
+.banner--photo-left .banner__media::after,
+.banner--photo-right .banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.banner--photo-left .banner__media::after {
+  background: linear-gradient(to right, transparent 55%, var(--color-navy));
+}
+
+.banner--photo-left .banner__body {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Foto à direita */
+.banner--photo-right {
+  grid-template-columns: 1fr 46%;
+}
+
+.banner--photo-right .banner__media {
+  order: 2;
+}
+
+.banner--photo-right .banner__media::after {
+  background: linear-gradient(to left, transparent 55%, var(--color-navy));
+}
+
+.banner--photo-right .banner__title {
+  max-width: 5ch;
+}
+
+/* Espelha a foto (útil para variar quando a mesma foto aparece em mais de um banner) */
+.banner--flip .banner__media img {
+  transform: scaleX(-1);
+}
+
+@media (hover: hover) {
+  .banner--flip:hover .banner__media img {
+    transform: scaleX(-1) scale(1.05);
+  }
+}
+
+/* Textura de fundo (cetim) com título centralizado */
+.banner--texture {
+  grid-template-columns: 1fr;
+}
+
+.banner--texture .banner__media {
+  position: absolute;
+  inset: 0;
+}
+
+.banner--texture .banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 27, 54, 0.28);
+}
+
+.banner--texture .banner__body {
+  align-items: center;
+  text-align: center;
+}
+
+@media (hover: hover) {
+  .banner:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .banner:hover .banner__media img {
+    transform: scale(1.05);
+  }
+}
+
+.banner:active {
+  transform: scale(0.985);
+}
+
+/* Desktop: três "capas de revista" lado a lado */
+@media (min-width: 960px) {
+  .banners {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding: 72px var(--gutter) 24px;
+  }
+
+  .banners__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .banner,
+  .banner--photo-left,
+  .banner--photo-right {
+    grid-template-columns: 1fr;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+  }
+
+  .banner .banner__media,
+  .banner--photo-right .banner__media {
+    position: absolute;
+    inset: 0;
+    order: 0;
+  }
+
+  .banner--photo-left .banner__media::after,
+  .banner--photo-right .banner__media::after {
+    background: linear-gradient(to top, var(--color-navy) 6%, transparent 62%);
+  }
+
+  .banner__body,
+  .banner--photo-left .banner__body,
+  .banner--texture .banner__body {
+    align-self: end;
+    align-items: flex-start;
+    padding: 28px;
+    text-align: left;
+  }
+
+  .banner--texture .banner__body {
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .banner__title {
+    font-size: 48px;
+  }
+
+  .banner--photo-right .banner__title {
+    max-width: none;
+  }
+
+  .banner__subtitle {
+    font-size: 11px;
+  }
+
+  .banner__cta {
+    margin-top: 16px;
+    padding: 6px 18px;
+    font-size: 10px;
+  }
+}

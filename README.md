@@ -10,6 +10,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | --- | --- | --- | --- | --- |
 | 01 | **Essencial** | [`modelos/01-essencial`](modelos/01-essencial) | Studio Suelen Bezerra · Nail Designer | Modelo inicial e mais simples: foto + monograma, 5 cards de navegação, procedimentos, galeria e rodapé. Luxo discreto em creme, nude e dourado. |
 | 02 | **Autoridade** | [`modelos/02-autoridade`](modelos/02-autoridade) | Agatha Rigazzi · Mentora de negócios | Para especialistas que vendem conhecimento: prova social sobre a foto, cards com foto alternando bege/chocolate, "Quem é", serviços, depoimentos e chamada final. Creme, bege e chocolate com Poppins. |
+| 03 | **Editorial** | [`modelos/03-editorial`](modelos/03-editorial) | Marina Albuquerque · Mentora de marketing digital | Linguagem de revista: nome em serifa sobre a foto, números com botão, faixas de foto e cetim, "Quem é" em duotone, serviços e retrato final. Azul-marinho com Playfair Display. |
 
 ## Convenções
 
@@ -37,6 +38,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | --- | --- | --- |
 | 01 · Essencial | `biosite-01-essencial` | https://biosite-01-essencial.vercel.app |
 | 02 · Autoridade | `biosite-02-autoridade` | https://biosite-02-autoridade.vercel.app |
+| 03 · Editorial | `biosite-03-editorial` | https://biosite-03-editorial.vercel.app |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.

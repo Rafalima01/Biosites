@@ -1,0 +1,192 @@
+/*
+ * Capa editorial: nome em serifa grande sobre o azul-marinho, sobreposto ao topo
+ * da foto. Em seguida, o quadro de números com o botão principal.
+ */
+.hero {
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__text {
+  position: relative;
+  z-index: 1;
+  padding: 36px var(--gutter) 0;
+  text-align: center;
+}
+
+.hero__name {
+  display: grid;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(44px, 13vw, 60px);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+
+.hero__role,
+.hero__tagline {
+  display: none;
+}
+
+.hero__media {
+  position: relative;
+  margin-top: -18px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Funde o topo da foto ao azul para o nome flutuar sobre ela */
+.hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--color-navy) 0%, transparent 22%);
+  pointer-events: none;
+}
+
+/* Números + botão */
+.highlights {
+  padding: 26px var(--gutter) 8px;
+  background: var(--color-paper);
+}
+
+.highlights__box {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 18px 18px 20px;
+  border-radius: var(--radius);
+  background: var(--color-mist);
+}
+
+.highlights__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+.stat {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.stat + .stat {
+  border-left: 1px solid rgba(13, 27, 54, 0.45);
+}
+
+.stat__value {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--color-navy);
+}
+
+.stat__label {
+  font-size: 11px;
+  color: var(--color-ink-soft);
+}
+
+.highlights__cta {
+  width: 100%;
+  max-width: 320px;
+}
+
+@media (min-width: 960px) {
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 80px);
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding: 0 var(--gutter);
+  }
+
+  .hero__text {
+    padding: 64px 0;
+    text-align: left;
+  }
+
+  .hero__name {
+    font-size: clamp(76px, 8vw, 124px);
+  }
+
+  .hero__role {
+    display: block;
+    margin-top: 28px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-on-navy-soft);
+  }
+
+  .hero__tagline {
+    display: block;
+    max-width: 32ch;
+    margin-top: 12px;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--color-on-navy-soft);
+  }
+
+  .hero__media {
+    align-self: stretch;
+    margin: 0;
+    aspect-ratio: auto;
+    min-height: min(84vh, 760px);
+  }
+
+  .hero__media::after {
+    background:
+      linear-gradient(to right, var(--color-navy) 0%, transparent 30%, transparent 82%, var(--color-navy) 100%),
+      linear-gradient(to top, var(--color-navy) 0%, transparent 18%);
+  }
+
+  .highlights {
+    padding: 0 var(--gutter);
+    background: transparent;
+  }
+
+  .highlights__box {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 40px;
+    max-width: var(--content-max);
+    margin: -44px auto 0;
+    padding: 24px 40px;
+    position: relative;
+    z-index: 2;
+    box-shadow: var(--shadow);
+  }
+
+  .highlights__stats {
+    max-width: 520px;
+  }
+
+  .stat__value {
+    font-size: 32px;
+  }
+
+  .stat__label {
+    font-size: 13px;
+  }
+
+  .highlights__cta {
+    width: auto;
+    max-width: none;
+    padding-inline: 40px;
+  }
+}

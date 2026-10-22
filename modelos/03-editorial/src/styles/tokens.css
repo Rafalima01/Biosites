@@ -1,0 +1,42 @@
+/*
+ * Tokens de design do Modelo 03 · Editorial. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Azul-marinho */
+  --color-navy: #0d1b36;
+  --color-navy-2: #132a52;
+  --color-navy-3: #1d3c70;
+  --color-on-navy: #f4f1ea;
+  --color-on-navy-soft: rgba(244, 241, 234, 0.78);
+
+  /* Superfícies claras */
+  --color-paper: #ffffff;
+  --color-page: #eef0f3;
+  --color-mist: #e2e4e8;
+
+  /* Texto */
+  --color-ink: #0d1b36;
+  --color-ink-soft: #545e70;
+
+  /* Tipografia */
+  --font-display: 'Playfair Display', 'Bodoni Moda', Georgia, serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius: 4px;
+  --radius-lg: 10px;
+
+  /* Sombras */
+  --shadow: 0 18px 36px -24px rgba(13, 27, 54, 0.55);
+  --shadow-hover: 0 26px 44px -24px rgba(13, 27, 54, 0.65);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 320ms;
+
+  /* Layout */
+  --gutter: clamp(16px, 5vw, 32px);
+  --column: 480px;
+  --content-max: 1140px;
+}
