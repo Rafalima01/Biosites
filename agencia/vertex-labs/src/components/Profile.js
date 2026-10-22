@@ -1,14 +1,8 @@
 import { esc, attrs } from '../lib/html.js';
 import { T } from '../lib/i18n.js';
-import { resolveChannel, renderTarget, whatsappUrl } from '../lib/links.js';
+import { resolveChannel, renderTarget } from '../lib/links.js';
+import { actionElement } from '../lib/actions.js';
 import { icon } from './icons.js';
-
-/** Link de WhatsApp com mensagem em cada idioma (o href troca junto com o idioma). */
-export function whatsappAttrs(site, message) {
-  const pt = whatsappUrl(site.contact.whatsapp.number, message.pt);
-  const en = whatsappUrl(site.contact.whatsapp.number, message.en);
-  return { href: pt, 'data-i18n-href': JSON.stringify({ pt, en }), target: '_blank', rel: 'noopener noreferrer' };
-}
 
 // Contatos sem destino (ex.: e-mail ainda não informado) ficam ocultos até serem configurados.
 export function Socials(site, className = 'socials') {
@@ -30,6 +24,14 @@ export function Socials(site, className = 'socials') {
 export function Profile(site) {
   const { brand, cta } = site;
   const instagram = resolveChannel(site, 'instagram');
+  const ctaContent = `
+    <span class="cta__icon" aria-hidden="true"><img src="${esc(brand.mark.src)}" alt="" width="40" height="26"></span>
+    <span class="cta__body">
+      <span class="cta__title">${T(cta.title)}</span>
+      <span class="cta__text">${T(cta.text)}</span>
+    </span>
+    <span class="cta__arrow" aria-hidden="true">${icon('arrowUpRight', { size: 20, stroke: 2 })}</span>`;
+
   return `<header class="profile" id="topo">
     <div class="profile__avatar reveal"><img ${attrs({ src: brand.mark.src, alt: brand.mark.alt, width: 120, height: 78 })}></div>
     <p class="profile__status reveal" style="--i:1"><span class="profile__dot" aria-hidden="true"></span>${T(brand.status)}</p>
@@ -39,13 +41,5 @@ export function Profile(site) {
     <p class="profile__bio reveal" style="--i:3">${T(brand.bio)}</p>
     <div class="reveal" style="--i:4">${Socials(site)}</div>
   </header>
-  <a ${attrs({ class: 'cta reveal', ...whatsappAttrs(site, cta.message), style: '--i:5' })}>
-    <span class="cta__icon" aria-hidden="true"><img src="${esc(brand.mark.src)}" alt="" width="40" height="26"></span>
-    <span class="cta__body">
-      <span class="cta__title">${T(cta.title)}</span>
-      <span class="cta__text">${T(cta.text)}</span>
-    </span>
-    <span class="cta__arrow" aria-hidden="true">${icon('arrowUpRight', { size: 20, stroke: 2 })}</span>
-    <span class="sr-only">(WhatsApp)</span>
-  </a>`;
+  <div class="reveal" style="--i:5">${actionElement(site, cta.action, { className: 'cta', content: ctaContent })}</div>`;
 }

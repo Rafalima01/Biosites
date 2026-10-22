@@ -9,6 +9,10 @@ html {
   text-size-adjust: 100%;
 }
 
+html.has-modal {
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -159,35 +163,6 @@ button {
 
 .socials--start {
   justify-content: flex-start;
-}
-
-/* Toast de destino pendente */
-.toast {
-  position: fixed;
-  z-index: 50;
-  left: 50%;
-  bottom: calc(20px + env(safe-area-inset-bottom));
-  width: max-content;
-  max-width: calc(100vw - 32px);
-  padding: 12px 20px;
-  border-radius: 14px;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 14px;
-  line-height: 1.4;
-  text-align: center;
-  box-shadow: 0 18px 34px -16px rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  transform: translate(-50%, 12px);
-  pointer-events: none;
-  transition:
-    opacity var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-
-.toast.is-visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
 }
 
 /* Entrada discreta (ativada apenas com JS; ver behaviors/reveal.js) */

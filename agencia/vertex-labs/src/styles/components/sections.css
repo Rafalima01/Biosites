@@ -3,6 +3,10 @@
   scroll-margin-top: 16px;
 }
 
+.section--links {
+  padding-top: 20px;
+}
+
 .section__head {
   display: flex;
   align-items: baseline;
@@ -18,10 +22,19 @@
   letter-spacing: -0.02em;
 }
 
-.section__index {
-  font-family: var(--font-mono);
-  font-size: 12px;
+.section__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.section__more:hover {
+  color: var(--vx-accent);
 }
 
 .section__intro {
@@ -30,29 +43,30 @@
   color: var(--muted);
 }
 
-/* Serviços numerados */
-.services {
+/* Lista numerada: site, portfólio completo, sistema sob medida */
+.link-list {
   display: grid;
   gap: 12px;
-  margin-top: 20px;
 }
 
-.service {
+.link-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
+  width: 100%;
   padding: 18px 16px 18px 18px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
   box-shadow: var(--shadow);
+  text-align: left;
   transition:
     border-color var(--dur) var(--ease),
     transform var(--dur) var(--ease);
 }
 
-.service__num {
+.link-row__num {
   display: grid;
   place-items: center;
   width: 52px;
@@ -65,30 +79,23 @@
   color: var(--vx-accent);
 }
 
-.service__body {
+.link-row__body {
   display: grid;
   gap: 3px;
 }
 
-.service__title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.link-row__title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 18px;
 }
 
-.service__title .icon {
-  color: var(--vx-accent);
-}
-
-.service__text {
+.link-row__text {
   font-size: 14px;
   color: var(--muted);
 }
 
-.service__arrow {
+.link-row__arrow {
   display: grid;
   place-items: center;
   width: 40px;
@@ -101,19 +108,46 @@
 }
 
 @media (hover: hover) {
-  .service:hover {
+  .link-row:not(.is-soon):hover {
     border-color: color-mix(in srgb, var(--vx-accent) 60%, transparent);
     transform: translateY(-2px);
   }
 
-  .service:hover .service__arrow {
+  .link-row:not(.is-soon):hover .link-row__arrow {
     background: var(--vx-gradient);
     color: #fff;
   }
 }
 
-.service:active {
+.link-row:not(.is-soon):active {
   transform: scale(0.985);
+}
+
+/* Item ainda sem destino: visível, porém desativado */
+.link-row.is-soon {
+  position: relative;
+  cursor: default;
+}
+
+.link-row.is-soon .link-row__arrow {
+  display: none;
+}
+
+.link-row.is-soon .link-row__title,
+.link-row.is-soon .link-row__text {
+  opacity: 0.7;
+}
+
+.soon-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 @media (min-width: 1024px) {
@@ -121,7 +155,7 @@
     padding-top: 40px;
   }
 
-  #servicos {
+  .section--links {
     padding-top: 48px;
   }
 

@@ -72,12 +72,9 @@
 }
 
 .work {
-  scroll-snap-align: start;
-}
-
-.work__link {
   display: grid;
   gap: 12px;
+  scroll-snap-align: start;
 }
 
 /* Palco com grade e brilho laranja, celular no centro */
@@ -132,26 +129,6 @@
   font-size: 13px;
   color: var(--muted);
   text-align: right;
-}
-
-.work__visit {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: -6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--vx-accent);
-}
-
-@media (hover: hover) {
-  .work__link:hover .work__phone {
-    transform: translateY(-10px);
-  }
-
-  .work__link:hover .work__title {
-    color: var(--vx-accent);
-  }
 }
 
 /* Categoria sem itens */

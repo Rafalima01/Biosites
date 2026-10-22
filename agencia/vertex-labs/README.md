@@ -1,28 +1,41 @@
 # Vertex Labs · Bio site da agência
 
 Bio site da própria agência, com a identidade da Vertex Labs (preto, branco e o degradê
-laranja→vermelho do símbolo). Estrutura inspirada na referência enviada, sem a seção de cursos.
+laranja→vermelho do símbolo). Duas páginas: **início** (`/`) e **portfólio completo** (`/portfolio/`).
 
-**Conteúdo:** topo com a marca, seletor **PT/EN** e botão de **tema claro/escuro**; símbolo em anel
-laranja, status "Disponível para novos projetos", nome, @vertexlabs.io, slogan "Construímos o que
-ainda não existe." (do post da marca), apresentação e redes; botão de destaque **Solicitar
-orçamento** (WhatsApp com mensagem pronta no idioma escolhido); **O que fazemos** (bio sites,
-landing pages e sistemas sob medida, cada um abrindo o WhatsApp com a mensagem do serviço);
-**Portfólio** em abas (Bio sites com os 6 modelos publicados; Landing pages e Sistemas como
-"em breve") e rodapé.
+## Página inicial
 
-No desktop o perfil fica fixo à esquerda e serviços + portfólio à direita.
+- Topo com a marca, seletor **PT/EN** e botão de **tema claro/escuro** (a escolha fica salva).
+- Perfil: símbolo em anel laranja, status, nome, @vertexlabs.io, slogan "Construímos o que ainda
+  não existe.", apresentação e redes.
+- **Solicitar orçamento** → abre a janela "Qual serviço você precisa?" com Página de vendas, Site
+  institucional, Bio site, Vídeo em motion e Outro projeto. Cada opção abre o WhatsApp com a
+  mensagem do serviço (no idioma escolhido).
+- Lista numerada:
+  - **01 Site da Vertex** — desativado, com selo "Em breve", até o site existir.
+  - **02 Portfólio completo** — abre `/portfolio/`.
+  - **03 Sistema sob medida** — abre uma janela com nome (opcional) e resumo do projeto; ao enviar,
+    a mensagem segue para o WhatsApp.
+- **Portfólio** (resumo): abas por categoria e link **Ver completo**. Os cards mostram só a imagem.
+
+## Portfólio completo (`/portfolio/`)
+
+Título, filtros (Todos, Bio sites, Landing pages, Sistemas) e cada projeto com imagem, ano,
+segmento, descrição e tags. Botão voltar no topo e botões flutuantes de "voltar ao topo" e
+"Orçamento".
+
+No desktop, a página inicial fica em duas colunas (perfil fixo à esquerda) e o portfólio em grade.
 
 ## Executar
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173
-npm run check     # traduções completas, arquivos, renderização e links
-npm run build     # gera /dist
+npm run dev       # http://localhost:5173 e http://localhost:5173/portfolio/
+npm run check     # traduções, arquivos, páginas, janelas e links
+npm run build     # gera /dist (index.html + portfolio/index.html)
 ```
 
-Na URL, `?lang=en` e `?theme=light` abrem o site já no idioma/tema (útil para compartilhar).
+Na URL, `?lang=en` e `?theme=light` abrem o site já no idioma/tema.
 
 ## Onde editar
 
@@ -33,18 +46,19 @@ Tudo em `src/sites/vertex-labs/site.config.js`. Todo texto visível é `{ pt, en
 | --- | --- |
 | Status, função, slogan, apresentação | `brand` |
 | WhatsApp, Instagram, e-mail, site | `contact` (contato vazio fica oculto) |
-| Redes exibidas | `socials` |
-| Botão de orçamento e mensagem | `cta` |
-| Serviços | `services.items` |
-| Portfólio | `portfolio.categories` — para incluir landing pages e sistemas, adicione itens em `items` |
+| Opções e mensagens do orçamento | `quote.options` |
+| Lista 01–03 | `links` (`action`: `dialog`, `page` ou `url`; `url` vazia = "Em breve") |
+| Textos da janela de sistema sob medida | `systemForm` |
+| Projetos do portfólio | `portfolio.items` (`category`, `title`, `year`, `segment`, `image`, `description`, `tags`) |
+| Textos da página de portfólio | `portfolioPage` |
 
 ### Adicionar um projeto ao portfólio
 
 1. Salve a imagem em `public/media/portfolio/` (print de celular, proporção ~9:19,5, 600 px de largura).
-2. Adicione em `portfolio.categories[n].items`:
-   `{ title: 'Nome', segment: { pt: 'Segmento', en: 'Segment' }, image: '/media/portfolio/arquivo.webp', href: 'https://...' }`
+2. Adicione em `portfolio.items` com `category: 'bio-sites' | 'landing-pages' | 'sistemas'`.
+   O projeto aparece no resumo da página inicial e no portfólio completo.
 
-Os prints atuais foram gerados com o Chrome em modo headless a partir dos sites publicados.
+Quando o site da Vertex estiver no ar, preencha o `href` do item "Site da Vertex" em `links`.
 
 ## Marca
 
@@ -60,5 +74,6 @@ Produção: https://vertexlabs-omega.vercel.app
 ## Pendências
 
 - E-mail de contato (o ícone aparece sozinho quando `contact.email.address` for preenchido).
+- Endereço do site da Vertex (item 01 da lista).
 - Domínio próprio: adicionar na Vercel e preencher `meta.siteUrl`.
 - Landing pages e sistemas no portfólio.
