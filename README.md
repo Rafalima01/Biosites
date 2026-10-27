@@ -15,11 +15,25 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 05 | **Premium** | [`modelos/05-premium`](modelos/05-premium) | Larissa Prado · Estrategista digital | Vitrine de produtos digitais: capa clara com linhas douradas e foto, cards de vidro sobre fundo dourado com imagem saltando para fora e botão de acesso. Creme e dourado com Bodoni Moda. |
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
 
+## Clientes
+
+Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (cada um vira um projeto Vercel).
+
+| Cliente | Pasta | Modelo | Situação |
+| --- | --- | --- | --- |
+| Jailane Ferreira · nail designer e mentora | [`clientes/jailane-ferreira`](clientes/jailane-ferreira) | 02 · Autoridade | 3 páginas: início, `/servicos/` (16 serviços com valores) e `/mentoria/` (aguardando textos) |
+
 ## Site da agência
 
 | Projeto | Pasta | Descrição |
 | --- | --- | --- |
 | **Vertex Labs** | [`agencia/vertex-labs`](agencia/vertex-labs) | Bio site da própria agência: orçamento, serviços e portfólio com os modelos acima. PT/EN e tema claro/escuro. |
+
+## Anúncios
+
+| Projeto | Pasta | Descrição |
+| --- | --- | --- |
+| **Anúncios em motion** | [`anuncios/vertex-motion`](anuncios/vertex-motion) | 4 vídeos 9:16 (Reels/Stories) narrados para captar clientes de bio sites e landing pages: voz da ElevenLabs, legenda palavra a palavra, trilha e efeitos, mais o guia de copy e campanha. Feitos em Remotion. |
 
 ## Convenções
 

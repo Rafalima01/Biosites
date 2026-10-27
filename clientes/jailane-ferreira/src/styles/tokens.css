@@ -1,0 +1,43 @@
+/*
+ * Tokens de design do Modelo 02 · Autoridade. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Superfícies */
+  --color-bg: #efe8e1;
+  --color-surface: #ddd0c3;
+  --color-surface-soft: #e6dcd2;
+  --color-paper: #f6f1ec;
+
+  /* Marca (chocolate) */
+  --color-brand: #5e2c1e;
+  --color-brand-deep: #4a2116;
+  --color-brand-soft: #7a4331;
+  --color-on-brand: #f6efe8;
+
+  /* Texto */
+  --color-ink: #4a271b;
+  --color-ink-soft: #6b5044;
+  --color-photo-bg: #5d524c;
+
+  /* Tipografia */
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-lg: 26px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+
+  /* Sombras */
+  --shadow-card: 0 18px 36px -24px rgba(74, 33, 22, 0.45), 0 3px 8px -4px rgba(74, 33, 22, 0.14);
+  --shadow-card-hover: 0 24px 44px -24px rgba(74, 33, 22, 0.55), 0 6px 14px -6px rgba(74, 33, 22, 0.2);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 320ms;
+
+  /* Layout */
+  --gutter: clamp(16px, 5vw, 32px);
+  --column: 520px;
+  --content-max: 1140px;
+}

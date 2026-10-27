@@ -1,0 +1,19 @@
+{
+  "name": "biosite-jailane-ferreira",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bio site de Jailane Ferreira (nail designer e mentora), feito com o Modelo 02 · Autoridade",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
