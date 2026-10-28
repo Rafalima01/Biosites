@@ -1,0 +1,58 @@
+/*
+ * Tokens de design do Modelo 07 · Hospedagem. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Fundo e superfícies */
+  --color-bg: #f6f1e9;
+  --color-surface: #ffffff;
+  --color-line: #e7dfd2;
+
+  /* Texto */
+  --color-text: #14303a;
+  --color-muted: #5b6e76;
+
+  /* Marca */
+  --ocean: #0f4352;
+  --sea: #1d7286;
+  --sea-soft: #e2eff1;
+  --coral: #d9654c;
+  --coral-soft: #fbe7e1;
+  --sun: #f2c46d;
+
+  /* Agenda */
+  --day-free: #e4f2ee;
+  --day-free-ink: #1f6f57;
+  --day-high: #fbf0d9;
+  --day-high-ink: #8a5d12;
+  --day-package: #fbe7e1;
+  --day-package-ink: #b2462f;
+  --day-booked: #eeebe6;
+  --day-booked-ink: #9b958c;
+
+  /* Tipografia */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-lg: 24px;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow-card: 0 18px 40px -26px rgba(15, 67, 82, 0.45);
+  --shadow-soft: 0 10px 30px -18px rgba(15, 67, 82, 0.35);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+
+  /* Layout */
+  --content: 1120px;
+  --gutter: 16px;
+  --topbar-h: 64px;
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 28px;
+  }
+}

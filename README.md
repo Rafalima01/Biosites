@@ -14,6 +14,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 04 | **Compacto** | [`modelos/04-compacto`](modelos/04-compacto) | Bianca Moraes · Designer de sobrancelhas | Cartão de visita digital em uma tela: foto do studio, retrato em moldura circular, monograma, quatro botões, painéis de Serviços/Sobre e barra de redes. Marrom, creme e bege. |
 | 05 | **Premium** | [`modelos/05-premium`](modelos/05-premium) | Larissa Prado · Estrategista digital | Vitrine de produtos digitais: capa clara com linhas douradas e foto, cards de vidro sobre fundo dourado com imagem saltando para fora e botão de acesso. Creme e dourado com Bodoni Moda. |
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
+| 07 | **Hospedagem** | [`modelos/07-hospedagem`](modelos/07-hospedagem) | Maré Mansa · Casas de temporada (marca fictícia) | Reserva direta para casas de temporada: casas com fotos e valores, pacotes de datas especiais, agenda interativa com preço por dia e reserva pronta no WhatsApp, sem taxa de plataforma. Areia, oceano e coral. |
 
 ## Clientes
 
@@ -65,6 +66,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 04 · Compacto | `biosite-04-compacto` | https://biosite-04-compacto.vercel.app |
 | 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 | 06 · Delivery | `biosite-06-delivery` | https://biosite-06-delivery.vercel.app |
+| 07 · Hospedagem | `biosite-07-hospedagem` | https://biosite-07-hospedagem.vercel.app |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 
