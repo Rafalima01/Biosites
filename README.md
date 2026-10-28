@@ -16,6 +16,14 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
 | 07 | **Hospedagem** | [`modelos/07-hospedagem`](modelos/07-hospedagem) | Maré Mansa · Casas de temporada (marca fictícia) | Reserva direta para casas de temporada: casas com fotos e valores, pacotes de datas especiais, agenda interativa com preço por dia e reserva pronta no WhatsApp, sem taxa de plataforma. Areia, oceano e coral. |
 
+## Sistemas
+
+Produtos com banco de dados e painel, além da vitrine.
+
+| Sistema | Pasta | Descrição |
+| --- | --- | --- |
+| **Hospedagem · reserva direta** | [`sistemas/hospedagem`](sistemas/hospedagem) | Site + reservas com Pix para casas de temporada: agenda com disponibilidade real, reserva fechada no site, QR Code Pix do sinal e painel do anfitrião (reservas, agenda, casas e fotos, promoções, pacotes, personalização). Next.js + Supabase, uma cópia por cliente. |
+
 ## Clientes
 
 Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (cada um vira um projeto Vercel).
