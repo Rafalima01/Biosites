@@ -3,6 +3,7 @@ import { getPainel } from '@/lib/supabase/server';
 import { escolherStudio, sair } from '../actions';
 import { Menu } from '@/components/Menu';
 import { Avisos } from '@/components/Avisos';
+import { MeuSite } from '@/components/MeuSite';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +40,7 @@ export default async function PainelLayout({ children }) {
           )}
         </div>
         <div className="topo__acoes">
+          <MeuSite url={studio.site_url} />
           <Avisos studioId={studio.id} email={user.email} />
           <form action={sair}><button className="btn btn--mini btn--fantasma" type="submit" title={user.email}>Sair</button></form>
         </div>

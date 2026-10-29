@@ -27,7 +27,7 @@ export async function getPainel() {
   const { data } = await supabase.auth.getUser();
   if (!data?.user) return { supabase, user: null, studios: [], studio: null };
   // A tabela de studios é pública (o site lê os ativos), então filtramos pelos vínculos da pessoa.
-  const { data: studios } = await supabase.from('studios').select('id, slug, name, timezone, whatsapp, settings, active').order('name');
+  const { data: studios } = await supabase.from('studios').select('id, slug, name, timezone, whatsapp, settings, active, site_url').order('name');
   const { data: vinculos } = await supabase.from('studio_members').select('studio_id').eq('email', data.user.email.toLowerCase());
   const { data: agencia } = await supabase.rpc('is_agency');
   const meus = new Set((vinculos || []).map((v) => v.studio_id));

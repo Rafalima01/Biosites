@@ -679,6 +679,41 @@ revoke all on function public.push_remove(text, text[]) from public;
 grant execute on function public.push_remove(text, text[]) to anon, authenticated;
 
 -- =============================================================================
+-- Link do biosite (botão "Meu site" no painel) e convites de cadastro
+-- =============================================================================
+alter table public.studios add column if not exists site_url text not null default '';
+
+-- Link único para a dona criar o próprio login: vale uma vez e por 7 dias. Só o servidor do
+-- painel (chave service_role) lê e usa; pelo site e pelo login comum, a tabela não aparece.
+create table if not exists public.invites (
+  token text primary key,
+  studio_id uuid not null references public.studios (id) on delete cascade,
+  expires_at timestamptz not null default now() + interval '7 days',
+  used_at timestamptz,
+  used_email text,
+  created_at timestamptz not null default now()
+);
+alter table public.invites enable row level security; -- sem políticas
+
+-- Rode no SQL Editor: select novo_convite('slug-do-studio'); devolve o link pronto para enviar.
+create or replace function public.novo_convite(p_slug text)
+returns text
+language plpgsql volatile security definer set search_path = public
+as $$
+declare
+  sid uuid;
+  tk text := replace(gen_random_uuid()::text, '-', '') || replace(gen_random_uuid()::text, '-', '');
+begin
+  select id into sid from studios where slug = p_slug;
+  if sid is null then raise exception 'Studio não encontrado: %', p_slug; end if;
+  insert into invites (token, studio_id) values (tk, sid);
+  return coalesce((select value from app_config where key = 'painel_url'), 'https://sistema-agendamento-sand.vercel.app')
+    || '/convite/' || tk;
+end;
+$$;
+revoke all on function public.novo_convite(text) from public, anon, authenticated;
+
+-- =============================================================================
 -- Primeiro acesso da agência (troque o e-mail e rode esta linha separadamente):
 -- insert into public.agency_admins (email) values ('voce@exemplo.com') on conflict do nothing;
 -- =============================================================================

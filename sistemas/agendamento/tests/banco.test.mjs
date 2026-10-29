@@ -243,5 +243,16 @@ await as('authenticated', 'agencia@ex.com');
 ok((await one(`select count(*)::int as n from appointments`)).n >= 3, 'agência vê todos os studios');
 ok((await one(`select ping() as p`)).p.startsWith('ok:'), 'ping do despertador responde');
 
+// ---------------- convites de cadastro ----------------
+ok(await throws(() => db.query(`select novo_convite('outro-studio')`)), 'nem a agência pelo login gera convite (só no SQL Editor)');
+await as(null);
+const link = (await one(`select novo_convite('outro-studio') as l`)).l;
+ok(/\/convite\/[0-9a-f]{64}$/.test(link), 'convite devolve link com código longo');
+ok(await throws(() => db.query(`select novo_convite('nao-existe')`)), 'convite para studio inexistente dá erro');
+await as('anon');
+ok((await one('select count(*)::int as n from invites')).n === 0, 'site não lê convites');
+await as('authenticated', 'outra@ex.com');
+ok((await one('select count(*)::int as n from invites')).n === 0, 'login comum não lê convites');
+
 console.log(`\n${total - falhas}/${total} verificações passaram.`);
 process.exit(falhas ? 1 : 0);

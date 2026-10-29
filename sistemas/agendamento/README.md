@@ -66,7 +66,9 @@ Variáveis do projeto Vercel: `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY
    insert into agency_admins (email) values ('seu-email@exemplo.com');
    ```
 4. **Painel na Vercel:** projeto com *Root Directory* `sistemas/agendamento` e as variáveis
-   `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` (*Project Settings → API* do Supabase).
+   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`
+   (*Project Settings → API Keys* do Supabase; a service_role fica só no servidor e serve para o
+   cadastro pelo link de convite).
    Publique com `node scripts/publicar.mjs <projeto>` (a publicação é manual; ver README da raiz).
 5. **Segredos do GitHub** (*Settings → Secrets and variables → Actions*):
    `AGENDA_SUPABASE_URL`, `AGENDA_SUPABASE_ANON_KEY` (despertador), `AGENDA_DB_URL` (Supabase →
@@ -75,21 +77,22 @@ Variáveis do projeto Vercel: `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY
 
 ## Cliente nova (alguns minutos)
 
-1. Em *Authentication → Users → Add user*, crie o login da dona.
-2. No *SQL Editor* (troque os valores):
+1. No *SQL Editor* (troque os valores):
    ```sql
    with s as (
-     insert into studios (slug, name, whatsapp, settings) values (
-       'nome-do-studio', 'Nome do Studio', '5571999999999',
+     insert into studios (slug, name, whatsapp, site_url, settings) values (
+       'nome-do-studio', 'Nome do Studio', '5571999999999', 'https://biosite-nome-do-studio.vercel.app',
        '{"step": 30, "minNotice": 120, "daysAhead": 30, "bufferMinutes": 0, "depositPercent": 30, "holdMinutes": 120,
          "pix": {"key": "+5571999999999", "keyLabel": "Celular", "keyDisplay": "(71) 99999-9999", "holder": "Nome do Titular", "city": "Salvador"}}'
      ) returning id
-   ), m as (insert into studio_members (studio_id, email) select id, 'dona@exemplo.com' from s)
+   )
    insert into hours (studio_id, weekday, starts, ends)
    select s.id, d, f.ini, f.fim from s, generate_series(1, 6) d,
      (values ('09:00'::time, '12:00'::time), ('13:00'::time, '19:00'::time)) f (ini, fim);
    ```
-3. Cadastre os serviços (em *Table Editor → services* ou por SQL: nome, categoria, minutos e valor).
+2. Cadastre os serviços (em *Table Editor → services* ou por SQL: nome, categoria, minutos e valor).
+3. **Login da dona:** rode `select novo_convite('nome-do-studio');` e mande o link que aparece. Ela
+   escolhe e-mail e senha e já entra no painel; o link vale uma vez só, por 7 dias.
 4. No bio site da cliente, ligue a página de agendamento ao sistema (etapa 2, abaixo).
 
 `settings`: `step` minutos entre horários · `minNotice` antecedência mínima (min) · `daysAhead` até

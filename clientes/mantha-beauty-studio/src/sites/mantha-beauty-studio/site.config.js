@@ -16,9 +16,7 @@ const media = (name, alt, { width, height, sizes }) => ({
   height,
 });
 
-// FASE DE TESTE: WhatsApp da Vertex recebendo as mensagens do site. O da Samantha é 5571996509097;
-// volte para ele quando ela começar a usar de verdade.
-const whatsapp = '5571992351084';
+const whatsapp = '5571996509097';
 
 export default {
   id: 'mantha-beauty-studio',
@@ -145,11 +143,11 @@ export default {
     studio: 'mantha-beauty-studio',
   },
 
-  // Pix do sinal. FASE DE TESTE: chave provisória; trocar pela chave da Samantha antes de usar de verdade.
+  // Pix do sinal (chave celular da Samantha).
   pix: {
-    key: '+5571992351084', // celular no formato +55DDDNÚMERO
+    key: '+5571996509097', // celular no formato +55DDDNÚMERO
     keyLabel: 'Celular',
-    keyDisplay: '(71) 99235-1084',
+    keyDisplay: '(71) 99650-9097',
     holder: 'Samantha Carvalho Beauty Studio',
     city: 'Salvador',
   },

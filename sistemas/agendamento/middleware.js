@@ -15,7 +15,8 @@ export async function middleware(request) {
     },
   });
   const { data } = await supabase.auth.getUser();
-  if (!data?.user && request.nextUrl.pathname !== '/login') {
+  const livre = request.nextUrl.pathname === '/login' || request.nextUrl.pathname.startsWith('/convite/');
+  if (!data?.user && !livre) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.search = '';

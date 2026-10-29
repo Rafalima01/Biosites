@@ -34,7 +34,7 @@ Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (ca
 | Cliente | Pasta | Modelo | Situação |
 | --- | --- | --- | --- |
 | Jailane Ferreira · nail designer e mentora | [`clientes/jailane-ferreira`](clientes/jailane-ferreira) | 02 · Autoridade | 3 páginas: início, `/servicos/` (16 serviços com valores) e `/mentoria/` (aguardando textos) |
-| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 09 · Delicado | Cores dela (roxo ameixa, dourado e creme); início, `/servicos/` e `/agendar/` (horários livres e sinal por Pix). Falta trocar a chave Pix provisória e ligar a agenda do Google |
+| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 09 · Delicado | Cores dela (roxo ameixa, dourado e creme); início, `/servicos/` e `/agendar/` (horários livres e sinal por Pix). Agenda ligada ao sistema (sinal por Pix na chave dela) |
 
 ## Site da agência
 
