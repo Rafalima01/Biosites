@@ -6,7 +6,7 @@ Bio site feito com o [Modelo 08 · Glam](../../modelos/08-glam). Sobrancelhas, c
 - **Fotos:** `public/media/` (capa com fundo roxo estendido para o letreiro não cobrir o rosto, rosto e fundo).
 - **Agendamento:** o botão principal e o "Agendar" de cada serviço abrem o WhatsApp (71 99650-9097)
   com a mensagem pronta, incluindo o nome do serviço.
-- **Galeria de inspirações:** escondida até termos fotos de trabalhos da Samantha. Para ativar, preencha
+- **Galeria de inspirações:** 4 fotos de trabalhos (filtros Sobrancelhas e Cílios); as escolhidas vão na mensagem do WhatsApp. Para mais fotos, preencha
   `inspo.tags` e `inspo.items` (mesmo formato do modelo) com as fotos em `public/media/`.
 
 ## Executar

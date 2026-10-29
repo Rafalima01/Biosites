@@ -4,9 +4,9 @@
  * Todo o conteúdo, links, imagens e ajustes de tema deste bio site vivem aqui.
  * Fotos da cliente ficam em `public/media/`.
  *
- * INSPIRAÇÕES: a galeria só aparece quando houver fotos em `inspo.items`
- * (fotos de trabalhos da própria Samantha). Sem fotos, o site mostra as
- * especialidades no lugar das inspirações escolhidas.
+ * INSPIRAÇÕES: fotos de trabalhos da própria Samantha. As escolhidas no "+"
+ * entram na mensagem do WhatsApp. Sem fotos, a galeria some e o site mostra
+ * as especialidades no lugar.
  */
 
 const media = (name, alt, { width, height, sizes }) => ({
@@ -30,7 +30,7 @@ export default {
       'Sobrancelhas, cílios e lábios com Samantha Carvalho. Design com henna, cílios em tufos de seda e spa labial. Agende pelo WhatsApp.',
     themeColor: '#5b3a7e',
     // Domínio final (ex.: 'https://manthabeauty.com.br'). Gera a URL canônica e o og:image absoluto.
-    siteUrl: '',
+    siteUrl: 'https://biosite-mantha-beauty-studio.vercel.app',
     ogImage: '/media/samantha-capa-900.webp',
   },
 
@@ -68,7 +68,7 @@ export default {
     category: 'Sobrancelhas',
     service: 'Design personalizado com henna',
     detail: '1 h · R$ 40',
-    photo: null,
+    photo: media('trabalho-1', 'Sobrancelhas marcadas com design e henna', { width: 800, height: 800, sizes: [400, 800] }),
   },
 
   // Bloco ao lado das especialidades.
@@ -80,12 +80,17 @@ export default {
     message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.',
   },
 
-  // Fotos de trabalhos da Samantha (vazio = galeria escondida).
+  // Fotos de trabalhos da Samantha. Cada foto pode ter várias categorias.
   inspo: {
     title: 'Inspirações',
     subtitle: 'Toque no + para mostrar à Samantha o que você quer',
-    tags: [],
-    items: [],
+    tags: ['Sobrancelhas', 'Cílios'],
+    items: [
+      { id: 'sobrancelha-marcada', title: 'Sobrancelha marcada', tags: ['Sobrancelhas'], photo: media('trabalho-1', 'Cliente com sobrancelhas escuras e bem desenhadas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { id: 'sobrancelha-e-cilios', title: 'Sobrancelha e cílios', tags: ['Sobrancelhas', 'Cílios'], photo: media('trabalho-2', 'Cliente loira com sobrancelhas acobreadas e cílios volumosos', { width: 800, height: 800, sizes: [400, 800] }) },
+      { id: 'cilios-volumosos', title: 'Cílios volumosos', tags: ['Cílios', 'Sobrancelhas'], photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { id: 'olhar-natural', title: 'Olhar natural', tags: ['Cílios', 'Sobrancelhas'], photo: media('trabalho-4', 'Cliente sorrindo com cílios alongados e sobrancelhas naturais', { width: 800, height: 800, sizes: [400, 800] }) },
+    ],
   },
 
   // Serviços por categoria. `minutes` vira "45 min" ou "1 h".
