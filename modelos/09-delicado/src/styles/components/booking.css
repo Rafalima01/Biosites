@@ -107,7 +107,7 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  box-shadow: 0 12px 22px -14px rgba(176, 79, 110, 0.9);
+  box-shadow: 0 12px 22px -14px var(--glow);
   transition:
     opacity var(--dur) var(--ease),
     transform var(--dur) var(--ease);
@@ -414,7 +414,7 @@
 .field__input:focus {
   border-color: var(--rose);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(217, 138, 160, 0.25);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .field__error {
@@ -438,7 +438,7 @@
 }
 
 .bk-summary div + div {
-  border-top: 1px solid rgba(196, 106, 133, 0.16);
+  border-top: 1px solid var(--line);
 }
 
 .bk-summary dt {

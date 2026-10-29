@@ -16,6 +16,14 @@
   --rose-ink: #b04f6e; /* rosa para texto pequeno sobre branco (contraste AA) */
   --tile: linear-gradient(150deg, #efb1c2, #d27b95);
   --band: linear-gradient(135deg, #e3a0b3, #bf5f7d);
+  --glow: rgba(176, 79, 110, 0.9); /* sombra colorida de botões e blocos */
+  --focus-ring: rgba(217, 138, 160, 0.25);
+
+  /* Assinatura manuscrita e detalhes */
+  --signature-faint: rgba(217, 138, 160, 0.2); /* atrás dos títulos */
+  --signature-fill: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)); /* no rodapé */
+  --kicker-line: var(--line);
+  --hero-fade: #3a2233; /* fundo abaixo da foto do topo, onde fica o nome */
 
   /* Texto */
   --ink: #3b2a30;
@@ -32,6 +40,7 @@
   --radius-item: 20px;
   --shadow: 0 24px 48px -28px rgba(140, 60, 90, 0.4);
   --shadow-soft: 0 10px 24px -18px rgba(140, 60, 90, 0.45);
+  --shadow-strong: 0 50px 90px -50px rgba(120, 50, 75, 0.55);
 
   /* Movimento */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);

@@ -53,7 +53,7 @@
   top: -16px;
   left: 50%;
   font-size: 104px;
-  color: rgba(217, 138, 160, 0.2);
+  color: var(--signature-faint);
   transform: translateX(-50%) rotate(-8deg);
 }
 

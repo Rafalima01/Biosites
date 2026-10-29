@@ -31,7 +31,8 @@ function renderHead(site, page) {
     `<link rel="preconnect" href="https://fonts.googleapis.com">`,
     `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
     `<link ${attrs({ rel: 'stylesheet', href: theme.fontsHref })}>`,
-    tokens ? `<style>:root{${esc(tokens)}}</style>` : '',
+    // `:root:root` vence o :root do tokens.css, que o Vite carrega depois deste bloco.
+    tokens ? `<style>:root:root{${esc(tokens)}}</style>` : '',
     `<script>document.documentElement.classList.add('js')</script>`,
   ]
     .filter(Boolean)

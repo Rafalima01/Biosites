@@ -45,7 +45,7 @@ Tudo fica em `src/sites/mantha-beauty-studio/site.config.js`:
 | Serviços e página `/servicos/` | `services` e `pages.servicos` |
 | WhatsApp, Instagram, mapa | `contact` e `social` (rodapé) |
 | Domínio, título e imagem de compartilhamento | `meta` |
-| Cores e fontes | `theme.fontsHref` e `theme.tokens` (sobrescrevem `tokens.css`) |
+| Cores e fontes | `theme.fontsHref` e `theme.tokens` (sobrescrevem `tokens.css`; a Mantha usa roxo ameixa, dourado e creme da identidade dela) |
 
 Ações dos cards:
 

@@ -151,7 +151,7 @@ summary {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--line);
+  background: var(--kicker-line);
 }
 
 /* Layout: uma coluna no celular */
@@ -182,7 +182,7 @@ summary {
     overflow: hidden;
     border-radius: 44px;
     background: var(--bg-soft);
-    box-shadow: 0 50px 90px -50px rgba(120, 50, 75, 0.55);
+    box-shadow: var(--shadow-strong);
     padding-bottom: 26px;
   }
 

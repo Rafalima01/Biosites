@@ -27,7 +27,7 @@ export default {
     title: 'Samantha Carvalho · Mantha Beauty Studio',
     description:
       'Sobrancelhas, cílios e lábios com Samantha Carvalho em Salvador. Design com henna, cílios em tufos de seda e spa labial. Agende pelo WhatsApp.',
-    themeColor: '#f7ecef',
+    themeColor: '#f3efe4',
     // Domínio final (ex.: 'https://manthabeauty.com.br'). Gera a URL canônica e o og:image absoluto.
     siteUrl: 'https://biosite-09-delicado.vercel.app',
     ogImage: '/media/samantha-retrato-1080.webp',
@@ -36,7 +36,31 @@ export default {
   theme: {
     fontsHref:
       'https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap',
-    tokens: {},
+    // Identidade visual da Samantha: roxo ameixa, dourado e creme (cores tiradas da identidade dela).
+    tokens: {
+      '--bg': '#f3efe4', // creme
+      '--bg-soft': '#faf7f0',
+      '--surface': '#fffdf8',
+      '--rose': '#a07a98', // roxo claro: contornos e ícones de linha
+      '--rose-deep': '#784870', // roxo ameixa da marca: títulos e destaques
+      '--rose-light': '#e8c79a', // dourado champanhe: sobrenome sobre a foto
+      '--rose-tint': '#f1e9ee', // lilás bem claro: fundo dos itens
+      '--rose-ink': '#6a3d63', // roxo para texto pequeno (contraste AA)
+      '--tile': 'linear-gradient(150deg, #9b6b93, #6a3c63)',
+      '--band': 'linear-gradient(135deg, #8a5882, #5e3358)',
+      '--glow': 'rgba(94, 51, 88, 0.8)',
+      '--focus-ring': 'rgba(120, 72, 112, 0.22)',
+      '--ink': '#352a33',
+      '--muted': '#77696f',
+      '--line': 'rgba(120, 72, 112, 0.2)',
+      '--shadow': '0 24px 48px -28px rgba(94, 51, 88, 0.42)',
+      '--shadow-soft': '0 10px 24px -18px rgba(94, 51, 88, 0.45)',
+      '--shadow-strong': '0 50px 90px -50px rgba(94, 51, 88, 0.55)',
+      '--signature-faint': 'rgba(197, 149, 96, 0.22)', // dourado suave atrás dos títulos
+      '--signature-fill': 'linear-gradient(135deg, #fae2c4, #daa95b 55%, #c59560)', // dourado no rodapé
+      '--kicker-line': 'rgba(197, 149, 96, 0.55)', // fios dourados ao lado dos subtítulos
+      '--hero-fade': '#2c1d2a',
+    },
   },
 
   brand: {

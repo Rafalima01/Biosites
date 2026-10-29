@@ -7,7 +7,7 @@
   position: relative;
   aspect-ratio: 1 / 1.4;
   overflow: hidden;
-  background: #3a2233; /* tom do fim da foto: o nome fica sobre ele, abaixo do rosto */
+  background: var(--hero-fade); /* o nome fica sobre ele, abaixo do rosto */
 }
 
 /* A foto ocupa o alto do topo inteira (sem cortar) e se dissolve no fundo escuro */
@@ -117,7 +117,7 @@
   background: var(--tile);
   color: #fff;
   box-shadow:
-    0 10px 18px -12px rgba(176, 79, 110, 0.9),
+    0 10px 18px -12px var(--glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 

@@ -18,8 +18,12 @@
 
 .footer__signature {
   position: static;
+  padding: 0 4px; /* espaço para as pontas da letra manuscrita */
   font-size: 46px;
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--signature-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .footer__social {
