@@ -226,11 +226,14 @@ export function initBooking(root, { toast }) {
       .join('');
   };
 
+  // A mensagem já sai do WhatsApp da cliente: o número dela não precisa ir no texto.
   function message() {
     return [
       `Olá, ${cfg.firstName}! Fiz um agendamento pelo site.`,
       '',
-      ...summaryRows().map(([k, v]) => `${k}: ${v}`),
+      ...summaryRows()
+        .filter(([k]) => k !== 'WhatsApp')
+        .map(([k, v]) => `${k}: ${v}`),
       '',
       'Segue o comprovante do sinal.',
     ].join('\n');
@@ -285,7 +288,7 @@ export function initBooking(root, { toast }) {
       renderCalendar();
     }
     if (step === 'dados') {
-      form.elements.nome.value = state.name;
+      form.elements.nome.value = state.known ? '' : state.name;
       form.elements.whatsapp.value = phoneMask(state.phone);
     }
     if (step === 'revisao') renderSummary($('[data-summary]'));
@@ -336,7 +339,17 @@ export function initBooking(root, { toast }) {
     // Abre a aba já no clique (o navegador bloqueia janelas abertas depois de uma espera).
     const aba = window.open('', '_blank');
     try {
-      const r = await reservar(sis, { uuid: state.service.uuid, startsAt: slot.startsAt, name: state.name, phone: phoneMask(state.phone) });
+      const r = await reservar(sis, { uuid: state.service.uuid, startsAt: slot.startsAt, name: state.known ? '' : state.name, phone: phoneMask(state.phone) });
+      if (!r.ok && r.needName) {
+        aba?.close();
+        toast.show('Precisamos do seu nome e sobrenome para o cadastro.');
+        state.known = false;
+        conhecida = null;
+        consultado = state.phone;
+        nameField.hidden = false;
+        show('dados');
+        return;
+      }
       if (!r.ok) {
         aba?.close();
         toast.show(r.reason || 'Não foi possível reservar esse horário.');
@@ -414,22 +427,75 @@ export function initBooking(root, { toast }) {
 
   $('[data-agree]').addEventListener('change', updateSend);
 
+  // Com o sistema: cliente cadastrada é reconhecida pelo WhatsApp; cliente nova informa o nome.
+  const nameField = $('[data-name-field]');
+  const welcome = $('[data-welcome]');
+  let conhecida = null; // { phone, firstName } quando o número já tem cadastro
+  let consultado = ''; // último número consultado
+
   form.elements.whatsapp.addEventListener('input', (e) => {
     e.target.value = phoneMask(e.target.value);
+    if (sis && digits(e.target.value) !== consultado) {
+      conhecida = null;
+      welcome.hidden = true;
+      if (consultado) nameField.hidden = true;
+    }
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = form.elements.nome.value.trim().replace(/\s+/g, ' ');
     const phone = digits(form.elements.whatsapp.value);
     const error = $('[data-error]');
-    const nomeRuim = !/^\S{2,}(\s+\S+)+$/.test(name);
-    const problem = nomeRuim ? 'Digite seu nome e sobrenome.' : phone.length < 10 || phone.length > 11 ? 'Digite seu WhatsApp com DDD, ex.: (71) 99999-9999.' : '';
-    error.hidden = !problem;
-    error.textContent = problem;
-    if (problem) return (nomeRuim ? form.elements.nome : form.elements.whatsapp).focus();
+    const erro = (msg, campo) => {
+      error.hidden = !msg;
+      error.textContent = msg || '';
+      if (msg) campo?.focus();
+      return Boolean(msg);
+    };
+    if (erro(phone.length < 10 || phone.length > 11 ? 'Digite seu WhatsApp com DDD, ex.: (71) 99999-9999.' : '', form.elements.whatsapp)) return;
+
+    if (sis) {
+      if (consultado !== phone) {
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        try {
+          const r = await fetch(`${sis.url}/rest/v1/rpc/find_client`, {
+            method: 'POST',
+            headers: { apikey: sis.chave, Authorization: `Bearer ${sis.chave}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ p_slug: sis.studio, p_phone: phone }),
+          }).then((x) => x.json());
+          consultado = phone;
+          conhecida = r.found ? { phone, firstName: r.firstName } : null;
+        } catch {
+          botao.disabled = false;
+          return erro('Não foi possível verificar agora. Tente de novo.', form.elements.whatsapp);
+        }
+        botao.disabled = false;
+      }
+      if (conhecida) {
+        welcome.hidden = false;
+        welcome.textContent = `Que bom te ver de novo, ${conhecida.firstName}! 💜`;
+        nameField.hidden = true;
+        erro('');
+        state.name = conhecida.firstName;
+        state.phone = phone;
+        state.known = true;
+        return show('revisao');
+      }
+      if (nameField.hidden) {
+        nameField.hidden = false;
+        welcome.hidden = false;
+        welcome.textContent = 'Primeira vez por aqui? Digite seu nome e sobrenome para fazer seu cadastro.';
+        erro('');
+        return form.elements.nome.focus();
+      }
+    }
+
+    if (erro(!/^\S{2,}(\s+\S+)+$/.test(name) ? 'Digite seu nome e sobrenome.' : '', form.elements.nome)) return;
     state.name = name;
     state.phone = phone;
+    state.known = false;
     show('revisao');
   });
 

@@ -26,6 +26,11 @@ const as = async (role, email) => {
   await db.query(`select set_config('request.jwt.claims', $1, false)`, [email ? JSON.stringify({ email }) : '']);
   if (role) await db.exec(`set role ${role}`);
 };
+const somaDia = (dia, n) => {
+  const d = new Date(`${dia}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
 const throws = async (fn) => {
   try {
     await fn();
@@ -158,6 +163,37 @@ r = (await one(`select book('outro-studio', 'b0000000-0000-4000-8000-00000000009
 ok(r.ok && r.status === 'confirmed' && Number(r.deposit) === 0, 'studio sem sinal confirma direto');
 r = (await one(`select book('studio-livia', 'b0000000-0000-4000-8000-000000000099', $1, 'Duda Rocha', '(11) 91234-5678') as j`, [outro[1].starts_at])).j;
 ok(!r.ok, 'serviço de um studio não pode ser agendado em outro');
+
+// ---------------- clientes (cadastro pelo WhatsApp) ----------------
+await as('anon');
+let fc = (await one(`select find_client('studio-livia', '(71) 97000-1111') as j`)).j;
+ok(fc.ok && fc.found === false, 'WhatsApp novo: não tem cadastro');
+ok(!(await one(`select find_client('studio-livia', '123') as j`)).j.ok, 'WhatsApp inválido é recusado');
+const sCli = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '14:00'`, [DESIGN, seg])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, '', '(71) 97000-1111') as j`, [DESIGN, sCli])).j;
+ok(!r.ok && r.needName === true, 'cliente nova sem nome: pede o nome');
+r = (await one(`select book('studio-livia', $1, $2, 'Karla  Nunes', '(71) 97000-1111') as j`, [DESIGN, sCli])).j;
+ok(r.ok && r.firstName === 'Karla', 'cliente nova agenda e fica cadastrada');
+fc = (await one(`select find_client('studio-livia', '5571970001111') as j`)).j;
+ok(fc.found === true && fc.firstName === 'Karla' && fc.name === undefined && fc.phone === undefined, 'na volta é reconhecida (com ou sem 55), só pelo primeiro nome');
+ok((await one(`select find_client('outro-studio', '71970001111') as j`)).j.found === false, 'cadastro é por studio');
+const sCli2 = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '15:30'`, [ALONGAMENTO, somaDia(seg, 1)])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, 'Outro Nome Qualquer', '71970001111') as j`, [ALONGAMENTO, sCli2])).j;
+ok(r.ok && r.firstName === 'Karla', 'cliente cadastrada agenda sem nome e ninguém troca o nome dela pelo site');
+ok((await one('select count(*)::int as n from clients')).n === 0, 'site não lê a lista de clientes');
+await as('authenticated', 'livia@ex.com');
+const karla = await all(`select c.name, c.phone, count(a.id)::int as ags from clients c join appointments a on a.client_id = c.id where c.phone = '71970001111' group by c.id`);
+ok(karla.length === 1 && karla[0].name === 'Karla Nunes' && karla[0].ags === 2, 'dona vê a cliente com os 2 agendamentos ligados');
+ok((await one('select count(*)::int as n from clients where studio_id = $1', [LIVIA])).n === 3, 'dona vê as clientes do studio (Ana, Bia e Karla)');
+await as(null);
+await db.query(`insert into appointments (code, studio_id, service_name, starts_at, ends_at, client_name, client_phone, price, status, source) values ('ANTIGO1', $1, 'Design', now() + interval '9 days', now() + interval '9 days 1 hour', 'Lara Antiga', '(71) 96000-2222', 35, 'confirmed', 'painel')`, [LIVIA]);
+await db.exec(file('supabase/schema.sql'));
+ok((await one(`select c.name from appointments a join clients c on c.id = a.client_id where a.code = 'ANTIGO1'`))?.name === 'Lara Antiga', 'agendamentos de antes do cadastro viram clientes ao atualizar o banco');
+await as('authenticated', 'livia@ex.com');
+r = (await one(`select add_appointment($1, $2, now() + interval '5 days', '', '(71) 97000-1111') as j`, [LIVIA, DESIGN])).j;
+ok(r.ok, 'encaixe pelo WhatsApp de cliente cadastrada dispensa o nome');
+await as('authenticated', 'outra@ex.com');
+ok((await one('select count(*)::int as n from clients where studio_id = $1', [LIVIA])).n === 0, 'dona de outro studio não vê as clientes da Lívia');
 
 // ---------------- avisos (push) ----------------
 await as(null);

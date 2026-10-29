@@ -100,7 +100,7 @@ quantos dias à frente · `bufferMinutes` intervalo depois de cada atendimento �
 
 ```bash
 npm install
-npm run test:db     # 54 verificações das regras do banco (Postgres dentro do Node, sem instalar nada)
+npm run test:db     # 67 verificações das regras do banco (Postgres dentro do Node, sem instalar nada)
 cp .env.example .env.local   # dados do Supabase
 npm run dev         # painel em http://localhost:3000
 ```

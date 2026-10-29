@@ -5,6 +5,7 @@ const ITENS = [
   ['/', 'Agenda'],
   ['/pedidos', 'Aguardando sinal'],
   ['/bloqueios', 'Bloqueios'],
+  ['/clientes', 'Clientes'],
 ];
 
 export function Menu() {

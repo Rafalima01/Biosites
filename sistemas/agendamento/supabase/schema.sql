@@ -114,6 +114,43 @@ create table if not exists public.appointments (
 create index if not exists appointments_studio_idx on public.appointments (studio_id, starts_at);
 create index if not exists appointments_status_idx on public.appointments (studio_id, status, created_at desc);
 
+-- Clientes de cada studio, identificadas pelo WhatsApp (só dígitos, com DDD, sem o 55).
+-- A cliente que volta é reconhecida pelo número e não precisa digitar o nome de novo.
+create table if not exists public.clients (
+  id uuid primary key default gen_random_uuid(),
+  studio_id uuid not null references public.studios (id) on delete cascade,
+  phone text not null check (phone ~ '^\d{10,11}$'),
+  name text not null check (length(name) between 2 and 120),
+  notes text not null default '',
+  created_at timestamptz not null default now(),
+  unique (studio_id, phone)
+);
+alter table public.appointments add column if not exists client_id uuid references public.clients (id) on delete set null;
+create index if not exists appointments_client_idx on public.appointments (client_id, starts_at desc);
+
+-- "(71) 99999-0001", "5571999990001" → "71999990001" (ou null se não for um celular/fixo válido).
+create or replace function public.norm_phone(p text)
+returns text
+language sql immutable
+as $$
+  select case
+    when d ~ '^55\d{10,11}$' then substr(d, 3)
+    when d ~ '^\d{10,11}$' then d
+  end
+  from (select regexp_replace(coalesce(p, ''), '\D', '', 'g') as d) x
+$$;
+
+-- Agendamentos antigos (de antes do cadastro) viram clientes.
+insert into public.clients (studio_id, phone, name)
+select distinct on (studio_id, norm_phone(client_phone)) studio_id, norm_phone(client_phone), client_name
+from public.appointments
+where norm_phone(client_phone) is not null and length(client_name) >= 2
+order by studio_id, norm_phone(client_phone), created_at desc
+on conflict (studio_id, phone) do nothing;
+update public.appointments a set client_id = c.id
+from public.clients c
+where a.client_id is null and c.studio_id = a.studio_id and c.phone = norm_phone(a.client_phone);
+
 -- =============================================================================
 -- Acesso
 -- =============================================================================
@@ -262,7 +299,24 @@ begin
 end;
 $$;
 
+-- O site pergunta primeiro o WhatsApp: se a cliente já tem cadastro no studio, é reconhecida
+-- (devolve só o primeiro nome, para não expor dados de quem digitar um número qualquer).
+create or replace function public.find_client(p_slug text, p_phone text)
+returns jsonb
+language sql stable security definer set search_path = public
+as $$
+  select case
+    when norm_phone(p_phone) is null then jsonb_build_object('ok', false, 'reason', 'Informe um WhatsApp válido com DDD.')
+    else jsonb_build_object('ok', true, 'found', c.id is not null, 'firstName', split_part(c.name, ' ', 1))
+  end
+  from (select 1) x
+  left join studios s on s.slug = p_slug and s.active
+  left join clients c on c.studio_id = s.id and c.phone = norm_phone(p_phone)
+$$;
+
 -- Agendamento feito pela cliente no site (único jeito do público gravar).
+-- Cliente já cadastrada: o nome vem do cadastro (p_name é ignorado). Cliente nova: nome obrigatório
+-- e ela fica cadastrada no studio.
 create or replace function public.book(p_slug text, p_service uuid, p_starts timestamptz, p_name text, p_phone text, p_notes text default '')
 returns jsonb
 language plpgsql volatile security definer set search_path = public
@@ -270,9 +324,10 @@ as $$
 declare
   st studios;
   sv services;
+  cl clients;
   pct numeric;
   hold int;
-  digits text := regexp_replace(coalesce(p_phone, ''), '\D', '', 'g');
+  fone text := norm_phone(p_phone);
   a appointments;
 begin
   -- Trava o studio: agendamentos simultâneos do mesmo studio entram um de cada vez.
@@ -281,15 +336,16 @@ begin
   select * into sv from services where id = p_service and studio_id = st.id and active;
   if sv.id is null then return jsonb_build_object('ok', false, 'reason', 'Serviço indisponível.'); end if;
 
-  if trim(coalesce(p_name, '')) !~ '^\S{2,}(\s+\S+)+$' then
-    return jsonb_build_object('ok', false, 'reason', 'Informe seu nome e sobrenome.');
-  end if;
-  if length(digits) < 10 or length(digits) > 13 then
+  if fone is null then
     return jsonb_build_object('ok', false, 'reason', 'Informe um WhatsApp válido com DDD.');
+  end if;
+  select * into cl from clients where studio_id = st.id and phone = fone;
+  if cl.id is null and trim(coalesce(p_name, '')) !~ '^\S{2,}(\s+\S+)+$' then
+    return jsonb_build_object('ok', false, 'reason', 'Informe seu nome e sobrenome.', 'needName', true);
   end if;
   -- Evita abuso: no máximo 2 horários aguardando sinal por telefone.
   if (select count(*) from appointments
-      where studio_id = st.id and regexp_replace(client_phone, '\D', '', 'g') = digits
+      where studio_id = st.id and norm_phone(client_phone) = fone
         and status = 'pending' and expires_at > now()) >= 2 then
     return jsonb_build_object('ok', false, 'reason', 'Você já tem horários aguardando o sinal. Fale com o studio pelo WhatsApp.');
   end if;
@@ -304,16 +360,22 @@ begin
   pct := coalesce((st.settings ->> 'depositPercent')::numeric, 30);
   hold := setting_int(st.settings, 'holdMinutes', 120);
 
-  insert into appointments (code, studio_id, service_id, service_name, starts_at, ends_at, client_name, client_phone,
+  if cl.id is null then
+    insert into clients (studio_id, phone, name) values (st.id, fone, regexp_replace(trim(p_name), '\s+', ' ', 'g'))
+    returning * into cl;
+  end if;
+
+  insert into appointments (code, studio_id, service_id, service_name, starts_at, ends_at, client_id, client_name, client_phone,
                             notes, price, deposit, status, source, expires_at)
   values (new_code(), st.id, sv.id, sv.name, p_starts, p_starts + make_interval(mins => sv.minutes),
-          trim(p_name), trim(p_phone), left(coalesce(p_notes, ''), 500), sv.price,
+          cl.id, cl.name, fone, left(coalesce(p_notes, ''), 500), sv.price,
           round(sv.price * pct / 100, 2), case when pct > 0 then 'pending' else 'confirmed' end, 'site',
           case when pct > 0 then now() + make_interval(mins => hold) end)
   returning * into a;
 
   return jsonb_build_object('ok', true, 'code', a.code, 'status', a.status, 'price', a.price, 'deposit', a.deposit,
-                            'expiresAt', a.expires_at, 'startsAt', a.starts_at, 'service', a.service_name);
+                            'expiresAt', a.expires_at, 'startsAt', a.starts_at, 'service', a.service_name,
+                            'firstName', split_part(cl.name, ' ', 1));
 end;
 $$;
 
@@ -379,22 +441,33 @@ language plpgsql volatile security definer set search_path = public
 as $$
 declare
   sv services;
+  cl clients;
   dur int;
+  fone text := norm_phone(p_phone);
+  nome text := regexp_replace(trim(coalesce(p_name, '')), '\s+', ' ', 'g');
   a appointments;
 begin
   if not is_member(p_studio) then raise exception 'Acesso negado' using errcode = '42501'; end if;
   perform 1 from studios where id = p_studio for update;
   select * into sv from services where id = p_service and studio_id = p_studio;
   if sv.id is null then return jsonb_build_object('ok', false, 'reason', 'Escolha um serviço.'); end if;
-  if length(trim(coalesce(p_name, ''))) < 2 then return jsonb_build_object('ok', false, 'reason', 'Informe o nome da cliente.'); end if;
+  -- Com WhatsApp, liga à cliente cadastrada (ou cadastra); o nome pode ficar em branco se ela já existe.
+  if fone is not null then
+    select * into cl from clients where studio_id = p_studio and phone = fone;
+    if cl.id is null and length(nome) >= 2 then
+      insert into clients (studio_id, phone, name) values (p_studio, fone, nome) returning * into cl;
+    end if;
+    if cl.id is not null and length(nome) < 2 then nome := cl.name; end if;
+  end if;
+  if length(nome) < 2 then return jsonb_build_object('ok', false, 'reason', 'Informe o nome da cliente.'); end if;
   dur := coalesce(p_minutes, sv.minutes);
   if period_busy(p_studio, p_starts, p_starts + make_interval(mins => dur)) then
     return jsonb_build_object('ok', false, 'reason', 'Já existe agendamento ou bloqueio nesse horário.');
   end if;
-  insert into appointments (code, studio_id, service_id, service_name, starts_at, ends_at, client_name, client_phone,
+  insert into appointments (code, studio_id, service_id, service_name, starts_at, ends_at, client_id, client_name, client_phone,
                             notes, price, deposit, status, source, confirmed_at)
-  values (new_code(), p_studio, sv.id, sv.name, p_starts, p_starts + make_interval(mins => dur), trim(p_name),
-          trim(coalesce(p_phone, '')), left(coalesce(p_notes, ''), 500), coalesce(p_price, sv.price), 0,
+  values (new_code(), p_studio, sv.id, sv.name, p_starts, p_starts + make_interval(mins => dur), cl.id, nome,
+          coalesce(fone, trim(coalesce(p_phone, ''))), left(coalesce(p_notes, ''), 500), coalesce(p_price, sv.price), 0,
           'confirmed', 'painel', now())
   returning * into a;
   return jsonb_build_object('ok', true, 'id', a.id, 'code', a.code);
@@ -417,6 +490,7 @@ alter table public.services enable row level security;
 alter table public.hours enable row level security;
 alter table public.blocks enable row level security;
 alter table public.appointments enable row level security;
+alter table public.clients enable row level security;
 
 drop policy if exists "agencia" on public.agency_admins;
 create policy "agencia" on public.agency_admins for all to authenticated using (is_agency()) with check (is_agency());
@@ -439,7 +513,7 @@ do $$
 declare t text;
 begin
   -- Tabelas do studio: a dona (ou a agência) pode tudo no próprio studio.
-  for t in select unnest(array['services', 'hours', 'blocks', 'appointments']) loop
+  for t in select unnest(array['services', 'hours', 'blocks', 'appointments', 'clients']) loop
     execute format('drop policy if exists "membro total" on public.%I', t);
     execute format('create policy "membro total" on public.%I for all to authenticated using (public.is_member(studio_id)) with check (public.is_member(studio_id))', t);
   end loop;
@@ -451,7 +525,7 @@ create policy "leitura publica" on public.services for select
 drop policy if exists "leitura publica" on public.hours;
 create policy "leitura publica" on public.hours for select
   using (exists (select 1 from public.studios s where s.id = studio_id and s.active));
--- blocks e appointments: sem leitura pública (o site usa day_slots, sem dados pessoais).
+-- blocks, appointments e clients: sem leitura pública (o site usa day_slots e find_client, sem dados pessoais).
 
 revoke all on function public.set_appointment_status(uuid, text) from public, anon;
 revoke all on function public.add_appointment(uuid, uuid, timestamptz, text, text, text, int, numeric) from public, anon;
@@ -460,6 +534,7 @@ grant execute on function public.day_slots(text, uuid, date) to anon, authentica
 grant execute on function public.days_summary(text, uuid, date, date) to anon, authenticated;
 grant execute on function public.book(text, uuid, timestamptz, text, text, text) to anon, authenticated;
 grant execute on function public.get_appointment(text) to anon, authenticated;
+grant execute on function public.find_client(text, text) to anon, authenticated;
 grant execute on function public.ping() to anon, authenticated;
 grant execute on function public.set_appointment_status(uuid, text) to authenticated;
 grant execute on function public.add_appointment(uuid, uuid, timestamptz, text, text, text, int, numeric) to authenticated;
