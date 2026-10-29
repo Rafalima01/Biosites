@@ -1,20 +1,21 @@
-/* Topo: foto, assinatura, nome e especialidades */
+/* Topo: foto, nome e especialidades */
 .hero {
   position: relative;
 }
 
 .hero__media {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1.4;
   overflow: hidden;
-  background: var(--rose-light);
+  background: #3a2233; /* tom do fim da foto: o nome fica sobre ele, abaixo do rosto */
 }
 
+/* A foto ocupa o alto do topo inteira (sem cortar) e se dissolve no fundo escuro */
 .hero__photo {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent);
+  mask-image: linear-gradient(180deg, #000 72%, transparent);
 }
 
 /* Sombra suave para o nome e transição para o fundo rosa */
@@ -22,14 +23,13 @@
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, transparent 42%, rgba(52, 22, 38, 0.38) 72%, rgba(52, 22, 38, 0.3) 86%, var(--bg) 100%);
+  background: linear-gradient(180deg, transparent 46%, rgba(52, 22, 38, 0.3) 68%, rgba(58, 34, 51, 0) 88%, var(--bg) 100%);
 }
 
 .hero__text {
   position: absolute;
   z-index: 2;
-  inset: auto 0 62px;
+  inset: auto 0 38px;
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -73,7 +73,7 @@
 .intro__body {
   position: relative;
   z-index: 3;
-  margin-top: -40px;
+  margin-top: -22px;
   padding: 0 16px;
 }
 
@@ -174,8 +174,3 @@
   color: var(--rose-deep);
 }
 
-@media (min-width: 960px) {
-  .hero__media {
-    aspect-ratio: 1 / 1.08;
-  }
-}

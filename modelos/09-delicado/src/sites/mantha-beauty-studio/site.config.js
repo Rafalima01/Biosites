@@ -61,7 +61,7 @@ export default {
       icon: 'calendar',
       action: { type: 'channel', channel: 'whatsapp', message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.' },
     },
-    { id: 'servicos', title: 'Serviços e valores', text: 'Duração e valor de cada um', icon: 'list', action: { type: 'page', href: '/servicos/' } },
+    { id: 'servicos', title: 'Serviços e valores', text: 'Duração e valores', icon: 'list', action: { type: 'page', href: '/servicos/' } },
     { id: 'trabalhos', title: 'Meus trabalhos', text: 'Acompanhe no Instagram', icon: 'instagram', action: { type: 'channel', channel: 'instagram' } },
     { id: 'endereco', title: 'Como chegar', text: 'Abrir no mapa', icon: 'pin', action: { type: 'channel', channel: 'location' } },
   ],
@@ -99,10 +99,10 @@ export default {
     id: 'trabalhos',
     title: 'Meus trabalhos',
     items: [
-      { caption: 'Sobrancelha marcada', photo: media('trabalho-1', 'Cliente com sobrancelhas escuras e bem desenhadas', { width: 800, height: 800, sizes: [400, 800] }) },
-      { caption: 'Sobrancelha e cílios', photo: media('trabalho-2', 'Cliente loira com sobrancelhas acobreadas e cílios volumosos', { width: 800, height: 800, sizes: [400, 800] }) },
-      { caption: 'Cílios volumosos', photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }) },
-      { caption: 'Olhar natural', photo: media('trabalho-4', 'Cliente sorrindo com cílios alongados e sobrancelhas naturais', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-1', 'Cliente com sobrancelhas escuras e bem desenhadas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-2', 'Cliente loira com sobrancelhas acobreadas e cílios volumosos', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-4', 'Cliente sorrindo com cílios alongados e sobrancelhas naturais', { width: 800, height: 800, sizes: [400, 800] }) },
     ],
   },
 

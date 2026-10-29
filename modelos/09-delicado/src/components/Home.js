@@ -81,14 +81,14 @@ export function Cta(site) {
   </section>`;
 }
 
-/** Fotos de trabalhos com legenda em serifa. */
+/** Fotos de trabalhos (legenda em serifa opcional: `caption`). */
 export function Gallery({ gallery }) {
   if (!gallery.items.length) return '';
   const items = gallery.items
     .map(
-      (g, i) => `<li class="shot reveal" style="--i:${i}">
+      (g, i) => `<li class="shot${g.caption ? ' shot--caption' : ''} reveal" style="--i:${i}">
         ${Picture(g.photo, { className: 'shot__img', sizes: '(min-width: 960px) 135px, 46vw' })}
-        <span class="shot__caption">${esc(g.caption)}</span>
+        ${g.caption ? `<span class="shot__caption">${esc(g.caption)}</span>` : ''}
       </li>`,
     )
     .join('');

@@ -158,7 +158,7 @@
   object-fit: cover;
 }
 
-.shot::after {
+.shot--caption::after {
   content: '';
   position: absolute;
   inset: 0;

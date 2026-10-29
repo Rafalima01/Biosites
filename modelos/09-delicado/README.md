@@ -7,8 +7,8 @@ Bio site em rosa claro com assinatura manuscrita, feito a partir da referência 
 **Composição:** foto no topo, nome em duas cores (primeiro nome em
 itálico branco, sobrenome rosa) e especialidades; cartão branco com quatro cards (ícone em bloco rosa,
 título em serifa, apoio e seta); frase em serifa + manuscrita; "Sobre mim" com a assinatura manuscrita
-atrás do título e a foto se dissolvendo no fundo; "Como posso te ajudar" em três colunas; faixa rosa "Quero agendar"; fotos de trabalhos com
-legenda; dúvidas frequentes que abrem e fecham; rodapé rosa com assinatura e canais.
+atrás do título e a foto se dissolvendo no fundo; "Como posso te ajudar" em três colunas; faixa rosa "Quero agendar"; fotos de trabalhos (legenda
+opcional em `caption`); dúvidas frequentes que abrem e fecham; rodapé rosa com assinatura e canais.
 Página `/servicos/` com as categorias em blocos que abrem e fecham e agendamento por serviço no WhatsApp.
 
 No celular é uma coluna só. No desktop o início vira duas colunas, como na referência: o "celular"
