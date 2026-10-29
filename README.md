@@ -16,7 +16,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
 | 07 | **Hospedagem** | [`modelos/07-hospedagem`](modelos/07-hospedagem) | Maré Mansa · Casas de temporada (marca fictícia) | Reserva direta para casas de temporada: casas com fotos e valores, pacotes de datas especiais, agenda interativa com preço por dia e reserva pronta no WhatsApp, sem taxa de plataforma. Areia, oceano e coral. |
 | 08 | **Glam** | [`modelos/08-glam`](modelos/08-glam) | Rosé Nail Studio · Nail designer (marca fictícia) | Cara de app: cartões de vidro fosco sobre foto, letreiro em neon, serviço em destaque e galeria de inspirações com filtros, curtir e escolher; as escolhidas vão na mensagem do WhatsApp. Rosa com Poiret One e Poppins. |
-| 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Mantha Beauty Studio · Samantha Carvalho (teste com dados reais) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes, página de serviços e agendamento online (calendário com horários livres da agenda do Google, sinal de 30% por Pix e envio pelo WhatsApp). Playfair Display, Allura e Montserrat. |
+| 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Lívia Martins · Studio Lívia Beauty (marca fictícia) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes, página de serviços e agendamento online (calendário com horários livres da agenda do Google, sinal de 30% por Pix e envio pelo WhatsApp). Playfair Display, Allura e Montserrat. |
 
 ## Sistemas
 
@@ -33,7 +33,7 @@ Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (ca
 | Cliente | Pasta | Modelo | Situação |
 | --- | --- | --- | --- |
 | Jailane Ferreira · nail designer e mentora | [`clientes/jailane-ferreira`](clientes/jailane-ferreira) | 02 · Autoridade | 3 páginas: início, `/servicos/` (16 serviços com valores) e `/mentoria/` (aguardando textos) |
-| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 08 · Glam | 2 páginas: início (galeria com 4 fotos de trabalhos e contato) e `/servicos/` (7 serviços com agendamento por serviço no WhatsApp) |
+| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 09 · Delicado | Cores dela (roxo ameixa, dourado e creme); início, `/servicos/` e `/agendar/` (horários livres e sinal por Pix). Falta trocar a chave Pix provisória e ligar a agenda do Google |
 
 ## Site da agência
 
@@ -65,14 +65,22 @@ npm run dev
 
 ## Publicar na Vercel
 
-Cada modelo é um projeto Vercel ligado a este repositório (branch `main`), com **Root Directory**
-apontando para a pasta do modelo. Todo push na `main` publica automaticamente; o `ignoreCommand`
-do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
+Cada modelo e cada cliente é um projeto Vercel ligado a este repositório, com **Root Directory**
+apontando para a própria pasta.
 
-Os projetos ligados ao repositório estão com **Preview Deployments desligado** (Settings → Git):
-pushes em outras branches (ex.: `modelo-09-delicado`) não criam publicações. Sem isso, cada push
-gerava uma tentativa em todos os projetos e esgotava o limite do plano grátis (100 publicações/dia).
-Para ver uma branch antes de ir para a `main`, publique pela CLI no projeto de teste dela.
+**A publicação é sempre manual, um projeto por vez.** A conta está no plano grátis (limite de 100
+publicações por dia) e, quando cada push publicava sozinho, uma única mudança gerava uma tentativa em
+todos os projetos e esgotava o limite. Por isso todo `vercel.json` tem `"git": { "deploymentEnabled": false }`:
+o push só guarda o código no GitHub, e nada vai para o ar sozinho.
+
+Para publicar, envie as mudanças (`git push`) e rode, na raiz do repositório, só para o projeto que mudou:
+
+```bash
+node scripts/publicar.mjs biosite-jailane-ferreira
+```
+
+O script pede à Vercel uma publicação daquele projeto a partir da `main` e espera ficar no ar.
+Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique só os projetos delas.
 
 | Modelo | Projeto Vercel | Produção |
 | --- | --- | --- |
@@ -83,14 +91,13 @@ Para ver uma branch antes de ir para a `main`, publique pela CLI no projeto de t
 | 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 | 06 · Delivery | `biosite-06-delivery` | https://biosite-06-delivery.vercel.app |
 | 07 · Hospedagem | `biosite-07-hospedagem` | https://biosite-07-hospedagem.vercel.app |
-| 08 · Glam | `biosite-08-glam` | (ainda não publicado) |
-| 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app (publicado pela CLI, branch `modelo-09-delicado`) |
+| 08 · Glam | `biosite-08-glam` | https://biosite-08-glam.vercel.app |
+| 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
-| Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app (publicado pela CLI, branch `modelo-08-glam`) |
+| Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |
+| Sistema · Hospedagem | `sistema-hospedagem` | https://sistema-hospedagem.vercel.app |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.
 
-Publicação manual pela CLI: rode a partir da **raiz do repositório** (o Root Directory já aponta
-para a pasta do modelo), por exemplo `vercel deploy --prod --cwd .` após `vercel link --project biosite-02-autoridade`.
