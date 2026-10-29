@@ -1,7 +1,7 @@
 // Comportamentos do navegador. O conteúdo já vem pré-renderizado no HTML.
 import { initReveal } from './behaviors/reveal.js';
 import { initToast } from './behaviors/toast.js';
-import { initInspo } from './behaviors/inspo.js';
+import { initSmoothScroll } from './behaviors/scroll.js';
 
 const yearEl = document.querySelector('[data-year]');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -14,19 +14,11 @@ document.addEventListener('click', (event) => {
   if (el) toast.show(el.dataset.pending);
 });
 
-// Compartilhar: menu nativo do celular ou cópia do link.
-document.querySelector('[data-share]')?.addEventListener('click', async () => {
-  const data = { title: document.title, url: location.href };
-  try {
-    if (navigator.share) return await navigator.share(data);
-    await navigator.clipboard.writeText(location.href);
-    toast.show('Link copiado!');
-  } catch {
-    // Compartilhamento cancelado.
-  }
-});
+// Agendamento: carregado só na página /agendar/ (calendário, Pix e QR Code).
+const booking = document.querySelector('[data-booking]');
+if (booking) import('./behaviors/booking.js').then(({ initBooking }) => initBooking(booking, { toast }));
 
-initInspo(document.querySelector('.card--inspo'), { siteId: document.querySelector('[data-site]')?.dataset.site || 'site', toast });
+initSmoothScroll();
 initReveal();
 
 if (import.meta.env.DEV) {

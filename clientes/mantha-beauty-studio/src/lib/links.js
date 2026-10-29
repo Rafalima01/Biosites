@@ -46,11 +46,13 @@ export function resolveChannel(site, key, opts = {}) {
   return { key, label: channel.label, icon: channel.icon, href, external: true, pending: !href };
 }
 
-/** Resolve a ação de um card/CTA: canal externo, seção interna ou URL livre. */
+/** Resolve a ação de um card/CTA: canal externo, seção interna, outra página do site ou URL livre. */
 export function resolveAction(site, action) {
   switch (action.type) {
     case 'section':
       return { href: `#${action.target}`, external: false, pending: false };
+    case 'page':
+      return { href: action.href, external: false, pending: false };
     case 'url':
       return { label: action.label, href: action.href || '', external: true, pending: !action.href };
     case 'channel':

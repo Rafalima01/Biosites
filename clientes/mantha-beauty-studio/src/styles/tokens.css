@@ -1,35 +1,46 @@
 /*
- * Tokens de design do Modelo 08 · Glam. Cada cliente pode sobrescrever
+ * Tokens de design do Modelo 09 · Delicado. Cada cliente pode sobrescrever
  * qualquer variável em `theme.tokens` no seu site.config.js.
  */
 :root {
-  /* Rosa */
-  --pink: #f47eb5;
-  --pink-deep: #e2589a;
-  --pink-soft: #f3c3d9;
-  --pink-glass: rgba(234, 170, 201, 0.82);
-  --pink-tint: #f06aa8;
-  --pink-ink: #b0336f; /* rosa para texto pequeno sobre o vidro claro (contraste AA) */
+  /* Fundo */
+  --bg: #f7ecef;
+  --bg-soft: #fdf7f8;
+  --surface: #ffffff;
 
-  /* Vidro */
-  --glass: rgba(240, 234, 238, 0.7);
-  --glass-dark: rgba(196, 128, 162, 0.5);
-  --glass-line: rgba(255, 255, 255, 0.55);
-  --glass-blur: 22px;
+  /* Rosa */
+  --rose: #d98aa0;
+  --rose-deep: #c46a85;
+  --rose-light: #f6c4d1;
+  --rose-tint: #fbe9ee;
+  --rose-ink: #b04f6e; /* rosa para texto pequeno sobre branco (contraste AA) */
+  --tile: linear-gradient(150deg, #efb1c2, #d27b95);
+  --band: linear-gradient(135deg, #e3a0b3, #bf5f7d);
+  --glow: rgba(176, 79, 110, 0.9); /* sombra colorida de botões e blocos */
+  --focus-ring: rgba(217, 138, 160, 0.25);
+
+  /* Assinatura manuscrita e detalhes */
+  --signature-faint: rgba(217, 138, 160, 0.2); /* atrás dos títulos */
+  --signature-fill: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)); /* no rodapé */
+  --kicker-line: var(--line);
+  --hero-fade: #3a2233; /* fundo abaixo da foto do topo, onde fica o nome */
 
   /* Texto */
-  --ink: #2a1d24;
-  --muted: #7c6a73;
-  --on-pink: #ffffff;
+  --ink: #3b2a30;
+  --muted: #7a6870;
+  --line: rgba(196, 106, 133, 0.22);
 
   /* Tipografia */
-  --font-display: 'Poiret One', 'Didot', Georgia, serif;
-  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', 'Didot', Georgia, serif;
+  --font-script: 'Allura', 'Snell Roundhand', cursive;
+  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Forma */
-  --radius-card: 44px;
-  --radius-tile: 32px;
-  --shadow: 0 30px 60px -30px rgba(40, 10, 30, 0.55);
+  --radius-card: 28px;
+  --radius-item: 20px;
+  --shadow: 0 24px 48px -28px rgba(140, 60, 90, 0.4);
+  --shadow-soft: 0 10px 24px -18px rgba(140, 60, 90, 0.45);
+  --shadow-strong: 0 50px 90px -50px rgba(120, 50, 75, 0.55);
 
   /* Movimento */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);

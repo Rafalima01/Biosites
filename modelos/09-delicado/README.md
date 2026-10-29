@@ -1,8 +1,8 @@
 # Modelo 09 · Delicado
 
 Bio site em rosa claro com assinatura manuscrita, feito a partir da referência em
-[`docs/referencia.jpg`](docs/referencia.jpg). Teste com os dados reais da
-**Mantha Beauty Studio · Samantha Carvalho** (mesmas informações do site dela no Modelo 08 · Glam).
+[`docs/referencia.jpg`](docs/referencia.jpg). Demonstração: **Lívia Martins · Studio Lívia Beauty** (marca fictícia).
+Cliente real feita com este modelo: [`clientes/mantha-beauty-studio`](../../clientes/mantha-beauty-studio) (Samantha Carvalho, com as cores dela).
 
 **Composição:** foto no topo, nome em duas cores (primeiro nome em
 itálico branco, sobrenome rosa) e especialidades; cartão branco com quatro cards (ícone em bloco rosa,
@@ -29,7 +29,7 @@ npm run preview   # serve o /dist localmente
 
 ## Personalizar
 
-Tudo fica em `src/sites/mantha-beauty-studio/site.config.js`:
+Tudo fica em `src/sites/livia-martins/site.config.js`:
 
 | O quê | Onde |
 | --- | --- |
@@ -45,7 +45,7 @@ Tudo fica em `src/sites/mantha-beauty-studio/site.config.js`:
 | Serviços e página `/servicos/` | `services` e `pages.servicos` |
 | WhatsApp, Instagram, mapa | `contact` e `social` (rodapé) |
 | Domínio, título e imagem de compartilhamento | `meta` |
-| Cores e fontes | `theme.fontsHref` e `theme.tokens` (sobrescrevem `tokens.css`; a Mantha usa roxo ameixa, dourado e creme da identidade dela) |
+| Cores e fontes | `theme.fontsHref` e `theme.tokens` (sobrescrevem `tokens.css`; veja a Mantha, em roxo ameixa, dourado e creme) |
 
 Ações dos cards:
 

@@ -1,12 +1,11 @@
 /**
- * Mantha Beauty Studio · Samantha Carvalho (cliente real, Modelo 08 · Glam)
+ * Mantha Beauty Studio · Samantha Carvalho — bio site oficial (cópia do Modelo 09 · Delicado com as cores dela)
  *
  * Todo o conteúdo, links, imagens e ajustes de tema deste bio site vivem aqui.
- * Fotos da cliente ficam em `public/media/`.
+ * Fotos ficam em `public/media/`.
  *
- * INSPIRAÇÕES: fotos de trabalhos da própria Samantha. As escolhidas no "+"
- * entram na mensagem do WhatsApp. Sem fotos, a galeria some e o site mostra
- * as especialidades no lugar.
+ * Textos de "Sobre mim", frase do topo e dúvidas frequentes foram escritos só com
+ * informações já confirmadas (serviços, horários, cidade). Troque pelos da cliente.
  */
 
 const media = (name, alt, { width, height, sizes }) => ({
@@ -25,97 +24,163 @@ export default {
   demo: false,
 
   meta: {
-    title: 'Mantha Beauty Studio · Samantha Carvalho',
+    title: 'Samantha Carvalho · Mantha Beauty Studio',
     description:
-      'Sobrancelhas, cílios e lábios com Samantha Carvalho. Design com henna, cílios em tufos de seda e spa labial. Agende pelo WhatsApp.',
-    themeColor: '#5b3a7e',
+      'Sobrancelhas, cílios e lábios com Samantha Carvalho em Salvador. Design com henna, cílios em tufos de seda e spa labial. Agende pelo WhatsApp.',
+    themeColor: '#f3efe4',
     // Domínio final (ex.: 'https://manthabeauty.com.br'). Gera a URL canônica e o og:image absoluto.
     siteUrl: 'https://biosite-mantha-beauty-studio.vercel.app',
-    ogImage: '/media/samantha-capa-900.webp',
+    ogImage: '/media/samantha-retrato-1080.webp',
   },
 
   theme: {
     fontsHref:
-      'https://fonts.googleapis.com/css2?family=Poiret+One&family=Poppins:wght@300;400;500;600&display=swap',
-    // Roxo do estúdio de fotos no fundo; o rosa continua nos botões e destaques.
+      'https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap',
+    // Identidade visual da Samantha: roxo ameixa, dourado e creme (cores tiradas da identidade dela).
     tokens: {
-      '--glass': 'rgba(244, 236, 245, 0.74)',
-      '--pink-tint': '#6c4391',
+      '--bg': '#f3efe4', // creme
+      '--bg-soft': '#faf7f0',
+      '--surface': '#fffdf8',
+      '--rose': '#a07a98', // roxo claro: contornos e ícones de linha
+      '--rose-deep': '#784870', // roxo ameixa da marca: títulos e destaques
+      '--rose-light': '#e8c79a', // dourado champanhe: sobrenome sobre a foto
+      '--rose-tint': '#f1e9ee', // lilás bem claro: fundo dos itens
+      '--rose-ink': '#6a3d63', // roxo para texto pequeno (contraste AA)
+      '--tile': 'linear-gradient(150deg, #9b6b93, #6a3c63)',
+      '--band': 'linear-gradient(135deg, #8a5882, #5e3358)',
+      '--glow': 'rgba(94, 51, 88, 0.8)',
+      '--focus-ring': 'rgba(120, 72, 112, 0.22)',
+      '--ink': '#352a33',
+      '--muted': '#77696f',
+      '--line': 'rgba(120, 72, 112, 0.2)',
+      '--shadow': '0 24px 48px -28px rgba(94, 51, 88, 0.42)',
+      '--shadow-soft': '0 10px 24px -18px rgba(94, 51, 88, 0.45)',
+      '--shadow-strong': '0 50px 90px -50px rgba(94, 51, 88, 0.55)',
+      '--signature-faint': 'rgba(197, 149, 96, 0.22)', // dourado suave atrás dos títulos
+      '--signature-fill': 'linear-gradient(135deg, #fae2c4, #daa95b 55%, #c59560)', // dourado no rodapé
+      '--kicker-line': 'rgba(197, 149, 96, 0.55)', // fios dourados ao lado dos subtítulos
+      '--hero-fade': '#2c1d2a',
     },
   },
-
-  // Foto de fundo atrás dos cartões (sempre desfocada).
-  backdrop: { ...media('samantha-fundo', '', { width: 1280, height: 1920, sizes: [640, 1280] }), blur: true },
 
   brand: {
-    neon: 'Mantha', // letreiro em neon sobre a foto
-    sign: 'Beauty Studio', // linha abaixo do letreiro (o nome completo vai no título da página)
+    firstName: 'Samantha',
+    lastName: 'Carvalho',
     name: 'Mantha Beauty Studio',
-    designer: 'Samantha Carvalho',
-    role: 'Sobrancelhas · Cílios · Lábios',
-    // Foto de perfil (ao lado do nome e no "Seguir" da galeria). Não é a foto da capa.
-    photo: media('samantha-perfil', 'Samantha Carvalho sorrindo, de cabelo cacheado', { width: 400, height: 400, sizes: [400] }),
+    // Assinatura manuscrita: atrás do "Sobre mim", do título de serviços e no rodapé (nunca sobre as fotos).
+    signature: 'Mantha',
+    tagline: ['Sobrancelhas', 'Cílios', 'Lábios'],
   },
 
-  studio: {
-    // Foto alta, com o letreiro no espaço acima da cabeça (não cobre o rosto).
-    photo: media('samantha-capa', 'Samantha Carvalho de conjunto rosa em fundo roxo', { width: 900, height: 1276, sizes: [480, 900] }),
-    layout: 'portrait',
+  hero: {
+    photo: media('samantha-retrato', 'Samantha Carvalho sorrindo, com a mão no cabelo cacheado', { width: 1080, height: 1258, sizes: [640, 1080] }),
   },
 
-  // Serviço em destaque. Sem foto de trabalho, mostra um selo com a categoria.
-  featured: {
-    status: 'Agenda aberta',
-    category: 'Sobrancelhas',
-    service: 'Design personalizado com henna',
-    detail: '1 h · R$ 40',
-    photo: media('trabalho-1', 'Sobrancelhas marcadas com design e henna', { width: 800, height: 800, sizes: [400, 800] }),
-  },
-
-  // Bloco ao lado das especialidades.
-  schedule: { label: 'Atendimento', day: 'Seg a Sáb', time: '8h às 18h' },
-
-  cta: {
-    label: 'Agendar horário',
-    note: 'Atendimento com hora marcada, direto pelo WhatsApp.',
-    message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.',
-  },
-
-  // Card do início que abre a página de serviços (/servicos/).
-  servicesCard: {
-    title: 'Serviços e valores',
-    text: 'Duração, valores e agendamento de cada serviço.',
-    button: 'Ver serviços',
-    photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }),
-  },
-
-  // Página /servicos/.
-  pages: {
-    servicos: {
-      meta: {
-        title: 'Serviços e valores · Mantha Beauty Studio',
-        description: 'Sobrancelhas, cílios e lábios com Samantha Carvalho: duração, valores e agendamento pelo WhatsApp.',
-      },
-      eyebrow: 'Serviços e valores',
-      title: 'Serviços',
-      subtitle: 'Toque no serviço para agendar. A mensagem já vai pronta com o nome dele.',
+  // Cards do topo. Ações: channel (whatsapp, instagram, location…), page (/servicos/), section (#id) ou url.
+  menu: [
+    {
+      id: 'agendamento',
+      title: 'Agendamento',
+      text: 'Reserve seu horário',
+      icon: 'calendar',
+      action: { type: 'page', href: '/agendar/' },
     },
+    { id: 'servicos', title: 'Serviços e valores', text: 'Duração e valores', icon: 'list', action: { type: 'page', href: '/servicos/' } },
+    { id: 'trabalhos', title: 'Meus trabalhos', text: 'Acompanhe no Instagram', icon: 'instagram', action: { type: 'channel', channel: 'instagram' } },
+    { id: 'endereco', title: 'Como chegar', text: 'Abrir no mapa', icon: 'pin', action: { type: 'channel', channel: 'location' } },
+  ],
+
+  // Frase abaixo dos cards: primeira parte em serifa, segunda em letra manuscrita.
+  phrase: { text: 'Sobrancelhas, cílios e lábios', script: 'com hora marcada.' },
+
+  about: {
+    id: 'sobre',
+    title: 'Sobre',
+    titleAccent: 'mim',
+    paragraphs: [
+      'Sou Samantha Carvalho, à frente do Mantha Beauty Studio, em Salvador.',
+      'Faço design de sobrancelhas com henna, cílios em tufos de seda e spa labial, sempre com hora marcada e atenção a cada detalhe.',
+    ],
+    photo: media('samantha-sobre', 'Samantha Carvalho de conjunto rosa, em pé, sorrindo', { width: 680, height: 1210, sizes: [400, 680] }),
   },
 
-  // Fotos de trabalhos da Samantha. Cada foto pode ter várias categorias.
-  inspo: {
-    title: 'Inspirações',
-    subtitle: 'Toque no + para mostrar à Samantha o que você quer',
-    tags: ['Sobrancelhas', 'Cílios'],
+  help: {
+    title: 'Como posso te ajudar',
     items: [
-      { id: 'sobrancelha-marcada', title: 'Sobrancelha marcada', tags: ['Sobrancelhas'], photo: media('trabalho-1', 'Cliente com sobrancelhas escuras e bem desenhadas', { width: 800, height: 800, sizes: [400, 800] }) },
-      { id: 'sobrancelha-e-cilios', title: 'Sobrancelha e cílios', tags: ['Sobrancelhas', 'Cílios'], photo: media('trabalho-2', 'Cliente loira com sobrancelhas acobreadas e cílios volumosos', { width: 800, height: 800, sizes: [400, 800] }) },
-      { id: 'cilios-volumosos', title: 'Cílios volumosos', tags: ['Cílios', 'Sobrancelhas'], photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }) },
-      { id: 'olhar-natural', title: 'Olhar natural', tags: ['Cílios', 'Sobrancelhas'], photo: media('trabalho-4', 'Cliente sorrindo com cílios alongados e sobrancelhas naturais', { width: 800, height: 800, sizes: [400, 800] }) },
+      { icon: 'brow', title: 'Sobrancelhas', text: 'Design personalizado com henna, design simples e masculino.' },
+      { icon: 'lashes', title: 'Cílios', text: 'Tufos de seda e mega volume, com remoção quando precisar.' },
+      { icon: 'lips', title: 'Lábios', text: 'Spa labial para hidratar e deixar os lábios macios.' },
     ],
   },
 
-  // Serviços por categoria. `minutes` vira "45 min" ou "1 h".
+  cta: {
+    text: 'Atendimento de segunda a sábado, das 8h às 18h.',
+    label: 'Quero agendar',
+    action: { type: 'page', href: '/agendar/' },
+  },
+
+  // Agendamento online (/agendar/): calendário com os horários livres, sinal por Pix e envio pelo WhatsApp.
+  // Os horários ocupados vêm da agenda do Google (endereço secreto iCal na variável AGENDA_ICS_URL da Vercel).
+  // Sem a variável, o calendário mostra todo o expediente e a confirmação fica no WhatsApp.
+  booking: {
+    days: [1, 2, 3, 4, 5, 6], // 0 = domingo … 6 = sábado
+    open: '08:00',
+    close: '18:00', // o serviço precisa terminar até este horário
+    step: 30, // minutos entre um horário e outro
+    breaks: [], // ex.: [{ from: '12:00', to: '13:00' }]
+    minNotice: 120, // antecedência mínima, em minutos
+    daysAhead: 30, // até quantos dias à frente dá para agendar
+    offset: -180, // fuso do studio em minutos (Salvador: UTC-3)
+    deposit: 0.3, // sinal de 30%
+  },
+
+  // Pix do sinal. FASE DE TESTE: chave provisória; trocar pela chave da Samantha antes de usar de verdade.
+  pix: {
+    key: '+5571992351084', // celular no formato +55DDDNÚMERO
+    keyLabel: 'Celular',
+    keyDisplay: '(71) 99235-1084',
+    holder: 'Samantha Carvalho Beauty Studio',
+    city: 'Salvador',
+  },
+
+  policy: {
+    title: 'Política de agendamento e cancelamento',
+    paragraphs: [
+      'Para garantir seu horário, é necessário o pagamento de uma taxa de agendamento de 30%, que será abatida do valor total.',
+      'Em caso de cancelamento, desistência ou não comparecimento, o valor da taxa não será reembolsado.',
+      'Ao realizar o agendamento, você concorda com esta política. Agradeço pela sua compreensão.',
+    ],
+    signature: 'Samantha Carvalho Beauty Studio',
+    agree: 'Li e concordo com a política de agendamento e cancelamento.',
+  },
+
+  gallery: {
+    id: 'trabalhos',
+    title: 'Meus trabalhos',
+    items: [
+      { photo: media('trabalho-1', 'Cliente com sobrancelhas escuras e bem desenhadas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-2', 'Cliente loira com sobrancelhas acobreadas e cílios volumosos', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }) },
+      { photo: media('trabalho-4', 'Cliente sorrindo com cílios alongados e sobrancelhas naturais', { width: 800, height: 800, sizes: [400, 800] }) },
+    ],
+  },
+
+  faq: {
+    title: 'Dúvidas frequentes',
+    items: [
+      {
+        q: 'Como faço para agendar?',
+        a: 'Toque em Agendamento ou no serviço que você quer, escolha o dia e o horário livres e envie o sinal de 30% pelo Pix. A confirmação é pelo WhatsApp, com o comprovante.',
+      },
+      { q: 'Qual o horário de atendimento?', a: 'De segunda a sábado, das 8h às 18h, sempre com hora marcada.' },
+      { q: 'Quanto tempo dura cada serviço?', a: 'De 30 minutos a 1 hora. A duração e o valor de cada um estão em Serviços e valores.' },
+      { q: 'Onde fica o studio?', a: 'Em Salvador. Toque em Como chegar para abrir a localização no mapa.' },
+    ],
+  },
+
+  schedule: { day: 'Seg a Sáb', time: '8h às 18h' },
+
+  // Serviços por categoria (página /servicos/). `minutes` vira "45 min" ou "1 h".
   services: [
     {
       category: 'Sobrancelhas',
@@ -170,6 +235,27 @@ export default {
     },
   ],
 
+  pages: {
+    servicos: {
+      meta: {
+        title: 'Serviços e valores · Samantha Carvalho',
+        description: 'Sobrancelhas, cílios e lábios com Samantha Carvalho: duração, valores e agendamento online.',
+      },
+      title: 'Serviços',
+      titleAccent: 'e valores',
+      subtitle: 'Toque no serviço para escolher o dia e o horário.',
+    },
+    agendar: {
+      meta: {
+        title: 'Agendar horário · Samantha Carvalho',
+        description: 'Escolha o serviço, o dia e o horário livres e garanta seu atendimento com Samantha Carvalho.',
+      },
+      title: 'Agendar',
+      titleAccent: 'horário',
+      subtitle: 'Escolha o dia e o horário livres. O horário fica garantido com o sinal de 30% pelo Pix.',
+    },
+  },
+
   contact: {
     whatsapp: {
       number: whatsapp,
@@ -184,15 +270,8 @@ export default {
     },
   },
 
-  // Card de contato (início e página de serviços): três botões lado a lado.
-  contactCard: {
-    title: 'Contato',
-    links: [
-      { id: 'whatsapp', label: 'WhatsApp', hint: 'Tirar dúvidas', action: { type: 'channel', channel: 'whatsapp' } },
-      { id: 'instagram', label: 'Instagram', hint: 'Ver perfil', action: { type: 'channel', channel: 'instagram' } },
-      { id: 'localizacao', label: 'Endereço', hint: 'Como chegar', action: { type: 'channel', channel: 'location' } },
-    ],
-  },
+  // Rodapé: "Acompanhe meu trabalho" com os canais abaixo.
+  social: { title: 'Acompanhe meu trabalho', channels: ['instagram', 'whatsapp', 'location'] },
 
   footer: {
     demoNote: '',

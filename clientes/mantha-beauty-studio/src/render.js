@@ -1,8 +1,10 @@
 // Monta o HTML de cada página a partir da config do site. Executado pelo Vite
 // (plugin em vite.config.js) no dev e no build, então a página chega pronta ao navegador.
 import { esc, attrs } from './lib/html.js';
-import { StudioCard, ServicesLinkCard, InspoCard, ContactCard, ServicesPage, Footer } from './components/Cards.js';
-import { Picture } from './components/Picture.js';
+import { Hero, Menu, Phrase, About, Help, Cta, Gallery, Faq } from './components/Home.js';
+import { Topbar, Services } from './components/Servicos.js';
+import { Booking } from './components/Agendar.js';
+import { Footer } from './components/Footer.js';
 
 export { site } from './sites/index.js';
 
@@ -29,36 +31,46 @@ function renderHead(site, page) {
     `<link rel="preconnect" href="https://fonts.googleapis.com">`,
     `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
     `<link ${attrs({ rel: 'stylesheet', href: theme.fontsHref })}>`,
-    tokens ? `<style>:root{${esc(tokens)}}</style>` : '',
+    // `:root:root` vence o :root do tokens.css, que o Vite carrega depois deste bloco.
+    tokens ? `<style>:root:root{${esc(tokens)}}</style>` : '',
     `<script>document.documentElement.classList.add('js')</script>`,
   ]
     .filter(Boolean)
     .join('\n    ');
 }
 
-// Conteúdo de cada página. Os serviços ficam numa página própria para o início não ficar longo.
-// No início, as duas colunas do desktop viram uma lista só no celular (ordem em base.css).
+// Conteúdo de cada página. No desktop o início vira duas colunas: o "celular" (topo e cards)
+// fixo à esquerda e as seções à direita; no celular é uma coluna só.
 const PAGINAS = {
-  home: (site) => `<div class="stack">
-      ${StudioCard(site)}
-      ${ContactCard(site)}
+  home: (site) => `<div class="intro">
+      ${Hero(site)}
+      <div class="intro__body">
+        ${Menu(site)}
+        ${Phrase(site)}
+      </div>
     </div>
-    <div class="stack stack--offset">
-      ${ServicesLinkCard(site)}
-      ${InspoCard(site)}
+    <div class="content">
+      ${About(site)}
+      ${Help(site)}
+      ${Cta(site)}
+      ${Gallery(site)}
+      ${Faq(site)}
     </div>`,
-  servicos: (site) => ServicesPage(site),
+  servicos: (site) => `${Topbar(site)}
+    ${Services(site)}
+    ${Cta(site)}`,
+  agendar: (site) => `${Topbar(site)}
+    ${Booking(site)}`,
 };
 
 function renderBody(site, page) {
   return `<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-  <div class="backdrop${site.backdrop.blur ? ' backdrop--blur' : ''}" aria-hidden="true">${Picture(site.backdrop, { className: 'backdrop__img', sizes: '100vw', priority: true })}</div>
-  <main class="page page--${page}" id="conteudo" data-site="${esc(site.id)}">
+  <main class="layout layout--${page}" id="conteudo" data-site="${esc(site.id)}">
     ${PAGINAS[page](site)}
   </main>
   ${Footer(site)}
   <div class="toast" role="status" aria-live="polite"></div>`;
 }
 
-/** `page`: 'home' (início) ou 'servicos'. */
+/** `page`: 'home' (início), 'servicos' ou 'agendar'. */
 export const renderPage = (site, page = 'home') => ({ lang: site.lang, head: renderHead(site, page), body: renderBody(site, page) });

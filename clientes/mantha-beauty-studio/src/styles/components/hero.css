@@ -1,0 +1,176 @@
+/* Topo: foto, nome e especialidades */
+.hero {
+  position: relative;
+}
+
+.hero__media {
+  position: relative;
+  aspect-ratio: 1 / 1.4;
+  overflow: hidden;
+  background: var(--hero-fade); /* o nome fica sobre ele, abaixo do rosto */
+}
+
+/* A foto ocupa o alto do topo inteira (sem cortar) e se dissolve no fundo escuro */
+.hero__photo {
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent);
+  mask-image: linear-gradient(180deg, #000 72%, transparent);
+}
+
+/* Sombra suave para o nome e transição para o fundo rosa */
+.hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 46%, rgba(52, 22, 38, 0.3) 68%, rgba(58, 34, 51, 0) 88%, var(--bg) 100%);
+}
+
+.hero__text {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 38px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.95;
+  text-shadow: 0 2px 18px rgba(40, 10, 25, 0.35);
+}
+
+.hero__first,
+.hero__last {
+  display: block;
+  font-size: clamp(50px, 15vw, 66px);
+}
+
+.hero__first {
+  font-style: italic;
+  color: #fff;
+}
+
+.hero__last {
+  margin-top: 2px;
+  color: var(--rose-light);
+}
+
+.hero__tagline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 8px rgba(40, 10, 25, 0.4);
+}
+
+/* Cards do topo */
+.intro__body {
+  position: relative;
+  z-index: 3;
+  margin-top: -22px;
+  padding: 0 16px;
+}
+
+.menu {
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.menu__list {
+  display: grid;
+  gap: 10px;
+}
+
+.menu__item {
+  display: grid;
+  grid-template-columns: 62px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 8px 14px 8px 8px;
+  border-radius: var(--radius-item);
+  background: linear-gradient(90deg, var(--rose-tint), #fdf3f6);
+  text-align: left;
+  transition:
+    transform var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.menu__item:active {
+  transform: scale(0.98);
+}
+
+.menu__icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  background: var(--tile);
+  color: #fff;
+  box-shadow:
+    0 10px 18px -12px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.menu__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.menu__title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.menu__sub {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.menu__go {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1.3px solid var(--rose-deep);
+  border-radius: 50%;
+  color: var(--rose-deep);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.menu__item:hover .menu__go {
+  background: var(--rose-deep);
+  color: #fff;
+}
+
+.phrase {
+  display: grid;
+  margin-top: 26px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--ink);
+}
+
+.phrase__script {
+  font-family: var(--font-script);
+  font-size: 34px;
+  line-height: 1.1;
+  color: var(--rose-deep);
+}
+
