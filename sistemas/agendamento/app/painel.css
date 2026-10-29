@@ -127,13 +127,18 @@ button, input, select { font: inherit; color: inherit; }
 .linha__quando small, .linha__quem small { font-size: 12px; color: var(--muted); }
 .linha__quem strong { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Avisos no celular */
-.avisos { display: grid; gap: 10px; }
+/* Avisos no celular: sininho no topo e cartão que abre abaixo dele */
+.topo { position: relative; }
+.topo__acoes { display: flex; align-items: center; gap: 6px; }
+.sino { position: relative; display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--rose-deep); cursor: pointer; }
+.sino:hover { border-color: var(--rose); }
+.sino--alerta::after { content: ''; position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--erro); box-shadow: 0 0 0 2px var(--surface); }
+.avisos { position: absolute; z-index: 20; top: calc(100% + 4px); right: 0; width: min(380px, 100%); display: grid; gap: 10px; padding-right: 44px; }
+.avisos__fechar { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 24px; line-height: 1; cursor: pointer; }
+.avisos__fechar:hover { background: var(--rose-tint); color: var(--rose-deep); }
 .avisos__titulo { font-weight: 700; color: var(--rose-deep); }
 .avisos__passos { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
 .avisos__msg { font-size: 12.5px; }
-.avisos--ok { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-radius: 14px; background: var(--ok-tint); color: var(--ok); font-size: 13.5px; font-weight: 600; }
-.avisos--ok .avisos__msg { flex-basis: 100%; color: var(--ok); }
 
 /* Clientes */
 .busca { display: flex; gap: 8px; }

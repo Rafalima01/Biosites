@@ -38,13 +38,13 @@ export default async function PainelLayout({ children }) {
             <strong className="topo__nome">{studio.name}</strong>
           )}
         </div>
-        <form action={sair}><button className="btn btn--mini btn--fantasma" type="submit" title={user.email}>Sair</button></form>
+        <div className="topo__acoes">
+          <Avisos studioId={studio.id} email={user.email} />
+          <form action={sair}><button className="btn btn--mini btn--fantasma" type="submit" title={user.email}>Sair</button></form>
+        </div>
       </header>
       <Menu />
-      <main className="conteudo">
-        <Avisos studioId={studio.id} email={user.email} />
-        {children}
-      </main>
+      <main className="conteudo">{children}</main>
     </div>
   );
 }
