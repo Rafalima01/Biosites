@@ -129,14 +129,29 @@ button {
   padding: 18px 14px 10px;
 }
 
+/* Início no celular: as duas colunas viram uma lista só, nesta ordem */
 .stack {
-  display: grid;
-  gap: 18px;
-  align-content: start;
+  display: contents;
+}
+
+.page--home .card--studio {
+  order: 1;
+}
+
+.page--home .card--menu {
+  order: 2;
+}
+
+.page--home .card--inspo {
+  order: 3;
+}
+
+.page--home .card--contact {
+  order: 4;
 }
 
 @media (min-width: 920px) {
-  .page {
+  .page--home {
     grid-template-columns: repeat(2, 420px);
     justify-content: center;
     gap: 34px;
@@ -144,8 +159,19 @@ button {
     padding: 56px 24px 24px;
   }
 
+  .stack {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+  }
+
   .stack--offset {
     margin-top: 150px;
+  }
+
+  .page--servicos {
+    max-width: 540px;
+    padding-top: 40px;
   }
 
   .backdrop__img {

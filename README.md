@@ -23,7 +23,7 @@ Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (ca
 | Cliente | Pasta | Modelo | Situação |
 | --- | --- | --- | --- |
 | Jailane Ferreira · nail designer e mentora | [`clientes/jailane-ferreira`](clientes/jailane-ferreira) | 02 · Autoridade | 3 páginas: início, `/servicos/` (16 serviços com valores) e `/mentoria/` (aguardando textos) |
-| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 08 · Glam | Sobrancelhas, cílios e lábios: 7 serviços com agendamento por serviço no WhatsApp; galeria aguardando fotos de trabalhos |
+| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 08 · Glam | 2 páginas: início (galeria com 4 fotos de trabalhos e contato) e `/servicos/` (7 serviços com agendamento por serviço no WhatsApp) |
 
 ## Site da agência
 
@@ -70,6 +70,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 08 · Glam | `biosite-08-glam` | (ainda não publicado) |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
+| Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app (publicado pela CLI, branch `modelo-08-glam`) |
 
 Novo modelo: **Add New → Project**, importe este repositório, defina o **Root Directory**
 (`modelos/NN-nome`), faça o deploy e adicione o domínio do cliente em **Settings → Domains**.

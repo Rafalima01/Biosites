@@ -9,6 +9,7 @@
   --pink-soft: #f3c3d9;
   --pink-glass: rgba(234, 170, 201, 0.82);
   --pink-tint: #f06aa8;
+  --pink-ink: #b0336f; /* rosa para texto pequeno sobre o vidro claro (contraste AA) */
 
   /* Vidro */
   --glass: rgba(240, 234, 238, 0.7);

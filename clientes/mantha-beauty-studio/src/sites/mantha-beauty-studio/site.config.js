@@ -53,7 +53,8 @@ export default {
     name: 'Mantha Beauty Studio',
     designer: 'Samantha Carvalho',
     role: 'Sobrancelhas · Cílios · Lábios',
-    photo: media('samantha-rosto', 'Samantha Carvalho sorrindo, com cabelo cacheado', { width: 400, height: 400, sizes: [400] }),
+    // Foto de perfil (ao lado do nome e no "Seguir" da galeria). Não é a foto da capa.
+    photo: media('samantha-perfil', 'Samantha Carvalho sorrindo, de cabelo cacheado', { width: 400, height: 400, sizes: [400] }),
   },
 
   studio: {
@@ -76,8 +77,29 @@ export default {
 
   cta: {
     label: 'Agendar horário',
-    note: 'Atendimento com hora marcada. Escolha o serviço abaixo ou chame no WhatsApp.',
+    note: 'Atendimento com hora marcada, direto pelo WhatsApp.',
     message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.',
+  },
+
+  // Card do início que abre a página de serviços (/servicos/).
+  servicesCard: {
+    title: 'Serviços e valores',
+    text: 'Duração, valores e agendamento de cada serviço.',
+    button: 'Ver serviços',
+    photo: media('trabalho-3', 'Cliente com cílios volumosos e sobrancelhas definidas', { width: 800, height: 800, sizes: [400, 800] }),
+  },
+
+  // Página /servicos/.
+  pages: {
+    servicos: {
+      meta: {
+        title: 'Serviços e valores · Mantha Beauty Studio',
+        description: 'Sobrancelhas, cílios e lábios com Samantha Carvalho: duração, valores e agendamento pelo WhatsApp.',
+      },
+      eyebrow: 'Serviços e valores',
+      title: 'Serviços',
+      subtitle: 'Toque no serviço para agendar. A mensagem já vai pronta com o nome dele.',
+    },
   },
 
   // Fotos de trabalhos da Samantha. Cada foto pode ter várias categorias.
@@ -162,12 +184,15 @@ export default {
     },
   },
 
-  // Botões de links no cartão de serviços.
-  links: [
-    { id: 'whatsapp', label: 'Falar no WhatsApp', action: { type: 'channel', channel: 'whatsapp' } },
-    { id: 'instagram', label: 'Instagram @mantha_beautystudio', action: { type: 'channel', channel: 'instagram' } },
-    { id: 'localizacao', label: 'Como chegar', action: { type: 'channel', channel: 'location' } },
-  ],
+  // Card de contato (início e página de serviços): três botões lado a lado.
+  contactCard: {
+    title: 'Contato',
+    links: [
+      { id: 'whatsapp', label: 'WhatsApp', hint: 'Tirar dúvidas', action: { type: 'channel', channel: 'whatsapp' } },
+      { id: 'instagram', label: 'Instagram', hint: 'Ver perfil', action: { type: 'channel', channel: 'instagram' } },
+      { id: 'localizacao', label: 'Endereço', hint: 'Como chegar', action: { type: 'channel', channel: 'location' } },
+    ],
+  },
 
   footer: {
     demoNote: '',

@@ -1,5 +1,5 @@
 // Galeria de inspirações: filtros por categoria, curtidas e escolha de referências.
-// As escolhas aparecem no cartão de agendamento e entram na mensagem do WhatsApp.
+// As escolhas aparecem no cartão de agendamento (só quando há alguma) e entram na mensagem do WhatsApp.
 const store = {
   get(key) {
     try {
@@ -24,6 +24,8 @@ export function initInspo(root, { siteId, toast }) {
   const empty = root.querySelector('[data-empty]');
   const likeCount = root.querySelector('[data-like-count]');
   const picked = document.querySelector('[data-picked]');
+  const pickedFaces = picked?.querySelector('[data-picked-faces]');
+  const pickedCount = picked?.querySelector('[data-picked-count]');
   const book = document.querySelector('[data-book]');
   const baseMessage = book?.dataset.message || '';
   const keys = { likes: `${siteId}:curtidas`, picks: `${siteId}:inspiracoes` };
@@ -58,16 +60,17 @@ export function initInspo(root, { siteId, toast }) {
     }
     if (likeCount) likeCount.textContent = String(likes.size);
 
-    // Rostinhos no cartão de agendamento.
-    if (picked && picks.length) {
-      const faces = picks
+    // Rostinhos no cartão de agendamento: a faixa fica escondida até a primeira escolha.
+    if (picked) {
+      picked.hidden = !picks.length;
+      pickedFaces.innerHTML = picks
         .slice(0, 4)
         .map((id) => {
           const img = tileOf(id).querySelector('img');
           return `<span class="faces__item"><img src="${img.currentSrc || img.src}" alt="" width="40" height="40"></span>`;
         })
         .join('');
-      picked.innerHTML = `<span class="faces__list">${faces}</span><span class="faces__more">${picks.length > 4 ? `+${picks.length - 4} · ` : ''}${picks.length === 1 ? '1 escolhida' : `${picks.length} escolhidas`}</span>`;
+      pickedCount.textContent = picks.length === 1 ? '1 inspiração escolhida' : `${picks.length} inspirações escolhidas`;
     }
 
     // Mensagem do WhatsApp com as inspirações escolhidas.
