@@ -1,0 +1,19 @@
+{
+  "name": "biosite-mantha-beauty-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bio site de Samantha Carvalho (Mantha Beauty Studio), feito com o Modelo 08 · Glam",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

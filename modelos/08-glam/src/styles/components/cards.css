@@ -1,0 +1,392 @@
+/* Cartões de vidro */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.3);
+}
+
+.card {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.round-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.32);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.round-btn:hover {
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Cartão 1: studio */
+.card--studio {
+  padding-bottom: 22px;
+}
+
+.studio {
+  position: relative;
+  aspect-ratio: 1 / 0.92;
+  overflow: hidden;
+  background: var(--pink-tint);
+}
+
+.studio__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Banho rosa sobre a foto, como a luz do neon no studio */
+.studio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 45% at 50% 32%, rgba(255, 210, 230, 0.35), transparent 70%),
+    linear-gradient(180deg, rgba(240, 106, 168, 0.55), rgba(240, 106, 168, 0.75));
+  mix-blend-mode: multiply;
+}
+
+.studio__share {
+  position: absolute;
+  z-index: 2;
+  top: 26px;
+  left: 26px;
+}
+
+.studio__sign {
+  position: absolute;
+  z-index: 1;
+  inset: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 26% 16px 0;
+  text-align: center;
+}
+
+.neon {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 14vw, 62px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff6fb;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 8px #ffd6ea,
+    0 0 18px var(--pink),
+    0 0 34px var(--pink-deep),
+    0 0 60px var(--pink-deep);
+  animation: neon 6s ease-in-out infinite;
+}
+
+@keyframes neon {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.7;
+  }
+  49% {
+    opacity: 1;
+  }
+}
+
+.studio__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 9.5vw, 42px);
+  line-height: 1.05;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.55),
+    0 2px 14px rgba(150, 30, 90, 0.45);
+}
+
+/* Destaque: pílula rosa sobreposta à foto */
+.featured {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 42% 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: -96px 10px 0;
+  padding: 10px 16px 10px 10px;
+  border-radius: 64px;
+  background: var(--pink-glass);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 30px -20px rgba(120, 20, 70, 0.6);
+}
+
+.featured__photo {
+  aspect-ratio: 1 / 1.12;
+  border-radius: 56px 40px 40px 56px;
+  overflow: hidden;
+}
+
+.featured__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured__body {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.chip--status {
+  margin-bottom: 6px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.featured__service {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.featured__detail {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.designer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  min-width: 0;
+}
+
+.designer__photo {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  overflow: hidden;
+}
+
+.designer__photo img,
+.profile__photo img,
+.faces__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.designer p {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.designer strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.designer span {
+  overflow: hidden;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Inspirações escolhidas e horários */
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 22px 26px 18px;
+}
+
+.summary__col + .summary__col {
+  padding-left: 18px;
+  border-left: 1.5px solid rgba(124, 106, 115, 0.35);
+}
+
+.summary__label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.summary__value {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.summary__sub {
+  font-size: 13.5px;
+}
+
+.faces {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.faces__list {
+  display: flex;
+}
+
+.faces__item {
+  width: 34px;
+  height: 34px;
+  margin-right: -10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  overflow: hidden;
+  background: var(--pink-soft);
+}
+
+.faces__more {
+  margin-left: 10px;
+  font-size: 11.5px;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.btn-pink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: min(100% - 52px, 300px);
+  min-height: 50px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f792c1, var(--pink));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow:
+    0 14px 24px -14px rgba(226, 88, 154, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition: transform var(--dur) var(--ease);
+}
+
+.btn-pink:active {
+  transform: scale(0.97);
+}
+
+.card__note {
+  margin: 12px 26px 0;
+  font-size: 12.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Cartão 3: serviços e links */
+.card--services {
+  display: grid;
+  gap: 16px;
+  padding: 26px 22px 22px;
+}
+
+.card--services .inspo__title {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.services li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 4px;
+  border-bottom: 1px solid rgba(124, 106, 115, 0.22);
+  font-size: 14.5px;
+}
+
+.services li:last-child {
+  border-bottom: 0;
+}
+
+.services strong {
+  flex: none;
+  font-weight: 600;
+  color: var(--pink-deep);
+}
+
+.services small {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.links {
+  display: grid;
+  gap: 10px;
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px 10px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  font-size: 14.5px;
+  font-weight: 500;
+  text-align: left;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.link-row:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.link-row__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--pink);
+  color: #fff;
+}
+
+.link-row__label {
+  flex: 1;
+}
