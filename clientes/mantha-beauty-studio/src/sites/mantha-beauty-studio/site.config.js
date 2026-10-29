@@ -134,6 +134,15 @@ export default {
     deposit: 0.3, // sinal de 30%
   },
 
+  // Sistema de Agendamento da Vertex: horários, bloqueios e agendamentos ficam no painel
+  // (https://sistema-agendamento-sand.vercel.app). A chave abaixo é a pública ("anon"), feita para ir no site.
+  sistema: {
+    url: 'https://jbudmvywhaskaemicubn.supabase.co',
+    chave:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidWRtdnl3aGFza2FlbWljdWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzMDYxMTksImV4cCI6MjEwODg4MjExOX0.zziLB69DZhG9eubnS1cICOItrKwVCDTygnw7Jviuu0A',
+    studio: 'mantha-beauty-studio',
+  },
+
   // Pix do sinal. FASE DE TESTE: chave provisória; trocar pela chave da Samantha antes de usar de verdade.
   pix: {
     key: '+5571992351084', // celular no formato +55DDDNÚMERO

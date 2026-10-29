@@ -19,6 +19,8 @@ export const bookingData = (site) => ({
   firstName: site.brand.firstName,
   rules: site.booking,
   pix: site.pix,
+  // Sistema de Agendamento (chave pública "anon"). Sem ele, a página usa a agenda do Google.
+  sistema: site.sistema?.url ? site.sistema : null,
   services: site.services.flatMap((g) =>
     g.items.map((s) => ({ id: slug(s.name), name: s.name, category: g.category, minutes: s.minutes, price: s.price })),
   ),
