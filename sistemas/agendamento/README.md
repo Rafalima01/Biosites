@@ -9,6 +9,8 @@ gerencia tudo num painel no celular. Substitui o Google Agenda.
 
 **Stack:** Supabase (Postgres + login) · Next.js 15 (painel) · Vercel. Começa no plano grátis dos dois.
 
+**No ar:** painel em https://sistema-agendamento-sand.vercel.app (projeto Vercel `sistema-agendamento`) · banco Supabase `jbudmvywhaskaemicubn` (São Paulo). Studio cadastrado: Mantha Beauty Studio. A instalação real foi feita com `supabase/instalar-vertex.sql` (fica fora do git, tem dados de clientes).
+
 ## O que já está pronto (etapa 1)
 
 **Banco** ([`supabase/schema.sql`](supabase/schema.sql)), com as regras no próprio banco:

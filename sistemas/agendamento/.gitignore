@@ -4,3 +4,6 @@ node_modules/
 !.env.example
 .vercel
 .dev-storage/
+
+# Arquivo de instalação com dados reais de clientes (não vai para o GitHub, que é público)
+supabase/instalar-*.sql
