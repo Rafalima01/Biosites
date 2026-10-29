@@ -60,6 +60,11 @@ Cada modelo é um projeto Vercel ligado a este repositório (branch `main`), com
 apontando para a pasta do modelo. Todo push na `main` publica automaticamente; o `ignoreCommand`
 do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 
+Os projetos ligados ao repositório estão com **Preview Deployments desligado** (Settings → Git):
+pushes em outras branches (ex.: `modelo-09-delicado`) não criam publicações. Sem isso, cada push
+gerava uma tentativa em todos os projetos e esgotava o limite do plano grátis (100 publicações/dia).
+Para ver uma branch antes de ir para a `main`, publique pela CLI no projeto de teste dela.
+
 | Modelo | Projeto Vercel | Produção |
 | --- | --- | --- |
 | 01 · Essencial | `biosite-01-essencial` | https://biosite-01-essencial.vercel.app |
