@@ -1,7 +1,7 @@
 import { getPainel } from '@/lib/supabase/server';
 import { encaixar, desbloquear } from '../actions';
-import { Atendimento, Retorno, statusReal } from '@/components/Atendimento';
-import { diaLongo, hoje, hora, noFuso, reais, somaDias, valido } from '@/lib/datas';
+import { Atendimento, Retorno, STATUS, statusReal } from '@/components/Atendimento';
+import { diaCurto, diaDe, diaLongo, hoje, hora, noFuso, reais, somaDias, valido } from '@/lib/datas';
 
 // Agenda do dia: atendimentos, bloqueios, totais e encaixe rápido.
 export default async function AgendaPage({ searchParams }) {
@@ -12,11 +12,21 @@ export default async function AgendaPage({ searchParams }) {
   const de = noFuso(dia, '00:00', tz).toISOString();
   const ate = noFuso(somaDias(dia, 1), '00:00', tz).toISOString();
 
-  const [{ data: ags }, { data: blocos }, { data: servicos }] = await Promise.all([
+  const [{ data: ags }, { data: blocos }, { data: servicos }, { data: futuros }] = await Promise.all([
     supabase.from('appointments').select('*').eq('studio_id', studio.id).gte('starts_at', de).lt('starts_at', ate).order('starts_at'),
     supabase.from('blocks').select('*').eq('studio_id', studio.id).lt('starts_at', ate).gt('ends_at', de).order('starts_at'),
     supabase.from('services').select('id, name, minutes, price, active').eq('studio_id', studio.id).eq('active', true).order('sort'),
+    // Próximos atendimentos (de agora em diante), para nada ficar escondido em outro dia.
+    supabase
+      .from('appointments')
+      .select('id, starts_at, client_name, service_name, status, expires_at')
+      .eq('studio_id', studio.id)
+      .in('status', ['confirmed', 'pending'])
+      .gte('starts_at', new Date().toISOString())
+      .order('starts_at')
+      .limit(40),
   ]);
+  const proximos = (futuros || []).filter((a) => statusReal(a) !== 'expired' && diaDe(a.starts_at, tz) !== dia).slice(0, 20);
   const lista = ags || [];
   const ativos = lista.filter((a) => ['confirmed', 'done'].includes(statusReal(a)) || statusReal(a) === 'pending');
   const aguardando = lista.filter((a) => statusReal(a) === 'pending').length;
@@ -74,6 +84,32 @@ export default async function AgendaPage({ searchParams }) {
       ) : (
         <p className="vazio">Nenhum atendimento neste dia.</p>
       )}
+
+      {proximos.length ? (
+        <section className="proximos">
+          <h2 className="subtitulo">Próximos atendimentos</h2>
+          <ul className="lista lista--compacta">
+            {proximos.map((a) => {
+              const [rotulo, classe] = STATUS[statusReal(a)];
+              return (
+                <li key={a.id}>
+                  <a className={`linha linha--${classe}`} href={`/?dia=${diaDe(a.starts_at, tz)}`}>
+                    <span className="linha__quando">
+                      <strong>{diaCurto(a.starts_at, tz)}</strong>
+                      <small>{hora(a.starts_at, tz)}</small>
+                    </span>
+                    <span className="linha__quem">
+                      <strong>{a.client_name}</strong>
+                      <small>{a.service_name}</small>
+                    </span>
+                    <span className={`selo selo--${classe}`}>{rotulo}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
 
       <details className="card encaixe">
         <summary>+ Encaixar atendimento</summary>

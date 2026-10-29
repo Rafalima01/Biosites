@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPainel, supabaseServer } from '@/lib/supabase/server';
-import { noFuso } from '@/lib/datas';
+import { diaCurto, diaDe, hora, noFuso } from '@/lib/datas';
 
 const txt = (fd, k) => String(fd.get(k) ?? '').trim();
 
@@ -51,11 +51,20 @@ const MENSAGENS = {
 };
 
 export async function mudarStatus(fd) {
-  const { supabase } = await studioAtual();
+  const { supabase, studio } = await studioAtual();
   const status = txt(fd, 'status');
-  const { error } = await supabase.rpc('set_appointment_status', { p_id: txt(fd, 'id'), p_status: status });
+  const id = txt(fd, 'id');
+  const { error } = await supabase.rpc('set_appointment_status', { p_id: id, p_status: status });
   revalidatePath('/', 'layout');
   if (error) voltar(fd, 'erro', amigavel(error));
+  // Confirmou o sinal fora da agenda (ex.: em "Aguardando sinal"): leva para o dia do atendimento.
+  if (status === 'confirmed' && !txt(fd, 'voltar').startsWith('/?')) {
+    const { data } = await supabase.from('appointments').select('starts_at').eq('id', id).single();
+    if (data) {
+      const dia = diaDe(data.starts_at, studio.timezone);
+      redirect(`/?dia=${dia}&ok=${encodeURIComponent(`Sinal confirmado. O atendimento está na agenda de ${diaCurto(data.starts_at, studio.timezone)} às ${hora(data.starts_at, studio.timezone)}.`)}`);
+    }
+  }
   voltar(fd, 'ok', MENSAGENS[status] || 'Salvo.');
 }
 

@@ -115,3 +115,14 @@ button, input, select { font: inherit; color: inherit; }
 /* Login */
 .login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
 .login__card { width: 100%; max-width: 400px; display: grid; gap: 14px; }
+
+/* Próximos atendimentos (lista compacta, toque leva ao dia) */
+.proximos { display: grid; gap: 10px; }
+.lista--compacta { gap: 8px; }
+.linha { display: grid; grid-template-columns: 78px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); border-left: 4px solid var(--rose); text-decoration: none; }
+.linha--pendente { border-left-color: var(--warn); }
+.linha:hover { box-shadow: 0 0 0 2px var(--line), var(--shadow); }
+.linha__quando, .linha__quem { display: grid; gap: 1px; min-width: 0; }
+.linha__quando strong { font-size: 13px; text-transform: capitalize; }
+.linha__quando small, .linha__quem small { font-size: 12px; color: var(--muted); }
+.linha__quem strong { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
