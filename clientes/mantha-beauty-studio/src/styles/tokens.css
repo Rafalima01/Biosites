@@ -1,0 +1,36 @@
+/*
+ * Tokens de design do Modelo 08 · Glam. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Rosa */
+  --pink: #f47eb5;
+  --pink-deep: #e2589a;
+  --pink-soft: #f3c3d9;
+  --pink-glass: rgba(234, 170, 201, 0.82);
+  --pink-tint: #f06aa8;
+
+  /* Vidro */
+  --glass: rgba(240, 234, 238, 0.7);
+  --glass-dark: rgba(196, 128, 162, 0.5);
+  --glass-line: rgba(255, 255, 255, 0.55);
+  --glass-blur: 22px;
+
+  /* Texto */
+  --ink: #2a1d24;
+  --muted: #7c6a73;
+  --on-pink: #ffffff;
+
+  /* Tipografia */
+  --font-display: 'Poiret One', 'Didot', Georgia, serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-card: 44px;
+  --radius-tile: 32px;
+  --shadow: 0 30px 60px -30px rgba(40, 10, 30, 0.55);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+}

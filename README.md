@@ -23,6 +23,7 @@ Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (ca
 | Cliente | Pasta | Modelo | Situação |
 | --- | --- | --- | --- |
 | Jailane Ferreira · nail designer e mentora | [`clientes/jailane-ferreira`](clientes/jailane-ferreira) | 02 · Autoridade | 3 páginas: início, `/servicos/` (16 serviços com valores) e `/mentoria/` (aguardando textos) |
+| Samantha Carvalho · Mantha Beauty Studio | [`clientes/mantha-beauty-studio`](clientes/mantha-beauty-studio) | 08 · Glam | Sobrancelhas, cílios e lábios: 7 serviços com agendamento por serviço no WhatsApp; galeria aguardando fotos de trabalhos |
 
 ## Site da agência
 
