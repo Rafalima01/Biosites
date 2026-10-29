@@ -24,4 +24,6 @@ export async function middleware(request) {
   return response;
 }
 
-export const config = { matcher: ['/((?!_next/|favicon|.*\.(?:svg|png|ico|webp)$).*)'] };
+// Fora do login: arquivos do app instalável (ícones, manifest, service worker) e a rota de envio
+// de avisos, que é chamada pelo banco e confere o próprio segredo.
+export const config = { matcher: ['/((?!_next/|favicon|sw\\.js|manifest\\.webmanifest|api/push$|.*\\.(?:svg|png|ico|webp)$).*)'] };

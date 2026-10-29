@@ -37,6 +37,24 @@ gerencia tudo num painel no celular. Substitui o Google Agenda.
 - **backup semanal criptografado** (`agenda-backup.yml`), porque o grátis não faz backup.
   O repositório é público, então o arquivo é cifrado com senha antes de ser guardado (30 dias).
 
+## Avisos no celular (app instalado)
+
+O painel é instalável (manifest + service worker). No iPhone: Safari → **Compartilhar → Adicionar à
+Tela de Início** → abrir pelo ícone → **Ativar avisos** (a Apple só libera notificação com o app
+instalado; iOS 16.4 ou mais novo). No Android/computador, o botão funciona direto no navegador.
+
+- **Novo agendamento pelo site** → aviso na hora ("Novo agendamento · aguardando sinal"), abre
+  "Aguardando sinal". Gatilho `appointments_push` no banco.
+- **Lembrete** perto de 30 minutos antes de cada atendimento confirmado ("Daqui a 28 min: Ana às 13:00").
+  `send_reminders()` roda a cada 5 minutos pelo `pg_cron`; cada atendimento é lembrado uma vez.
+- Quem entrega é a rota `/api/push` (biblioteca `web-push`). O banco chama a rota pelo `pg_net` com
+  o segredo de `app_config`; celulares que desinstalaram o app saem da lista sozinhos.
+
+Variáveis do projeto Vercel: `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `PUSH_SECRET`
+(gerados uma vez; trocar invalida os celulares já inscritos). Ativação no banco:
+`supabase/instalar-avisos.sql` (fora do git: tem o segredo) liga `pg_net`/`pg_cron`, grava
+`push_url`/`push_secret` em `app_config` e agenda `agenda-lembretes`.
+
 ## Instalar (uma vez só)
 
 1. **Supabase:** crie um projeto em [supabase.com](https://supabase.com) (plano grátis), região São Paulo.
@@ -82,7 +100,7 @@ quantos dias à frente · `bufferMinutes` intervalo depois de cada atendimento �
 
 ```bash
 npm install
-npm run test:db     # 41 verificações das regras do banco (Postgres dentro do Node, sem instalar nada)
+npm run test:db     # 54 verificações das regras do banco (Postgres dentro do Node, sem instalar nada)
 cp .env.example .env.local   # dados do Supabase
 npm run dev         # painel em http://localhost:3000
 ```

@@ -1,6 +1,12 @@
 import './painel.css';
 
-export const metadata = { title: 'Agenda · Painel do studio', robots: { index: false } };
+export const metadata = {
+  title: 'Agenda · Painel do studio',
+  robots: { index: false },
+  applicationName: 'Agenda',
+  appleWebApp: { capable: true, title: 'Agenda', statusBarStyle: 'default' },
+  icons: { icon: '/icone-192.png', apple: '/apple-touch-icon.png' },
+};
 export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#fbf3f3' };
 
 export default function RootLayout({ children }) {

@@ -126,3 +126,11 @@ button, input, select { font: inherit; color: inherit; }
 .linha__quando strong { font-size: 13px; text-transform: capitalize; }
 .linha__quando small, .linha__quem small { font-size: 12px; color: var(--muted); }
 .linha__quem strong { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Avisos no celular */
+.avisos { display: grid; gap: 10px; }
+.avisos__titulo { font-weight: 700; color: var(--rose-deep); }
+.avisos__passos { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
+.avisos__msg { font-size: 12.5px; }
+.avisos--ok { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-radius: 14px; background: var(--ok-tint); color: var(--ok); font-size: 13.5px; font-weight: 600; }
+.avisos--ok .avisos__msg { flex-basis: 100%; color: var(--ok); }

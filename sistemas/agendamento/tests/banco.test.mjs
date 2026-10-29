@@ -159,6 +159,49 @@ ok(r.ok && r.status === 'confirmed' && Number(r.deposit) === 0, 'studio sem sina
 r = (await one(`select book('studio-livia', 'b0000000-0000-4000-8000-000000000099', $1, 'Duda Rocha', '(11) 91234-5678') as j`, [outro[1].starts_at])).j;
 ok(!r.ok, 'serviço de um studio não pode ser agendado em outro');
 
+// ---------------- avisos (push) ----------------
+await as(null);
+const chamadas = async () => (await one('select count(*)::int as n from net._chamadas')).n;
+await db.exec('delete from net._chamadas');
+await db.query(`insert into push_subscriptions (studio_id, email, endpoint, p256dh, auth) values ($1, 'livia@ex.com', 'https://push.exemplo/cel-1', 'k', 'a')`, [LIVIA]);
+await as('anon');
+const sNovo = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '17:00'`, [DESIGN, seg])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, 'Fernanda Alves', '(71) 95555-0005') as j`, [DESIGN, sNovo])).j;
+await as(null);
+ok(r.ok && (await chamadas()) === 0, 'sem configuração de envio, agenda normalmente e não chama ninguém');
+await db.exec(`insert into app_config (key, value) values ('push_url', 'https://painel.exemplo/api/push'), ('push_secret', 'segredo-teste') on conflict (key) do update set value = excluded.value`);
+await as('anon');
+const sNovo2 = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '18:00'`, [DESIGN, seg])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, 'Gabi Torres', '(71) 94444-0006') as j`, [DESIGN, sNovo2])).j;
+await as(null);
+let c = await all('select * from net._chamadas order by id');
+ok(r.ok && c.length === 1, 'agendamento pelo site dispara 1 aviso');
+ok(c[0]?.body.title.includes('aguardando sinal') && c[0]?.body.body.startsWith('Gabi · Design personalizado') && c[0]?.body.url === '/pedidos', 'aviso diz quem, o quê e quando, e abre Aguardando sinal');
+ok(c[0]?.headers['x-push-secret'] === 'segredo-teste' && c[0]?.body.subscriptions.length === 1 && c[0]?.url === 'https://painel.exemplo/api/push', 'aviso vai com o segredo para os celulares do studio');
+await as('authenticated', 'livia@ex.com');
+await db.query(`select add_appointment($1, $2, now() + interval '3 days', 'Encaixe Teste')`, [LIVIA, DESIGN]);
+await as(null);
+ok((await chamadas()) === 1, 'encaixe feito pela dona não gera aviso');
+await db.exec('delete from net._chamadas');
+await db.query(
+  `insert into appointments (code, studio_id, service_id, service_name, starts_at, ends_at, client_name, client_phone, price, status, source) values
+  ('LEMB001', $1, $2, 'Design personalizado', now() + interval '20 minutes', now() + interval '60 minutes', 'Helena Prado', '71933330007', 35, 'confirmed', 'painel'),
+  ('LEMB002', $1, $2, 'Design personalizado', now() + interval '2 hours', now() + interval '3 hours', 'Iris Melo', '71922220008', 35, 'confirmed', 'painel'),
+  ('LEMB003', $1, $2, 'Design personalizado', now() + interval '10 minutes', now() + interval '50 minutes', 'Joana Reis', '71911110009', 35, 'cancelled', 'painel')`,
+  [LIVIA, DESIGN],
+);
+ok((await one('select send_reminders() as n')).n === 1, 'lembrete só para o confirmado que começa em até 30 min');
+c = await all('select body from net._chamadas');
+ok(/^Daqui a (19|20) min: Helena às /.test(c[0]?.body.title || ''), 'lembrete diz quanto falta, quem e a hora');
+ok((await one('select send_reminders() as n')).n === 0, 'o mesmo atendimento não é lembrado duas vezes');
+await as('anon');
+ok((await one('select count(*)::int as n from push_subscriptions')).n === 0 && (await one('select count(*)::int as n from app_config')).n === 0, 'site não lê celulares inscritos nem o segredo');
+ok(await throws(() => db.query('select send_reminders()')), 'site não dispara lembretes');
+ok(await throws(() => db.query(`select push_remove('errado', array['https://push.exemplo/cel-1'])`)), 'remover celular exige o segredo');
+ok((await one(`select push_remove('segredo-teste', array['https://push.exemplo/cel-1']) as n`)).n === 1, 'com o segredo, celular desinstalado sai da lista');
+await as('authenticated', 'outra@ex.com');
+ok(await throws(() => db.query(`insert into push_subscriptions (studio_id, endpoint, p256dh, auth) values ($1, 'https://x/y', 'k', 'a')`, [LIVIA])), 'dona de outro studio não inscreve celular no studio da Lívia');
+
 // ---------------- agência ----------------
 await as('authenticated', 'agencia@ex.com');
 ok((await one(`select count(*)::int as n from appointments`)).n >= 3, 'agência vê todos os studios');

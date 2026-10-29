@@ -465,6 +465,145 @@ grant execute on function public.set_appointment_status(uuid, text) to authentic
 grant execute on function public.add_appointment(uuid, uuid, timestamptz, text, text, text, int, numeric) to authenticated;
 
 -- =============================================================================
+-- Avisos no celular (Web Push)
+--
+-- O painel instalado na tela inicial registra o celular em push_subscriptions. O banco avisa:
+--   * na hora em que um agendamento chega pelo site (gatilho em appointments);
+--   * ~30 minutos antes de cada atendimento confirmado (send_reminders, a cada 5 minutos pelo pg_cron).
+-- Quem entrega é a rota /api/push do painel (chaves VAPID ficam só na Vercel). O banco chama essa
+-- rota pelo pg_net com um segredo guardado em app_config (tabela sem acesso pelo site).
+-- Sem app_config preenchida, nada é enviado e nada quebra.
+-- =============================================================================
+alter table public.appointments add column if not exists reminded_at timestamptz;
+
+create table if not exists public.push_subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  studio_id uuid not null references public.studios (id) on delete cascade,
+  email text not null default '',
+  endpoint text not null unique,
+  p256dh text not null,
+  auth text not null,
+  user_agent text not null default '',
+  created_at timestamptz not null default now()
+);
+create index if not exists push_subscriptions_studio_idx on public.push_subscriptions (studio_id);
+
+create table if not exists public.app_config (
+  key text primary key,
+  value text not null
+);
+
+alter table public.push_subscriptions enable row level security;
+alter table public.app_config enable row level security; -- sem políticas: ninguém lê pelo site
+drop policy if exists "membro total" on public.push_subscriptions;
+create policy "membro total" on public.push_subscriptions for all to authenticated
+  using (public.is_member(studio_id)) with check (public.is_member(studio_id));
+
+-- Envia um aviso para todos os celulares do studio. Nunca impede a operação que chamou.
+create or replace function public.push_send(p_studio uuid, p_title text, p_body text, p_url text default '/', p_tag text default null)
+returns void
+language plpgsql volatile security definer set search_path = public
+as $$
+declare
+  v_url text := (select value from app_config where key = 'push_url');
+  v_secret text := (select value from app_config where key = 'push_secret');
+  subs jsonb;
+begin
+  if v_url is null or v_secret is null then return; end if;
+  select jsonb_agg(jsonb_build_object('endpoint', endpoint, 'keys', jsonb_build_object('p256dh', p256dh, 'auth', auth)))
+    into subs from push_subscriptions where studio_id = p_studio;
+  if subs is null then return; end if;
+  perform net.http_post(
+    url := v_url,
+    body := jsonb_build_object('subscriptions', subs, 'title', p_title, 'body', p_body, 'url', p_url, 'tag', p_tag),
+    headers := jsonb_build_object('Content-Type', 'application/json', 'x-push-secret', v_secret)
+  );
+exception when others then
+  raise warning 'Aviso não enviado: %', sqlerrm;
+end;
+$$;
+
+-- Agendamento novo pelo site → aviso imediato.
+create or replace function public.on_new_appointment()
+returns trigger
+language plpgsql security definer set search_path = public
+as $$
+declare
+  tz text;
+  quando text;
+begin
+  if new.source = 'site' then
+    select timezone into tz from studios where id = new.studio_id;
+    quando := to_char(new.starts_at at time zone tz, 'DD/MM') || ' às ' || to_char(new.starts_at at time zone tz, 'HH24:MI');
+    perform push_send(
+      new.studio_id,
+      case when new.status = 'pending' then 'Novo agendamento · aguardando sinal' else 'Novo agendamento' end,
+      split_part(new.client_name, ' ', 1) || ' · ' || new.service_name || ' · ' || quando,
+      case when new.status = 'pending' then '/pedidos' else '/?dia=' || to_char(new.starts_at at time zone tz, 'YYYY-MM-DD') end,
+      'novo-' || new.code
+    );
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists appointments_push on public.appointments;
+create trigger appointments_push after insert on public.appointments for each row execute function public.on_new_appointment();
+
+-- Lembretes: atendimentos confirmados que começam nos próximos 30 minutos (uma vez cada).
+create or replace function public.send_reminders()
+returns int
+language plpgsql volatile security definer set search_path = public
+as $$
+declare
+  a record;
+  n int := 0;
+  faltam int;
+begin
+  for a in
+    select ap.id, ap.studio_id, ap.code, ap.starts_at, ap.client_name, ap.service_name, s.timezone
+    from appointments ap join studios s on s.id = ap.studio_id
+    where ap.status = 'confirmed' and ap.reminded_at is null
+      and ap.starts_at > now() and ap.starts_at <= now() + interval '30 minutes'
+    for update of ap skip locked
+  loop
+    faltam := greatest(1, round(extract(epoch from a.starts_at - now()) / 60)::int);
+    perform push_send(
+      a.studio_id,
+      'Daqui a ' || faltam || ' min: ' || split_part(a.client_name, ' ', 1) || ' às ' || to_char(a.starts_at at time zone a.timezone, 'HH24:MI'),
+      a.client_name || ' · ' || a.service_name,
+      '/?dia=' || to_char(a.starts_at at time zone a.timezone, 'YYYY-MM-DD'),
+      'lembrete-' || a.code
+    );
+    update appointments set reminded_at = now() where id = a.id;
+    n := n + 1;
+  end loop;
+  return n;
+end;
+$$;
+
+-- A rota de envio avisa quais celulares não existem mais (app removido): saem da lista.
+create or replace function public.push_remove(p_secret text, p_endpoints text[])
+returns int
+language plpgsql volatile security definer set search_path = public
+as $$
+declare n int;
+begin
+  if p_secret is null or p_secret <> coalesce((select value from app_config where key = 'push_secret'), '') then
+    raise exception 'Acesso negado' using errcode = '42501';
+  end if;
+  delete from push_subscriptions where endpoint = any (p_endpoints);
+  get diagnostics n = row_count;
+  return n;
+end;
+$$;
+
+revoke all on function public.push_send(uuid, text, text, text, text) from public, anon, authenticated;
+revoke all on function public.send_reminders() from public, anon, authenticated;
+revoke all on function public.on_new_appointment() from public, anon, authenticated;
+revoke all on function public.push_remove(text, text[]) from public;
+grant execute on function public.push_remove(text, text[]) to anon, authenticated;
+
+-- =============================================================================
 -- Primeiro acesso da agência (troque o e-mail e rode esta linha separadamente):
 -- insert into public.agency_admins (email) values ('voce@exemplo.com') on conflict do nothing;
 -- =============================================================================

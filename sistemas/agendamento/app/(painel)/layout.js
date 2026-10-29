@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getPainel } from '@/lib/supabase/server';
 import { escolherStudio, sair } from '../actions';
 import { Menu } from '@/components/Menu';
+import { Avisos } from '@/components/Avisos';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,7 +41,10 @@ export default async function PainelLayout({ children }) {
         <form action={sair}><button className="btn btn--mini btn--fantasma" type="submit" title={user.email}>Sair</button></form>
       </header>
       <Menu />
-      <main className="conteudo">{children}</main>
+      <main className="conteudo">
+        <Avisos studioId={studio.id} email={user.email} />
+        {children}
+      </main>
     </div>
   );
 }
