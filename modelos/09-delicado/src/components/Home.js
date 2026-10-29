@@ -1,5 +1,5 @@
 import { esc } from '../lib/html.js';
-import { resolveAction, resolveChannel, renderTarget } from '../lib/links.js';
+import { resolveAction, renderTarget } from '../lib/links.js';
 import { icon } from './icons.js';
 import { Picture } from './Picture.js';
 
@@ -70,13 +70,13 @@ export function Help({ help }) {
 /** Faixa rosa com o botão de agendamento. */
 export function Cta(site) {
   const { cta } = site;
-  const target = resolveChannel(site, 'whatsapp', { message: cta.message });
+  const target = resolveAction(site, cta.action);
   return `<section class="cta reveal" aria-label="Agendamento">
     <p class="cta__text">${esc(cta.text)}</p>
     ${renderTarget(target, {
       className: 'cta__btn',
-      label: 'WhatsApp',
-      content: `<span>${esc(cta.label)}</span>${icon('whatsapp', { size: 20 })}`,
+      label: cta.label,
+      content: `<span>${esc(cta.label)}</span>${icon('calendar', { size: 20 })}`,
     })}
   </section>`;
 }

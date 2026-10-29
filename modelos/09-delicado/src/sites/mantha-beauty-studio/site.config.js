@@ -59,7 +59,7 @@ export default {
       title: 'Agendamento',
       text: 'Reserve seu horário',
       icon: 'calendar',
-      action: { type: 'channel', channel: 'whatsapp', message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.' },
+      action: { type: 'page', href: '/agendar/' },
     },
     { id: 'servicos', title: 'Serviços e valores', text: 'Duração e valores', icon: 'list', action: { type: 'page', href: '/servicos/' } },
     { id: 'trabalhos', title: 'Meus trabalhos', text: 'Acompanhe no Instagram', icon: 'instagram', action: { type: 'channel', channel: 'instagram' } },
@@ -92,7 +92,42 @@ export default {
   cta: {
     text: 'Atendimento de segunda a sábado, das 8h às 18h.',
     label: 'Quero agendar',
-    message: 'Olá, Samantha! Vim pelo seu site e quero agendar um horário.',
+    action: { type: 'page', href: '/agendar/' },
+  },
+
+  // Agendamento online (/agendar/): calendário com os horários livres, sinal por Pix e envio pelo WhatsApp.
+  // Os horários ocupados vêm da agenda do Google (endereço secreto iCal na variável AGENDA_ICS_URL da Vercel).
+  // Sem a variável, o calendário mostra todo o expediente e a confirmação fica no WhatsApp.
+  booking: {
+    days: [1, 2, 3, 4, 5, 6], // 0 = domingo … 6 = sábado
+    open: '08:00',
+    close: '18:00', // o serviço precisa terminar até este horário
+    step: 30, // minutos entre um horário e outro
+    breaks: [], // ex.: [{ from: '12:00', to: '13:00' }]
+    minNotice: 120, // antecedência mínima, em minutos
+    daysAhead: 30, // até quantos dias à frente dá para agendar
+    offset: -180, // fuso do studio em minutos (Salvador: UTC-3)
+    deposit: 0.3, // sinal de 30%
+  },
+
+  // Pix do sinal. FASE DE TESTE: chave provisória; trocar pela chave da Samantha antes de usar de verdade.
+  pix: {
+    key: '+5571992351084', // celular no formato +55DDDNÚMERO
+    keyLabel: 'Celular',
+    keyDisplay: '(71) 99235-1084',
+    holder: 'Samantha Carvalho Beauty Studio',
+    city: 'Salvador',
+  },
+
+  policy: {
+    title: 'Política de agendamento e cancelamento',
+    paragraphs: [
+      'Para garantir seu horário, é necessário o pagamento de uma taxa de agendamento de 30%, que será abatida do valor total.',
+      'Em caso de cancelamento, desistência ou não comparecimento, o valor da taxa não será reembolsado.',
+      'Ao realizar o agendamento, você concorda com esta política. Agradeço pela sua compreensão.',
+    ],
+    signature: 'Samantha Carvalho Beauty Studio',
+    agree: 'Li e concordo com a política de agendamento e cancelamento.',
   },
 
   gallery: {
@@ -111,7 +146,7 @@ export default {
     items: [
       {
         q: 'Como faço para agendar?',
-        a: 'Pelo WhatsApp. Toque em Agendamento ou no serviço que você quer, e a mensagem já vai pronta.',
+        a: 'Toque em Agendamento ou no serviço que você quer, escolha o dia e o horário livres e envie o sinal de 30% pelo Pix. A confirmação é pelo WhatsApp, com o comprovante.',
       },
       { q: 'Qual o horário de atendimento?', a: 'De segunda a sábado, das 8h às 18h, sempre com hora marcada.' },
       { q: 'Quanto tempo dura cada serviço?', a: 'De 30 minutos a 1 hora. A duração e o valor de cada um estão em Serviços e valores.' },
@@ -180,11 +215,20 @@ export default {
     servicos: {
       meta: {
         title: 'Serviços e valores · Samantha Carvalho',
-        description: 'Sobrancelhas, cílios e lábios com Samantha Carvalho: duração, valores e agendamento pelo WhatsApp.',
+        description: 'Sobrancelhas, cílios e lábios com Samantha Carvalho: duração, valores e agendamento online.',
       },
       title: 'Serviços',
       titleAccent: 'e valores',
-      subtitle: 'Toque no serviço para agendar. A mensagem já vai pronta com o nome dele.',
+      subtitle: 'Toque no serviço para escolher o dia e o horário.',
+    },
+    agendar: {
+      meta: {
+        title: 'Agendar horário · Samantha Carvalho',
+        description: 'Escolha o serviço, o dia e o horário livres e garanta seu atendimento com Samantha Carvalho.',
+      },
+      title: 'Agendar',
+      titleAccent: 'horário',
+      subtitle: 'Escolha o dia e o horário livres. O horário fica garantido com o sinal de 30% pelo Pix.',
     },
   },
 

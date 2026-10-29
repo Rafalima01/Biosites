@@ -1,5 +1,4 @@
-import { esc } from '../lib/html.js';
-import { resolveChannel, renderTarget } from '../lib/links.js';
+import { esc, slug } from '../lib/html.js';
 import { icon } from './icons.js';
 
 const duration = (m) => (m % 60 === 0 ? `${m / 60} h` : m > 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`);
@@ -13,30 +12,23 @@ export const Topbar = ({ brand }) =>
     <span aria-hidden="true"></span>
   </header>`;
 
-/** Página /servicos/: categorias que abrem e fecham; o card inteiro de cada serviço agenda pelo WhatsApp. */
+/** Página /servicos/: categorias que abrem e fecham; o card inteiro de cada serviço abre o agendamento. */
 export function Services(site) {
   const p = site.pages.servicos;
-  const first = site.brand.firstName;
   const groups = site.services
     .map((group, gi) => {
       const items = group.items
-        .map((s) => {
-          const target = resolveChannel(site, 'whatsapp', { message: `Olá, ${first}! Vim pelo seu site e quero agendar: ${s.name}.` });
-          return `<li class="svc">
+        .map(
+          (s) => `<li class="svc">
             <div class="svc__top">
               <h3 class="svc__name">${esc(s.name)}</h3>
               <p class="svc__price">${money(s.price)}</p>
             </div>
             <p class="svc__time">${icon('clock', { size: 15 })}${duration(s.minutes)}</p>
             ${s.description ? `<p class="svc__desc">${esc(s.description)}</p>` : ''}
-            ${renderTarget(target, {
-              className: 'svc__book',
-              label: 'WhatsApp',
-              ariaLabel: `Agendar ${s.name} pelo WhatsApp`,
-              content: `<span>Agendar</span>${icon('whatsapp', { size: 16 })}`,
-            })}
-          </li>`;
-        })
+            <a class="svc__book" href="/agendar/?servico=${esc(slug(s.name))}" aria-label="Agendar ${esc(s.name)}"><span>Agendar</span>${icon('calendar', { size: 16 })}</a>
+          </li>`,
+        )
         .join('');
       return `<details class="svc-group reveal" style="--i:${gi}"${gi === 0 ? ' open' : ''}>
         <summary class="svc-group__head">

@@ -4,6 +4,10 @@ import { existsSync } from 'node:fs';
 import { strict as assert } from 'node:assert';
 import { renderPage, site } from '../src/render.js';
 import { resolveAction, resolveChannel, whatsappUrl } from '../src/lib/links.js';
+import { slug } from '../src/lib/html.js';
+import { crc16, pixPayload } from '../src/lib/pix.js';
+import { slotsForDay, instant, deposit } from '../src/lib/agenda.js';
+import { busyFromIcs } from '../api/disponibilidade.js';
 
 const errors = [];
 const check = (ok, msg) => ok || errors.push(msg);
@@ -25,9 +29,20 @@ for (const photo of photos) {
   }
 }
 for (const g of site.services) for (const s of g.items) check(s.minutes > 0 && s.price > 0, `Serviço sem duração ou valor: ${s.name}`);
+const serviceIds = site.services.flatMap((g) => g.items.map((s) => slug(s.name)));
+check(new Set(serviceIds).size === serviceIds.length, 'Dois serviços geram o mesmo endereço de agendamento');
 
-// 2. Renderização (início e /servicos/)
-for (const nome of ['home', 'servicos']) {
+// Agendamento
+const b = site.booking;
+check(b.days.length && b.days.every((d) => d >= 0 && d <= 6), 'booking.days deve ter dias de 0 (domingo) a 6 (sábado)');
+check(/^\d\d:\d\d$/.test(b.open) && /^\d\d:\d\d$/.test(b.close) && b.open < b.close, 'booking.open/close inválidos');
+check(b.step > 0 && b.daysAhead > 0 && b.deposit > 0 && b.deposit < 1, 'booking.step, daysAhead ou deposit inválidos');
+check(/^\+55\d{10,11}$/.test(site.pix.key) || !/^\+?\d+$/.test(site.pix.key), 'Chave Pix de celular deve estar no formato +55DDDNÚMERO');
+check(site.policy.paragraphs.length && site.policy.agree, 'Política de agendamento incompleta');
+
+// 2. Renderização (início, /servicos/ e /agendar/)
+for (const nome of ['home', 'servicos', 'agendar']) {
+  check(nome === 'home' || existsSync(new URL(`../${nome}/index.html`, import.meta.url)), `Página não encontrada: ${nome}/index.html`);
   try {
     const page = renderPage(site, nome);
     check((page.body.match(/<h1/g) || []).length === 1, `Página "${nome}" deve ter exatamente um <h1>`);
@@ -36,13 +51,42 @@ for (const nome of ['home', 'servicos']) {
     if (nome === 'servicos') {
       const total = site.services.reduce((n, g) => n + g.items.length, 0);
       check((page.body.match(/class="svc__book"/g) || []).length === total, 'Cada serviço precisa do seu botão Agendar');
+      for (const id of serviceIds) check(page.body.includes(`/agendar/?servico=${id}`), `Serviço sem link de agendamento: ${id}`);
+    }
+    if (nome === 'agendar') {
+      const json = page.body.match(/<script type="application\/json" data-booking-config>([\s\S]*?)<\/script>/);
+      check(json, 'Dados do agendamento ausentes na página /agendar/');
+      if (json) check(JSON.parse(json[1]).services.length === serviceIds.length, 'Dados do agendamento sem todos os serviços');
+      for (const step of ['servico', 'data', 'dados', 'revisao', 'sinal', 'pronto']) check(page.body.includes(`data-step="${step}"`), `Etapa ausente: ${step}`);
     }
   } catch (err) {
     errors.push(`Falha ao renderizar "${nome}": ${err.message}`);
   }
 }
 
-// 3. Links: com os dados preenchidos, nenhum destino pode ficar pendente
+// 3. Agenda, horários e Pix
+assert.equal(crc16('123456789'), '29B1');
+const code = pixPayload({ key: site.pix.key, name: site.pix.holder, city: site.pix.city, amount: deposit(55, 0.3) });
+assert.equal(code.slice(-4), crc16(code.slice(0, -4)), 'CRC do Pix');
+assert.match(code, /540516\.50/, 'Valor do Pix (30% de R$ 55 = 16,50)');
+const rules = { ...b, days: [6], open: '08:00', close: '12:00', step: 60, breaks: [], minNotice: 0 };
+const sabado = '2026-11-07';
+const ocupado = [{ start: instant(sabado, 9 * 60, b.offset), end: instant(sabado, 10 * 60, b.offset) }];
+assert.deepEqual(slotsForDay(sabado, 60, rules, ocupado, 0), ['08:00', '10:00', '11:00']);
+assert.deepEqual(slotsForDay('2026-11-08', 60, rules, [], 0), [], 'Domingo fechado');
+const ics = [
+  'BEGIN:VCALENDAR',
+  'BEGIN:VEVENT', 'UID:a', 'DTSTART:20261107T120000Z', 'DTEND:20261107T130000Z', 'SUMMARY:Cliente', 'END:VEVENT',
+  'BEGIN:VEVENT', 'UID:b', 'DTSTART;VALUE=DATE:20261110', 'DTEND;VALUE=DATE:20261111', 'SUMMARY:Folga', 'END:VEVENT',
+  'BEGIN:VEVENT', 'UID:c', 'DTSTART:20261104T150000Z', 'DTEND:20261104T160000Z', 'RRULE:FREQ=WEEKLY;COUNT=3', 'SUMMARY:Fixo', 'END:VEVENT',
+  'END:VCALENDAR',
+].join('\r\n');
+const busy = busyFromIcs(ics, Date.parse('2026-11-01T00:00:00Z'), Date.parse('2026-12-01T00:00:00Z'));
+assert.equal(busy.length, 5, 'Agenda: 1 evento + 1 folga + 3 repetições');
+assert.ok(busy.some((x) => x.start === '2026-11-10T03:00:00.000Z'), 'Folga de dia inteiro no fuso de Salvador');
+check(!JSON.stringify(busy).includes('Cliente'), 'A agenda não pode expor títulos de eventos');
+
+// 4. Links: com os dados preenchidos, nenhum destino pode ficar pendente
 const filled = structuredClone(site);
 filled.contact.whatsapp.number = '+55 (11) 90000-0000';
 filled.contact.instagram.handle = '@exemplo';
@@ -53,7 +97,7 @@ assert.equal(whatsappUrl('+55 (11) 90000-0000', 'Olá!'), 'https://wa.me/5511900
 assert.equal(resolveChannel(filled, 'instagram').href, 'https://www.instagram.com/exemplo/');
 assert.equal(resolveAction(filled, { type: 'page', href: '/servicos/' }).href, '/servicos/');
 for (const m of filled.menu) check(!resolveAction(filled, m.action).pending, `Card segue pendente com dados preenchidos: ${m.id}`);
-for (const nome of ['home', 'servicos']) check(!renderPage(filled, nome).body.includes('data-pending'), `Ainda há destinos pendentes em "${nome}" com todos os dados preenchidos`);
+for (const nome of ['home', 'servicos', 'agendar']) check(!renderPage(filled, nome).body.includes('data-pending'), `Ainda há destinos pendentes em "${nome}" com todos os dados preenchidos`);
 
 // Relatório
 const pending = [

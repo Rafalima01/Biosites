@@ -14,6 +14,10 @@ document.addEventListener('click', (event) => {
   if (el) toast.show(el.dataset.pending);
 });
 
+// Agendamento: carregado só na página /agendar/ (calendário, Pix e QR Code).
+const booking = document.querySelector('[data-booking]');
+if (booking) import('./behaviors/booking.js').then(({ initBooking }) => initBooking(booking, { toast }));
+
 initSmoothScroll();
 initReveal();
 

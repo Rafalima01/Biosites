@@ -1,0 +1,566 @@
+/* Página de agendamento */
+.booking {
+  display: grid;
+  gap: 16px;
+  padding: 26px 16px 8px;
+}
+
+/* Etapas */
+.bk-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bk-steps li {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--muted);
+}
+
+.bk-steps__n {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.3px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bk-steps li.is-done .bk-steps__n {
+  border-color: var(--rose);
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.bk-steps li[aria-current='step'] {
+  color: var(--rose-ink);
+}
+
+.bk-steps li[aria-current='step'] .bk-steps__n {
+  border-color: transparent;
+  background: var(--tile);
+  color: #fff;
+}
+
+/* Cartão de cada etapa */
+.bk-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px 18px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.bk-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.bk-title:focus {
+  outline: none;
+}
+
+.bk-lead {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.bk-note {
+  font-size: 12.5px;
+  line-height: 1.55;
+  text-align: center;
+  color: var(--muted);
+}
+
+.bk-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.bk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--band);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 22px -14px rgba(176, 79, 110, 0.9);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.bk-btn:active {
+  transform: scale(0.97);
+}
+
+.bk-btn:disabled,
+.bk-btn[aria-disabled='true'] {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.bk-btn--ghost {
+  margin-right: auto;
+  padding: 0 18px 0 14px;
+  border: 1.3px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.bk-btn--soft {
+  width: 100%;
+  border: 1.3px solid var(--rose);
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+  box-shadow: none;
+}
+
+.bk-btn--send {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  font-size: 14.5px;
+  white-space: nowrap;
+}
+
+.bk-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rose-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Etapa 1: serviço */
+.bk-groups {
+  display: grid;
+  gap: 16px;
+}
+
+.bk-group__title {
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rose-ink);
+}
+
+.bk-options {
+  display: grid;
+  gap: 8px;
+}
+
+.bk-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 14px 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--rose-tint), #fdf3f6);
+  color: var(--rose-deep);
+  text-align: left;
+}
+
+.bk-option__text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  color: var(--ink);
+}
+
+.bk-option__name {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.bk-option__meta {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* Etapa 2: calendário e horários */
+.bk-chosen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: var(--rose-tint);
+}
+
+.bk-chosen p {
+  display: grid;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.bk-chosen strong {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bk-chosen__label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rose-ink);
+}
+
+.cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cal__month {
+  font-family: var(--font-display);
+  font-size: 19px;
+}
+
+.cal__nav {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--rose-tint);
+  color: var(--rose-deep);
+}
+
+.cal__nav--next svg {
+  transform: rotate(180deg);
+}
+
+.cal__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.cal__week,
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal__week {
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--muted);
+}
+
+.cal__day {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--rose-tint);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.cal__day:disabled {
+  background: none;
+  font-weight: 400;
+  color: rgba(122, 104, 112, 0.45);
+  cursor: default;
+}
+
+.cal__day.is-today {
+  box-shadow: inset 0 0 0 1.3px var(--rose);
+}
+
+.cal__day[aria-pressed='true'] {
+  background: var(--tile);
+  color: #fff;
+}
+
+.cal__day.is-loading {
+  animation: cal-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes cal-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.bk-status:empty {
+  display: none;
+}
+
+.bk-status {
+  font-size: 13px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.slots__title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.slots__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.slot {
+  min-height: 42px;
+  border: 1.3px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.slot[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--tile);
+  color: #fff;
+}
+
+/* Etapa 3: dados */
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field__label {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.field__input {
+  min-height: 50px;
+  padding: 0 16px;
+  border: 1.3px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-soft);
+  font: inherit;
+  font-size: 16px; /* evita zoom automático no iPhone */
+  color: var(--ink);
+}
+
+.field__input:focus {
+  border-color: var(--rose);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(217, 138, 160, 0.25);
+}
+
+.field__error {
+  font-size: 13px;
+  font-weight: 500;
+  color: #b3263f;
+}
+
+/* Etapas 4 e final: resumo */
+.bk-summary {
+  margin: 0;
+  border-radius: 16px;
+  background: var(--rose-tint);
+}
+
+.bk-summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 16px;
+}
+
+.bk-summary div + div {
+  border-top: 1px solid rgba(196, 106, 133, 0.16);
+}
+
+.bk-summary dt {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.bk-summary dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Etapa 5: sinal */
+.pix {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 18px 16px;
+  border-radius: 20px;
+  background: var(--rose-tint);
+  text-align: center;
+}
+
+.pix__amount {
+  display: grid;
+  gap: 2px;
+}
+
+.pix__amount span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.pix__amount strong {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--rose-ink);
+}
+
+.pix__amount small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.pix__qr {
+  width: min(210px, 70%);
+  padding: 8px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.pix__qr svg {
+  width: 100%;
+  height: auto;
+}
+
+.pix__key {
+  font-size: 13px;
+}
+
+.pix__key .bk-link {
+  margin-left: 6px;
+}
+
+.pix__holder {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.policy {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1.3px solid var(--line);
+  border-radius: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.policy__title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.25;
+  color: var(--rose-deep);
+}
+
+.policy__sign {
+  font-family: var(--font-script);
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--rose-deep);
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--bg-soft);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--rose-deep);
+}
+
+/* Final */
+.bk-done {
+  justify-items: center;
+  text-align: center;
+}
+
+.bk-done__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--tile);
+  color: #fff;
+}
+
+.bk-done .bk-summary {
+  width: 100%;
+  text-align: left;
+}
+
+.bk-done__home {
+  margin-top: 4px;
+}
+
+@media (min-width: 960px) {
+  .layout--agendar {
+    max-width: 600px;
+    padding-top: 24px;
+  }
+
+  .slots__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

@@ -3,6 +3,7 @@
 import { esc, attrs } from './lib/html.js';
 import { Hero, Menu, Phrase, About, Help, Cta, Gallery, Faq } from './components/Home.js';
 import { Topbar, Services } from './components/Servicos.js';
+import { Booking } from './components/Agendar.js';
 import { Footer } from './components/Footer.js';
 
 export { site } from './sites/index.js';
@@ -57,6 +58,8 @@ const PAGINAS = {
   servicos: (site) => `${Topbar(site)}
     ${Services(site)}
     ${Cta(site)}`,
+  agendar: (site) => `${Topbar(site)}
+    ${Booking(site)}`,
 };
 
 function renderBody(site, page) {
@@ -68,5 +71,5 @@ function renderBody(site, page) {
   <div class="toast" role="status" aria-live="polite"></div>`;
 }
 
-/** `page`: 'home' (início) ou 'servicos'. */
+/** `page`: 'home' (início), 'servicos' ou 'agendar'. */
 export const renderPage = (site, page = 'home') => ({ lang: site.lang, head: renderHead(site, page), body: renderBody(site, page) });

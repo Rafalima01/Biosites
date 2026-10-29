@@ -1,8 +1,28 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
 
-/** Página pelo caminho do HTML: /servicos/ tem o próprio index.html. */
-const pageOf = (file = '') => (file.split('\\').join('/').includes('/servicos/') ? 'servicos' : 'home');
+/** Página pelo caminho do HTML: /servicos/ e /agendar/ têm o próprio index.html. */
+const pageOf = (file = '') => {
+  const f = file.split('\\').join('/');
+  if (f.includes('/servicos/')) return 'servicos';
+  if (f.includes('/agendar/')) return 'agendar';
+  return 'home';
+};
+
+/**
+ * No `vite dev`/`vite preview`, responde /api/disponibilidade com a mesma função da Vercel
+ * (api/disponibilidade.js). Para testar com uma agenda: AGENDA_ICS_URL=... npm run dev
+ */
+function apiLocal() {
+  // Sem `return`: o Vite chamaria a função devolvida como gancho "post".
+  const mount = (server) => {
+    server.middlewares.use('/api/disponibilidade', async (req, res) => {
+      const { default: handler } = await import(new URL('./api/disponibilidade.js', import.meta.url).href);
+      await handler(req, res);
+    });
+  };
+  return { name: 'api-local', configureServer: mount, configurePreviewServer: mount };
+}
 
 /**
  * Pré-renderiza cada página a partir da config do site ativo (src/sites/index.js),
@@ -37,12 +57,13 @@ function bioSitePrerender() {
 }
 
 export default defineConfig({
-  plugins: [bioSitePrerender()],
+  plugins: [bioSitePrerender(), apiLocal()],
   build: {
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         servicos: fileURLToPath(new URL('./servicos/index.html', import.meta.url)),
+        agendar: fileURLToPath(new URL('./agendar/index.html', import.meta.url)),
       },
     },
   },

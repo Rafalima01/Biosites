@@ -9,7 +9,8 @@ itálico branco, sobrenome rosa) e especialidades; cartão branco com quatro car
 título em serifa, apoio e seta); frase em serifa + manuscrita; "Sobre mim" com a assinatura manuscrita
 atrás do título e a foto se dissolvendo no fundo; "Como posso te ajudar" em três colunas; faixa rosa "Quero agendar"; fotos de trabalhos (legenda
 opcional em `caption`); dúvidas frequentes que abrem e fecham; rodapé rosa com assinatura e canais.
-Página `/servicos/` com as categorias em blocos que abrem e fecham e agendamento por serviço no WhatsApp.
+Página `/servicos/` com as categorias em blocos que abrem e fecham; o "Agendar" de cada serviço abre o
+**agendamento online** em `/agendar/` (ver abaixo).
 
 No celular é uma coluna só. No desktop o início vira duas colunas, como na referência: o "celular"
 (topo, cards e frase) à esquerda e as seções à direita.
@@ -56,6 +57,33 @@ Ações dos cards:
 ```
 
 **Destinos vazios** viram botões que avisam "destino ainda não configurado", em vez de links inventados.
+
+## Agendamento online (`/agendar/`)
+
+Sem banco de dados. Etapas: **serviço → data e horário livres → nome e WhatsApp → revisão → sinal**.
+
+- **Horários livres:** gerados a partir de `booking` (dias, abertura, fechamento, intervalo entre horários,
+  pausas, antecedência mínima e quantos dias à frente), respeitando a duração de cada serviço.
+- **Horários ocupados:** a função `api/disponibilidade.js` (Vercel) lê a **agenda do Google** da profissional
+  e devolve só os períodos ocupados, sem títulos nem nomes. Eventos repetidos, folgas de dia inteiro e
+  exceções são considerados; eventos marcados como "Disponível" ou cancelados não bloqueiam.
+  Mudanças na agenda aparecem no site em poucos minutos (o próprio Google leva alguns minutos para atualizar o link).
+- **Sinal:** Pix copia e cola e QR Code gerados no próprio site (`src/lib/pix.js`) já com o valor de
+  `booking.deposit` (30%), mais a política de `policy` com a caixa "Li e concordo" obrigatória.
+- **Envio:** "Agendar e enviar comprovante" abre o WhatsApp com a mensagem pronta (serviço, data, horário,
+  valor, sinal, nome e WhatsApp). A cliente anexa o comprovante; o horário vale quando a profissional confirma.
+
+### Ligar a agenda do Google
+
+1. No computador, abra o Google Agenda → **Configurações** → escolha a agenda → **Integrar agenda**.
+2. Copie o **Endereço secreto no formato iCal** (termina em `basic.ics`). Não compartilhe esse link.
+3. Na Vercel, no projeto `biosite-09-delicado`: **Settings → Environment Variables** →
+   `AGENDA_ICS_URL` = o endereço copiado (ambiente Production) e faça um novo deploy.
+
+Sem `AGENDA_ICS_URL`, o calendário mostra todo o expediente (a confirmação continua pelo WhatsApp).
+Para testar localmente: `AGENDA_ICS_URL=https://... npm run dev` (o `vite.config.js` responde `/api/disponibilidade`).
+
+**Fase de teste:** a chave Pix em `pix.key` é provisória. Troque pela chave da cliente antes de usar de verdade.
 
 ## Textos a confirmar com a cliente
 

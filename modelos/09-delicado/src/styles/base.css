@@ -76,6 +76,11 @@ summary {
   color: var(--ink);
 }
 
+/* `hidden` sempre esconde, mesmo em elementos com display próprio (ex.: etapas do agendamento) */
+[hidden] {
+  display: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

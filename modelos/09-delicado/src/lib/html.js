@@ -11,3 +11,12 @@ export const attrs = (obj) =>
 
 /** Texto escapado com suporte a **negrito** (único markup permitido no conteúdo). */
 export const rich = (value = '') => esc(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+/** Identificador para URLs: "Design simples" → "design-simples". */
+export const slug = (value = '') =>
+  String(value)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
