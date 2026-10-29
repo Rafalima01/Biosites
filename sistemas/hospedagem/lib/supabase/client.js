@@ -1,0 +1,9 @@
+'use client';
+import { createBrowserClient } from '@supabase/ssr';
+
+let client;
+/** Cliente do Supabase no navegador (uma instância por aba). */
+export function supabaseBrowser() {
+  client ??= createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return client;
+}

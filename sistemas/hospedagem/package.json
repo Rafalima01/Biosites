@@ -1,0 +1,29 @@
+{
+  "name": "sistema-hospedagem",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de reserva direta para casas de temporada: site, agenda, reservas com Pix e painel do anfitrião (Next.js + Supabase).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test:db": "bash tests/run-db-tests.sh",
+    "test:race": "bash tests/race.sh",
+    "dev:local": "bash tests/dev-up.sh",
+    "test:e2e": "node tests/e2e/fluxo-completo.cjs && node tests/e2e/pacote-e-valores.cjs"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.58.0",
+    "next": "15.5.28",
+    "qrcode": "^1.5.4",
+    "react": "19.1.10",
+    "react-dom": "19.1.10"
+  },
+  "devDependencies": {
+    "pg": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

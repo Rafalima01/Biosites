@@ -1,0 +1,283 @@
+/* Seções */
+.section {
+  margin-top: 44px;
+}
+
+.section__head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.section__head--center {
+  justify-items: center;
+  text-align: center;
+}
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(27px, 7vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ocean);
+}
+
+.section__lead {
+  color: var(--color-muted);
+}
+
+/* Trilho rolável no celular, grade no desktop */
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(82vw, 340px);
+  gap: 14px;
+  margin-inline: calc(var(--gutter) * -1);
+  padding: 4px var(--gutter) 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail > * {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 960px) {
+  .rail {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+  }
+}
+
+/* Card de casa */
+.house-card,
+.package {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.house-card__media,
+.package__media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--sea-soft);
+}
+
+.house-card__img,
+.package__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease);
+}
+
+.house-card__media:hover .house-card__img {
+  transform: scale(1.04);
+}
+
+.house-card__count {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(8, 34, 43, 0.7);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.house-card__body,
+.package__body {
+  display: grid;
+  gap: 6px;
+  flex: 1;
+  padding: 16px 18px 18px;
+}
+
+.house-card__name,
+.package__title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ocean);
+}
+
+.house-card__place,
+.package__house {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.house-card__foot,
+.package__foot {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-line);
+}
+
+.price {
+  display: grid;
+  line-height: 1.2;
+}
+
+.price span {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.price strong {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.price small {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+/* Vantagens */
+.perks {
+  padding: 26px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--ocean);
+  color: #fff;
+}
+
+.perks .section__title {
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.perks__list {
+  display: grid;
+  gap: 16px;
+}
+
+.perk {
+  display: flex;
+  gap: 14px;
+}
+
+.perk__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--sun);
+}
+
+.perk h3 {
+  font-size: 15.5px;
+  font-weight: 800;
+}
+
+.perk p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+@media (min-width: 720px) {
+  .perks {
+    padding: 36px;
+  }
+
+  .perks__list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 30px;
+  }
+}
+
+@media (min-width: 1040px) {
+  .perks__list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .perk {
+    flex-direction: column;
+  }
+}
+
+/* Pacotes */
+.package__media {
+  aspect-ratio: 16 / 10;
+}
+
+.package__media .pill {
+  background: var(--coral);
+  color: #fff;
+}
+
+.package__dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.package__dates div {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+}
+
+.package__dates dt {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.package__dates dd {
+  font-weight: 800;
+}
+
+.package__note {
+  font-size: 13.5px;
+  color: var(--color-muted);
+}
