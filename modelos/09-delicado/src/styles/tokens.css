@@ -1,0 +1,39 @@
+/*
+ * Tokens de design do Modelo 09 · Delicado. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Fundo */
+  --bg: #f7ecef;
+  --bg-soft: #fdf7f8;
+  --surface: #ffffff;
+
+  /* Rosa */
+  --rose: #d98aa0;
+  --rose-deep: #c46a85;
+  --rose-light: #f6c4d1;
+  --rose-tint: #fbe9ee;
+  --rose-ink: #b04f6e; /* rosa para texto pequeno sobre branco (contraste AA) */
+  --tile: linear-gradient(150deg, #efb1c2, #d27b95);
+  --band: linear-gradient(135deg, #e3a0b3, #bf5f7d);
+
+  /* Texto */
+  --ink: #3b2a30;
+  --muted: #7a6870;
+  --line: rgba(196, 106, 133, 0.22);
+
+  /* Tipografia */
+  --font-display: 'Playfair Display', 'Didot', Georgia, serif;
+  --font-script: 'Allura', 'Snell Roundhand', cursive;
+  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-card: 28px;
+  --radius-item: 20px;
+  --shadow: 0 24px 48px -28px rgba(140, 60, 90, 0.4);
+  --shadow-soft: 0 10px 24px -18px rgba(140, 60, 90, 0.45);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+}

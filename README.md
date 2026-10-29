@@ -15,6 +15,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 05 | **Premium** | [`modelos/05-premium`](modelos/05-premium) | Larissa Prado · Estrategista digital | Vitrine de produtos digitais: capa clara com linhas douradas e foto, cards de vidro sobre fundo dourado com imagem saltando para fora e botão de acesso. Creme e dourado com Bodoni Moda. |
 | 06 | **Delivery** | [`modelos/06-delivery`](modelos/06-delivery) | Brasa & Massa Pizza (marca fictícia) | Para restaurantes e delivery: carrossel de sabores, selo da marca, horário com "aberto agora" em tempo real e botões por canal (app de delivery, cardápio, endereço, WhatsApp). Escuro com amarelo. |
 | 08 | **Glam** | [`modelos/08-glam`](modelos/08-glam) | Rosé Nail Studio · Nail designer (marca fictícia) | Cara de app: cartões de vidro fosco sobre foto, letreiro em neon, serviço em destaque e galeria de inspirações com filtros, curtir e escolher; as escolhidas vão na mensagem do WhatsApp. Rosa com Poiret One e Poppins. |
+| 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Mantha Beauty Studio · Samantha Carvalho (teste com dados reais) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes e página de serviços. Playfair Display, Allura e Montserrat. |
 
 ## Clientes
 
@@ -68,6 +69,7 @@ do `vercel.json` pula o build quando o push não altera a pasta daquele modelo.
 | 05 · Premium | `biosite-05-premium` | https://biosite-05-premium.vercel.app |
 | 06 · Delivery | `biosite-06-delivery` | https://biosite-06-delivery.vercel.app |
 | 08 · Glam | `biosite-08-glam` | (ainda não publicado) |
+| 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app (publicado pela CLI, branch `modelo-09-delicado`) |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app (publicado pela CLI, branch `modelo-08-glam`) |
