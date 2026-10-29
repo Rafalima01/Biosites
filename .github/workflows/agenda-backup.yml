@@ -1,0 +1,52 @@
+# Sistema de Agendamento · backup semanal do banco (plano grátis do Supabase não faz backup).
+#
+# O repositório é PÚBLICO: o arquivo é CRIPTOGRAFADO com senha antes de ser guardado
+# (fica como "artifact" da execução por 30 dias). Ninguém consegue ler sem a senha.
+#
+# Segredos necessários (GitHub → Settings → Secrets and variables → Actions):
+#   AGENDA_DB_URL          Supabase → Connect → "Session pooler" (postgresql://...), com a senha do banco
+#   AGENDA_BACKUP_SENHA    uma senha longa só para os backups (guarde num lugar seguro)
+#
+# Para restaurar: baixe o artifact, rode
+#   gpg --decrypt agenda-AAAA-MM-DD.sql.gpg > agenda.sql
+# e execute o agenda.sql no SQL Editor de um projeto Supabase (depois do schema.sql).
+name: Agenda · backup semanal
+
+on:
+  schedule:
+    - cron: '41 6 * * 1' # toda segunda, 03:41 em Brasília
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Exportar e criptografar
+        id: dump
+        env:
+          DB_URL: ${{ secrets.AGENDA_DB_URL }}
+          SENHA: ${{ secrets.AGENDA_BACKUP_SENHA }}
+        run: |
+          if [ -z "$DB_URL" ] || [ -z "$SENHA" ]; then
+            echo "Segredos AGENDA_DB_URL / AGENDA_BACKUP_SENHA ainda não configurados. Nada a fazer."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          set -o pipefail
+          ARQ="agenda-$(date -u +%F).sql.gpg"
+          docker run --rm -e DB_URL postgres:17-alpine sh -c 'pg_dump "$DB_URL" --schema=public --data-only --no-owner --no-privileges' \
+            | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase "$SENHA" -o "$ARQ"
+          ls -l "$ARQ"
+          echo "arquivo=$ARQ" >> "$GITHUB_OUTPUT"
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+      - name: Guardar (30 dias)
+        if: steps.dump.outputs.ok == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.dump.outputs.arquivo }}
+          path: ${{ steps.dump.outputs.arquivo }}
+          retention-days: 30
+          if-no-files-found: error

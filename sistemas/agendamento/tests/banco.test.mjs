@@ -1,0 +1,168 @@
+// Testes das regras do banco, num Postgres de verdade rodando dentro do Node (PGlite):
+// não precisa instalar Postgres nem Docker. Uso: npm run test:db
+import { readFileSync } from 'node:fs';
+import { PGlite } from '@electric-sql/pglite';
+
+const db = new PGlite();
+const file = (p) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
+const LIVIA = 'a0000000-0000-4000-8000-000000000001';
+const ALONGAMENTO = 'b0000000-0000-4000-8000-000000000001'; // 120 min
+const DESIGN = 'b0000000-0000-4000-8000-000000000004'; // 40 min
+
+let falhas = 0;
+let total = 0;
+const ok = (cond, msg) => {
+  total++;
+  if (cond) console.log(`ok - ${msg}`);
+  else {
+    falhas++;
+    console.log(`FALHOU - ${msg}`);
+  }
+};
+const one = async (sql, params = []) => (await db.query(sql, params)).rows[0];
+const all = async (sql, params = []) => (await db.query(sql, params)).rows;
+const as = async (role, email) => {
+  await db.exec('reset role');
+  await db.query(`select set_config('request.jwt.claims', $1, false)`, [email ? JSON.stringify({ email }) : '']);
+  if (role) await db.exec(`set role ${role}`);
+};
+const throws = async (fn) => {
+  try {
+    await fn();
+    return false;
+  } catch {
+    return true;
+  }
+};
+
+// Instala como no Supabase (e roda o schema duas vezes: não pode quebrar).
+await db.exec(file('tests/supabase-stub.sql'));
+await db.exec(file('supabase/schema.sql'));
+await db.exec(file('supabase/seed.sql'));
+await db.exec(file('supabase/schema.sql'));
+await db.exec(file('supabase/seed.sql'));
+
+// Segundo studio e logins
+await db.exec(`
+  insert into studios (id, slug, name, settings) values ('a0000000-0000-4000-8000-000000000002', 'outro-studio', 'Outro Studio', '{"depositPercent": 0}');
+  insert into services (id, studio_id, name, minutes, price) values ('b0000000-0000-4000-8000-000000000099', 'a0000000-0000-4000-8000-000000000002', 'Corte', 30, 50);
+  insert into hours (studio_id, weekday, starts, ends) select 'a0000000-0000-4000-8000-000000000002', d, '10:00', '12:00' from generate_series(0, 6) d;
+  insert into studio_members (studio_id, email) values ('${LIVIA}', 'livia@ex.com'), ('a0000000-0000-4000-8000-000000000002', 'outra@ex.com');
+  insert into agency_admins (email) values ('agencia@ex.com');
+`);
+
+// Próxima segunda-feira com pelo menos 7 dias de folga (dentro da janela de 30 dias), no fuso do studio.
+const { seg } = await one(`
+  select (d + ((8 - extract(isodow from d)::int) % 7))::date::text as seg
+  from (select ((now() at time zone 'America/Sao_Paulo')::date + 7) as d) x`);
+
+// ---------------- visitante ----------------
+await as('anon');
+const pub = (await one(`select public_studio('studio-livia') as j`)).j;
+ok(pub.name === 'Studio Lívia Beauty' && pub.services.length === 7, 'visitante vê o studio e os 7 serviços');
+ok(pub.pix.key === '+5500900000000' && Number(pub.depositPercent) === 30, 'visitante vê a chave Pix e o percentual do sinal');
+ok(JSON.stringify(pub).indexOf('@ex.com') < 0, 'dados públicos não trazem e-mails');
+
+let slots = await all(`select slot, starts_at, free from day_slots('studio-livia', $1, $2::date)`, [DESIGN, seg]);
+ok(slots[0].slot === '09:00' && slots.every((s) => s.free), 'segunda começa às 09:00 e está toda livre');
+ok(!slots.some((s) => s.slot === '11:30') && slots.some((s) => s.slot === '11:00'), 'serviço de 40 min não começa 11:30 (passaria do almoço)');
+ok(!slots.some((s) => s.slot === '12:00' || s.slot === '12:30'), 'almoço (12h–13h) sem horários');
+ok(new Date(slots[0].starts_at).toISOString().slice(11, 16) === '12:00', '09:00 em Salvador = 12:00 UTC');
+const domingo = new Date(`${seg}T12:00:00Z`);
+domingo.setUTCDate(domingo.getUTCDate() - 1);
+ok((await all(`select * from day_slots('studio-livia', $1, $2::date)`, [DESIGN, domingo.toISOString().slice(0, 10)])).length === 0, 'domingo fechado');
+ok((await all(`select * from day_slots('studio-livia', $1, current_date + 60)`, [DESIGN])).length === 0, 'não agenda além de 30 dias');
+ok((await all(`select * from day_slots('studio-livia', $1, current_date - 1)`, [DESIGN])).length === 0, 'não agenda no passado');
+
+const slot10 = slots.find((s) => s.slot === '10:00').starts_at;
+let r = (await one(`select book('studio-livia', $1, $2, 'Ana Souza', '(71) 99999-0001', 'primeira vez') as j`, [ALONGAMENTO, slot10])).j;
+ok(r.ok && r.status === 'pending', 'cliente agenda alongamento às 10:00 (aguardando sinal)');
+ok(Number(r.price) === 150 && Number(r.deposit) === 45, 'valor vem do serviço e sinal é 30% (R$ 45)');
+const code = r.code;
+
+r = (await one(`select book('studio-livia', $1, $2, 'Bia Lima', '(71) 98888-0002') as j`, [DESIGN, slot10])).j;
+ok(!r.ok, 'outra cliente NÃO consegue o mesmo horário');
+const s11 = new Date(new Date(slot10).getTime() + 60 * 60000).toISOString();
+r = (await one(`select book('studio-livia', $1, $2, 'Bia Lima', '(71) 98888-0002') as j`, [DESIGN, s11])).j;
+ok(!r.ok, 'nem um horário que encosta no alongamento (10:00–12:00)');
+
+slots = await all(`select slot, free from day_slots('studio-livia', $1, $2::date)`, [DESIGN, seg]);
+const mapa = Object.fromEntries(slots.map((s) => [s.slot, s.free]));
+ok(mapa['09:00'] && mapa['09:30'] === false && mapa['10:00'] === false && mapa['11:00'] === false, 'ocupados aparecem com free = false');
+ok(mapa['13:00'] === true, 'tarde continua livre');
+
+const s13 = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '13:00'`, [DESIGN, seg])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, 'Ana', '(71) 96666-0004') as j`, [DESIGN, s13])).j;
+ok(!r.ok, 'exige nome e sobrenome');
+r = (await one(`select book('studio-livia', $1, now() + interval '3 days', 'Carla Dias', '123') as j`, [DESIGN])).j;
+ok(!r.ok, 'exige WhatsApp válido');
+r = (await one(`select book('studio-livia', $1, $2, 'Carla Dias', '(71) 97777-0003') as j`, [DESIGN, new Date(new Date(slot10).getTime() + 17 * 60000).toISOString()])).j;
+ok(!r.ok, 'não aceita horário "quebrado" fora da grade (10:17)');
+
+const g = (await one(`select get_appointment($1) as j`, [code.toLowerCase()])).j;
+ok(g.status === 'pending' && g.clientName === 'Ana' && g.phone === undefined, 'consulta pelo código mostra só o primeiro nome, sem telefone');
+ok((await one(`select count(*)::int as n from appointments`)).n === 0, 'visitante NÃO lê a tabela de agendamentos');
+ok((await one(`select count(*)::int as n from blocks`)).n === 0, 'visitante NÃO lê bloqueios');
+ok(await throws(() => db.query(`select set_appointment_status(gen_random_uuid(), 'confirmed')`)), 'visitante não muda status');
+ok(await throws(() => db.query(`insert into blocks (studio_id, starts_at, ends_at) values ($1, now(), now() + interval '1 hour')`, [LIVIA])), 'visitante não cria bloqueio');
+
+// ---------------- dona do studio ----------------
+await as('authenticated', 'livia@ex.com');
+const minhas = await all(`select * from appointments where code = $1`, [code]);
+ok(minhas.length === 1 && minhas[0].client_phone.includes('99999'), 'dona vê o agendamento com o telefone');
+await db.query(`select set_appointment_status($1, 'confirmed')`, [minhas[0].id]);
+ok((await one(`select status from appointments where id = $1`, [minhas[0].id])).status === 'confirmed', 'dona confirma o sinal');
+
+const tarde = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '15:00'`, [DESIGN, seg])).starts_at;
+await db.query(`insert into blocks (studio_id, starts_at, ends_at, reason) values ($1, $2, $2::timestamptz + interval '2 hours', 'Médico')`, [LIVIA, tarde]);
+slots = await all(`select slot, free from day_slots('studio-livia', $1, $2::date)`, [DESIGN, seg]);
+ok(!slots.find((s) => s.slot === '15:00').free && !slots.find((s) => s.slot === '16:30').free && slots.find((s) => s.slot === '17:00').free, 'bloqueio das 15h às 17h tira esses horários');
+
+r = (await one(`select add_appointment($1, $2, $3, 'Dona Maria', '', 'encaixe') as j`, [LIVIA, DESIGN, tarde])).j;
+ok(!r.ok, 'encaixe não pode bater com bloqueio');
+const noite = new Date(new Date(tarde).getTime() + 5 * 3600000).toISOString(); // 20:00, fora do expediente
+r = (await one(`select add_appointment($1, $2, $3, 'Dona Maria') as j`, [LIVIA, DESIGN, noite])).j;
+ok(r.ok, 'encaixe fora do expediente é permitido para a dona');
+
+await db.query(`select set_appointment_status($1, 'cancelled')`, [minhas[0].id]);
+slots = await all(`select slot, free from day_slots('studio-livia', $1, $2::date)`, [DESIGN, seg]);
+ok(slots.find((s) => s.slot === '10:00').free, 'cancelar libera o horário');
+
+// Outra cliente pega o horário liberado; reativar o cancelado precisa falhar.
+await as('anon');
+r = (await one(`select book('studio-livia', $1, $2, 'Bia Lima', '(71) 98888-0002') as j`, [DESIGN, slot10])).j;
+ok(r.ok, 'horário liberado pode ser agendado por outra cliente');
+await as('authenticated', 'livia@ex.com');
+ok(await throws(() => db.query(`select set_appointment_status($1, 'confirmed')`, [minhas[0].id])), 'não reativa cancelado se o horário já foi ocupado');
+
+// Expiração do sinal
+await as(null);
+await db.exec(`update appointments set expires_at = now() - interval '1 minute' where client_name = 'Bia Lima'`);
+await as('anon');
+slots = await all(`select slot, free from day_slots('studio-livia', $1, $2::date)`, [DESIGN, seg]);
+ok(slots.find((s) => s.slot === '10:00').free, 'sinal não pago no prazo libera o horário sozinho');
+
+// ---------------- isolamento entre studios ----------------
+await as('authenticated', 'outra@ex.com');
+ok((await one(`select count(*)::int as n from appointments`)).n === 0, 'dona de outro studio NÃO vê os agendamentos da Lívia');
+ok((await one(`select count(*)::int as n from blocks`)).n === 0, 'nem os bloqueios');
+const qualquer = (await all(`select id from services where studio_id = $1 limit 1`, [LIVIA]))[0];
+ok(await throws(() => db.query(`select add_appointment($1, $2, now() + interval '1 day', 'Intrusa')`, [LIVIA, qualquer.id])), 'não cria agendamento no studio dos outros');
+await db.query(`update services set price = 1 where studio_id = $1`, [LIVIA]);
+await as(null);
+ok(Number((await one(`select price from services where id = $1`, [DESIGN])).price) === 35, 'não altera preço do studio dos outros');
+
+await as('anon');
+const outro = await all(`select slot, starts_at from day_slots('outro-studio', 'b0000000-0000-4000-8000-000000000099', $1::date)`, [seg]);
+r = (await one(`select book('outro-studio', 'b0000000-0000-4000-8000-000000000099', $1, 'Duda Rocha', '(11) 91234-5678') as j`, [outro[0].starts_at])).j;
+ok(r.ok && r.status === 'confirmed' && Number(r.deposit) === 0, 'studio sem sinal confirma direto');
+r = (await one(`select book('studio-livia', 'b0000000-0000-4000-8000-000000000099', $1, 'Duda Rocha', '(11) 91234-5678') as j`, [outro[1].starts_at])).j;
+ok(!r.ok, 'serviço de um studio não pode ser agendado em outro');
+
+// ---------------- agência ----------------
+await as('authenticated', 'agencia@ex.com');
+ok((await one(`select count(*)::int as n from appointments`)).n >= 3, 'agência vê todos os studios');
+ok((await one(`select ping() as p`)).p.startsWith('ok:'), 'ping do despertador responde');
+
+console.log(`\n${total - falhas}/${total} verificações passaram.`);
+process.exit(falhas ? 1 : 0);

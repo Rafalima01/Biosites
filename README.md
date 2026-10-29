@@ -25,6 +25,7 @@ Produtos com banco de dados e painel, além da vitrine.
 | Sistema | Pasta | Descrição |
 | --- | --- | --- |
 | **Hospedagem · reserva direta** | [`sistemas/hospedagem`](sistemas/hospedagem) | Site + reservas com Pix para casas de temporada: agenda com disponibilidade real, reserva fechada no site, QR Code Pix do sinal e painel do anfitrião (reservas, agenda, casas e fotos, promoções, pacotes, personalização). Next.js + Supabase, uma cópia por cliente. |
+| **Agendamento · studios de beleza** | [`sistemas/agendamento`](sistemas/agendamento) | Agenda própria no lugar do Google Agenda: horários livres pelo expediente, sinal por Pix com horário segurado e painel da dona no celular (agenda do dia, confirmar sinal, encaixe, bloqueios). Um banco Supabase para todos os studios. Etapa 1 pronta; falta criar o Supabase e ligar o site da Samantha. |
 
 ## Clientes
 

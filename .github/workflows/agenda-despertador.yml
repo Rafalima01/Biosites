@@ -1,0 +1,33 @@
+# Sistema de Agendamento · "despertador" diário do Supabase.
+# No plano grátis, o Supabase pausa o banco depois de 7 dias sem uso. Esta chamada leve
+# (função ping) mantém o banco acordado. Não altera nada no banco.
+#
+# Segredos necessários (GitHub → Settings → Secrets and variables → Actions):
+#   AGENDA_SUPABASE_URL       ex.: https://xxxx.supabase.co
+#   AGENDA_SUPABASE_ANON_KEY  chave pública "anon"
+name: Agenda · despertador do banco
+
+on:
+  schedule:
+    - cron: '17 11 * * *' # todo dia, 08:17 em Brasília
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chamar ping()
+        env:
+          URL: ${{ secrets.AGENDA_SUPABASE_URL }}
+          KEY: ${{ secrets.AGENDA_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "Segredos AGENDA_SUPABASE_URL / AGENDA_SUPABASE_ANON_KEY ainda não configurados. Nada a fazer."
+            exit 0
+          fi
+          curl -fsS --retry 3 --retry-delay 20 -X POST "$URL/rest/v1/rpc/ping" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}'
+          echo
