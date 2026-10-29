@@ -16,7 +16,9 @@ const media = (name, alt, { width, height, sizes }) => ({
   height,
 });
 
-const whatsapp = '5571996509097';
+// FASE DE TESTE: WhatsApp da Vertex recebendo as mensagens do site. O da Samantha é 5571996509097;
+// volte para ele quando ela começar a usar de verdade.
+const whatsapp = '5571992351084';
 
 export default {
   id: 'mantha-beauty-studio',
