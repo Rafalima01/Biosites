@@ -26,15 +26,6 @@
     linear-gradient(180deg, transparent 42%, rgba(52, 22, 38, 0.38) 72%, rgba(52, 22, 38, 0.3) 86%, var(--bg) 100%);
 }
 
-.hero__signature {
-  top: 4%;
-  right: 5%;
-  z-index: 1;
-  font-size: clamp(84px, 28vw, 130px);
-  color: rgba(255, 220, 232, 0.32);
-  transform: rotate(-10deg);
-}
-
 .hero__text {
   position: absolute;
   z-index: 2;

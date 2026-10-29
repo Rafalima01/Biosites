@@ -3,13 +3,12 @@ import { resolveAction, resolveChannel, renderTarget } from '../lib/links.js';
 import { icon } from './icons.js';
 import { Picture } from './Picture.js';
 
-/** Topo: foto com a assinatura manuscrita atrás, nome em duas cores e especialidades. */
+/** Topo: foto, nome em duas cores e especialidades. */
 export function Hero(site) {
   const { brand, hero } = site;
   return `<header class="hero">
     <div class="hero__media">
       ${Picture(hero.photo, { className: 'hero__photo', sizes: '(min-width: 960px) 440px, 100vw', priority: true })}
-      <span class="signature hero__signature" aria-hidden="true">${esc(brand.signature)}</span>
     </div>
     <div class="hero__text">
       <h1 class="hero__name"><span class="hero__first">${esc(brand.firstName)}</span> <span class="hero__last">${esc(brand.lastName)}</span></h1>

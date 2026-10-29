@@ -43,7 +43,7 @@ export default {
     firstName: 'Samantha',
     lastName: 'Carvalho',
     name: 'Mantha Beauty Studio',
-    // Assinatura manuscrita: atrás da foto do topo e no rodapé.
+    // Assinatura manuscrita: atrás do "Sobre mim", do título de serviços e no rodapé (nunca sobre as fotos).
     signature: 'Mantha',
     tagline: ['Sobrancelhas', 'Cílios', 'Lábios'],
   },
