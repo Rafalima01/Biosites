@@ -6,7 +6,7 @@ import { renderPage, site } from '../src/render.js';
 import { resolveAction, resolveChannel, whatsappUrl } from '../src/lib/links.js';
 import { slug } from '../src/lib/html.js';
 import { crc16, pixPayload } from '../src/lib/pix.js';
-import { slotsForDay, instant, deposit } from '../src/lib/agenda.js';
+import { daySlots, slotsForDay, instant, deposit } from '../src/lib/agenda.js';
 import { busyFromIcs } from '../api/disponibilidade.js';
 
 const errors = [];
@@ -73,6 +73,11 @@ const rules = { ...b, days: [6], open: '08:00', close: '12:00', step: 60, breaks
 const sabado = '2026-11-07';
 const ocupado = [{ start: instant(sabado, 9 * 60, b.offset), end: instant(sabado, 10 * 60, b.offset) }];
 assert.deepEqual(slotsForDay(sabado, 60, rules, ocupado, 0), ['08:00', '10:00', '11:00']);
+assert.deepEqual(
+  daySlots(sabado, 60, rules, ocupado, 0).map((s) => `${s.time}${s.free ? '' : ' ocupado'}`),
+  ['08:00', '09:00 ocupado', '10:00', '11:00'],
+  'Ocupados continuam na lista, marcados (aparecem riscados)',
+);
 assert.deepEqual(slotsForDay('2026-11-08', 60, rules, [], 0), [], 'Domingo fechado');
 const ics = [
   'BEGIN:VCALENDAR',

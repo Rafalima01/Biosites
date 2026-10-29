@@ -3,7 +3,7 @@
 // segue como mensagem para o WhatsApp, onde a profissional confirma com o comprovante do sinal.
 import { renderSVG } from 'uqr';
 import { pixPayload } from '../lib/pix.js';
-import { addDays, deposit, localDate, slotsForDay, weekday } from '../lib/agenda.js';
+import { addDays, daySlots, deposit, localDate, slotsForDay, weekday } from '../lib/agenda.js';
 
 const ORDER = ['servico', 'data', 'dados', 'revisao', 'sinal', 'pronto'];
 const duration = (m) => (m % 60 === 0 ? `${m / 60} h` : m > 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`);
@@ -126,14 +126,22 @@ export function initBooking(root, { toast }) {
     renderSlots();
   }
 
+  // Ocupados aparecem riscados e sem clique, para a cliente ver que o horário existe mas já foi reservado.
   function renderSlots() {
     const box = $('[data-slots]');
-    const slots = state.status === 'ready' && state.date ? freeSlots(state.date) : [];
+    const slots = state.status === 'ready' && state.date ? daySlots(state.date, state.service.minutes, rules, state.busy, Date.now()) : [];
+    const hasBusy = slots.some((s) => !s.free);
     box.innerHTML = slots.length
-      ? `<p class="slots__title">Horários livres · ${cap(fmt(state.date, { weekday: 'long', day: '2-digit', month: '2-digit' }))}</p>
+      ? `<p class="slots__title">Horários · ${cap(fmt(state.date, { weekday: 'long', day: '2-digit', month: '2-digit' }))}</p>
          <div class="slots__grid">${slots
-           .map((t) => `<button type="button" class="slot" data-time="${t}" aria-pressed="${t === state.time}">${t.replace(':', 'h')}</button>`)
-           .join('')}</div>`
+           .map(({ time, free }) => {
+             const label = time.replace(':', 'h');
+             return free
+               ? `<button type="button" class="slot" data-time="${time}" aria-pressed="${time === state.time}">${label}</button>`
+               : `<button type="button" class="slot is-busy" disabled aria-label="${label}, ocupado">${label}</button>`;
+           })
+           .join('')}</div>
+         ${hasBusy ? '<p class="slots__legend"><span class="slots__legend-mark" aria-hidden="true">00h00</span>Riscado: horário já ocupado</p>' : ''}`
       : '';
     $('[data-need-time]').disabled = !(state.date && state.time);
   }

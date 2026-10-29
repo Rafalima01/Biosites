@@ -360,6 +360,35 @@
   color: #fff;
 }
 
+/* Ocupado: riscado e sem clique */
+.slot.is-busy {
+  border-style: dashed;
+  background: rgba(122, 104, 112, 0.06);
+  color: rgba(122, 104, 112, 0.6);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--rose-deep);
+  cursor: not-allowed;
+}
+
+.slots__legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.slots__legend-mark {
+  padding: 1px 6px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+  text-decoration: line-through;
+  text-decoration-color: var(--rose-deep);
+}
+
 /* Etapa 3: dados */
 .field {
   display: grid;

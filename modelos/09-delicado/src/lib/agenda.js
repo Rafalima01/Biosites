@@ -29,10 +29,12 @@ export function addDays(date, n) {
 }
 
 /**
- * Horários de início livres em `date` para um serviço de `duration` minutos.
+ * Horários de início em `date` para um serviço de `duration` minutos: `{ time, free }`.
+ * Ocupados pela agenda vêm com `free: false` (o site mostra riscados); pausas e horários
+ * que já passaram (ou sem a antecedência mínima) ficam de fora.
  * `busy`: [{ start, end }] em ms. `now`: instante atual em ms.
  */
-export function slotsForDay(date, duration, rules, busy, now) {
+export function daySlots(date, duration, rules, busy, now) {
   if (!rules.days.includes(weekday(date))) return [];
   const open = toMinutes(rules.open);
   const close = toMinutes(rules.close);
@@ -45,11 +47,16 @@ export function slotsForDay(date, duration, rules, busy, now) {
     const start = instant(date, m, rules.offset);
     const finish = instant(date, end, rules.offset);
     if (start < earliest) continue;
-    if (busy.some((b) => start < b.end && finish > b.start)) continue;
-    slots.push(fromMinutes(m));
+    slots.push({ time: fromMinutes(m), free: !busy.some((b) => start < b.end && finish > b.start) });
   }
   return slots;
 }
+
+/** Só os horários livres (ex.: ['08:00', '08:30']). */
+export const slotsForDay = (...args) =>
+  daySlots(...args)
+    .filter((s) => s.free)
+    .map((s) => s.time);
 
 /** Sinal em reais, arredondado para centavos (ex.: 30% de 55 = 16,5). */
 export const deposit = (price, rate) => Math.round(price * rate * 100) / 100;
