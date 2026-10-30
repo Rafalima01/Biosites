@@ -116,3 +116,140 @@
   background: var(--color-paper);
   color: var(--color-brand);
 }
+
+/*
+ * Capa da página de serviços: faixa chocolate com a foto se dissolvendo no fundo e o título em
+ * creme por cima da base da foto. A faixa termina em degradê para o creme da página.
+ */
+.page--servicos .topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.page--servicos .topbar__name {
+  color: var(--color-on-brand);
+}
+
+.capa-servicos {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 64px 0 76px;
+  background:
+    radial-gradient(120% 70% at 50% 22%, var(--color-brand-soft) 0%, transparent 62%),
+    linear-gradient(to bottom, var(--color-brand) 0%, var(--color-brand-deep) 70%, var(--color-brand-deep) calc(100% - 110px), var(--color-bg) 100%);
+}
+
+/* Arcos finos atrás da foto, como uma marca d'água */
+.capa-servicos::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 8%;
+  left: 50%;
+  width: min(150vw, 900px);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  border: 1px solid rgba(246, 239, 232, 0.1);
+  box-shadow: 0 0 0 34px rgba(246, 239, 232, 0.025), inset 0 0 0 70px rgba(246, 239, 232, 0.03);
+  pointer-events: none;
+}
+
+.capa-servicos__media {
+  position: relative;
+  max-width: 420px;
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 58%, transparent 100%);
+}
+
+.capa-servicos__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Aquece a foto: o fundo lilás vira um bege quente que conversa com o chocolate */
+.capa-servicos__media::before,
+.capa-servicos__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.capa-servicos__media::before {
+  background: #8a5236;
+  mix-blend-mode: soft-light;
+  opacity: 0.45;
+}
+
+.capa-servicos__media::after {
+  background: #e2c3a6;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+
+.capa-servicos__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: var(--column);
+  margin: -88px auto 0;
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+
+.capa-servicos__eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+  text-transform: uppercase;
+  color: #e3c9a8;
+}
+
+.capa-servicos__title {
+  font-size: clamp(44px, 13vw, 64px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-on-brand);
+  text-shadow: 0 10px 30px rgba(42, 17, 10, 0.45);
+}
+
+.capa-servicos__intro {
+  max-width: 30ch;
+  font-size: 14.5px;
+  color: rgba(246, 239, 232, 0.82);
+}
+
+.section--capa {
+  padding-top: 8px;
+}
+
+@media (min-width: 960px) {
+  .capa-servicos {
+    padding: 72px 0 88px;
+  }
+
+  .capa-servicos__media {
+    max-width: 400px;
+  }
+
+  .capa-servicos__title {
+    font-size: 76px;
+  }
+
+  .capa-servicos__intro {
+    font-size: 16px;
+  }
+}

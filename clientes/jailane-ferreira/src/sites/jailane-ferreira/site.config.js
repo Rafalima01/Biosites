@@ -124,6 +124,8 @@ export default {
     eyebrow: 'Serviços e valores',
     title: 'Meus serviços',
     intro: 'Toque no serviço para agendar online.',
+    // Foto do topo da página /servicos/ (capa com degradê).
+    pagePhoto: foto('capa', 'Jailane Ferreira sorrindo, de blusa de cetim dourada e braços cruzados', 4 / 5),
     // A Booksy não tem link por serviço: todos abrem a mesma página, onde a cliente escolhe o serviço e o horário.
     bookingUrl: 'https://booksy.com/pt-br/instant-experiences/widget/278150',
     bookingMessage: 'Olá, Jailane! Quero agendar: {servico}.',

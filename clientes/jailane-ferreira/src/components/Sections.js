@@ -113,16 +113,29 @@ export function Location(site) {
   </section>`;
 }
 
-/** `titulo`: 'h1' quando os serviços são a página inteira (/servicos/). */
+/**
+ * Topo da página /servicos/: foto se dissolvendo na faixa chocolate, com o título em creme por cima.
+ */
+const ServicesCover = (services) => `<header class="capa-servicos">
+    <figure class="capa-servicos__media">${Picture(services.pagePhoto, { className: 'capa-servicos__photo', sizes: '(min-width: 560px) 440px, 100vw', priority: true })}</figure>
+    <div class="capa-servicos__content">
+      <p class="capa-servicos__eyebrow reveal">${esc(services.eyebrow)}</p>
+      <h1 class="capa-servicos__title reveal" id="${esc(services.id)}-title" tabindex="-1" style="--i:1">${esc(services.title)}</h1>
+      ${services.intro ? `<p class="capa-servicos__intro reveal" style="--i:2">${esc(services.intro)}</p>` : ''}
+    </div>
+  </header>`;
+
+/** `titulo`: 'h1' quando os serviços são a página inteira (/servicos/); lá, com `pagePhoto`, o topo vira a capa com foto. */
 export function Services(site, { titulo = 'h2' } = {}) {
   const { services } = site;
   if (services.groups) {
-    return `<section class="section section--page" id="${esc(services.id)}" aria-labelledby="${esc(services.id)}-title">
-    <header class="section__header reveal">
+    const capa = titulo === 'h1' && services.pagePhoto;
+    return `${capa ? ServicesCover(services) : ''}<section class="section section--page${capa ? ' section--capa' : ''}" id="${esc(services.id)}" aria-labelledby="${esc(services.id)}-title">
+    ${capa ? '' : `<header class="section__header reveal">
       <p class="section__eyebrow">${esc(services.eyebrow)}</p>
       <${titulo} class="section__title" id="${esc(services.id)}-title" tabindex="-1">${esc(services.title)}</${titulo}>
       ${services.intro ? `<p class="section__intro">${esc(services.intro)}</p>` : ''}
-    </header>
+    </header>`}
     <div class="price-groups">${PriceGroups(site, services.groups)}</div>
     <div class="section__cta reveal">${Cta(site, services.cta)}</div>
   </section>`;
