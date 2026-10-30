@@ -9,10 +9,12 @@ Demonstração: **Helena Duarte · Psicóloga · CRP 00/00000**, São Paulo (mar
 fundo, Ψ + nome + "Psicóloga · CRP", título "Agendamento Online" e botão marrom "Agende sua Consulta",
 com balões 3D de coração na divisa; card "Saúde Mental" com a frase enorme em marrom, o cérebro
 realista na frente das letras, três margaridas realistas saindo pelas bordas do card e "Terapias &
-Abordagens" (abre `/servicos/`; medidas em `cqw`, proporcionais à largura do card); card azul do Instagram
-com faixa bege e cérebro 3D, selo "Saúde mental em primeiro lugar" com carinha, título arredondado e
-texto em papel rasgado; card azul "Onde me encontrar" com cérebro em traço ao fundo, polaroid do
-consultório presa por tachinha, nota "Atendo até às 19h" em papel rasgado e carinhas 3D.
+Abordagens" (abre `/servicos/`); card do Instagram (no print, "Visite nosso Blog") com faixa bege e painel
+azul, o cérebro realista de lado apoiado numa mão, selo azul "Saúde Mental em Primeiro Lugar" saindo pela
+borda de cima e texto em papel rasgado realista; card "Estamos Localizados" com cérebro em traço ao
+fundo, bilhete com o esboço do cérebro preso por tachinha vermelha, "Atendemos até às 19h" em papel
+rasgado saindo pela borda e carinhas 3D nos cantos. Os três cards de baixo usam medidas em `cqw`
+(proporcionais à largura do card), então mantêm as proporções do print em qualquer tela.
 Depois: sobre mim (foto, texto e temas), como funciona (três passos), atendimento online e presencial
 (endereço, mapa e horários), chamada final para o WhatsApp e rodapé azul com Ψ, nome e CRP.
 Página `/servicos/` com os atendimentos agrupados: tocar abre o WhatsApp com o nome do atendimento.
@@ -23,7 +25,8 @@ duração; o `npm run check` falha se aparecer `R$` ou um campo `price`.
 
 No celular é uma coluna só. No desktop o início vira duas colunas: os cards à esquerda e as seções à direita.
 
-Fontes: Poppins (texto, nome e frase grande) e Fredoka (títulos arredondados dos cards azuis). Fotos do
+Fontes: Poppins (texto, nome e frase grande), Gluten (títulos dos cards azuis, a mais parecida com a do
+print) e Fredoka (títulos das categorias em `/servicos/`). Fotos do
 Unsplash (licença gratuita), recortadas e entregues em webp pelo servidor de imagens do Unsplash, com
 `srcset`. Elementos 3D:
 
@@ -34,9 +37,15 @@ Unsplash (licença gratuita), recortadas e entregues em webp pelo servidor de im
   ([NIH 3D, 3DPX-003765](https://3d.nih.gov/entries/3DPX-003765)), licença **CC BY-SA 4.0**: a imagem
   pode ser usada comercialmente, desde que o crédito fique no site (`footer.credits`, mostrado no rodapé)
   e a imagem continue com a mesma licença.
-- **Balões, coração, carinhas, tachinha e o cérebro do card do Instagram**: [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)
-  da Microsoft (licença MIT); o cérebro recebe um filtro de cor no CSS (`--filtro-cerebro` em `src/styles/tokens.css`).
-- O cérebro em traço do card de localização é `public/cerebro-traco.svg`.
+- **Cérebro na mão do card do Instagram** (`public/media/cerebro-mao.webp`): [`scripts/blender/cerebro_mao.py`](../../scripts/blender/cerebro_mao.py),
+  com o mesmo cérebro (CC BY-SA 4.0, mesmo crédito) e a mão "generic-hand" do pacote
+  [@webxr-input-profiles/assets](https://github.com/immersive-web/webxr-input-profiles) (licença MIT), posada no script.
+- **Papéis rasgados, bilhete e tachinha** (`papel-faixa.webp`, `papel-nota.webp`, `bilhete.webp`,
+  `tachinha-real.webp`): feitos do zero por [`scripts/blender/papel.py`](../../scripts/blender/papel.py)
+  e [`scripts/blender/tachinha.py`](../../scripts/blender/tachinha.py). O texto fica no HTML, por cima do papel.
+- **Balões, coração e carinhas**: [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) da Microsoft (licença MIT).
+- **Cérebro em traço** (fundo do card de localização e esboço do bilhete): `public/cerebro-lado.svg`,
+  usado como máscara; a cor vem do CSS.
 
 ## Executar
 
@@ -57,8 +66,8 @@ Tudo fica em `src/sites/helena-duarte/site.config.js`:
 | Nome, profissão e CRP | `brand` |
 | Card de abertura (foto, título, botão e mensagem) | `intro` |
 | Card "Saúde Mental" (frase grande em duas linhas, título, texto) | `therapies` |
-| Card do Instagram (selo, título, texto do papel) | `content` |
-| Card da localização (nota do horário, título, texto, foto da polaroid) | `place` |
+| Card do Instagram (selo em duas linhas, título, texto do papel) | `content` |
+| Card da localização (texto e hora do papel de cima, título, texto) | `place` (`note`, `hour`) |
 | Sobre mim e temas atendidos | `about` |
 | Como funciona | `steps` |
 | Atendimento online e presencial | `local` |

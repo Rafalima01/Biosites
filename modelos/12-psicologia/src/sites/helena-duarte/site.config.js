@@ -42,7 +42,7 @@ export default {
   },
 
   theme: {
-    fontsHref: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Poppins:wght@400;500;600;700;800&display=swap',
+    fontsHref: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Gluten:wght@700&family=Poppins:wght@400;500;600;700;800&display=swap',
     // Paleta bege, marrom e azul-marinho do modelo (src/styles/tokens.css). Para uma cliente, sobrescreva aqui.
     tokens: {},
   },
@@ -69,20 +69,20 @@ export default {
     action: { type: 'page', href: '/servicos/' },
   },
 
-  // Card azul do Instagram ("blog"): selo, título e papel rasgado.
+  // Card do Instagram (no print, "Visite nosso Blog"): selo em duas linhas, título e papel rasgado.
   content: {
-    badge: 'Saúde mental em primeiro lugar',
-    title: 'Dicas & Reflexões',
-    text: 'Conteúdos sobre saúde mental, emoções e autocuidado no meu Instagram.',
+    badge: ['Saúde Mental em', 'Primeiro Lugar'],
+    title: 'Visite nosso Instagram',
+    text: 'Acesse nosso Instagram e encontre dicas e conteúdos sobre saúde mental e emocional.',
     action: { type: 'channel', channel: 'instagram' },
   },
 
-  // Card azul da localização: polaroid do consultório, horário no papel rasgado.
+  // Card da localização: bilhete com o cérebro preso por tachinha e o horário no papel rasgado.
   place: {
-    note: 'Atendo até às 19h',
-    title: 'Onde me encontrar',
-    text: 'Consultório na Vila Mariana (SP) e sessões online para todo o Brasil.',
-    photo: unsplash('photo-1754037783933-c25ff9f68f87', 'Poltrona do consultório ao lado da janela, com planta', { width: 400, height: 400, crop: 'entropy' }),
+    note: 'Atendemos até às',
+    hour: '19h',
+    title: 'Estamos Localizados',
+    text: 'Estamos na Vila Mariana (SP), seu espaço seguro para cuidar da saúde mental.',
     action: { type: 'section', target: 'local' },
   },
 

@@ -12,7 +12,7 @@ const check = (ok, msg) => ok || errors.push(msg);
 // 1. Config
 check(site.meta.ogImage, 'Defina meta.ogImage');
 check(site.brand.name && site.brand.crp, 'Nome e CRP são obrigatórios na divulgação (Código de Ética do Psicólogo)');
-const fotos = [site.intro.photo, site.place.photo, site.about.photo];
+const fotos = [site.intro.photo, site.about.photo];
 for (const foto of fotos) check(foto.alt?.trim(), `Foto sem texto alternativo: ${foto.src}`);
 const sectionIds = new Set([site.about.id, site.local.id]);
 for (const [nome, bloco] of Object.entries({ intro: site.intro, therapies: site.therapies, content: site.content, place: site.place, cta: site.cta })) {
@@ -53,7 +53,7 @@ const servicos = renderPage(site, 'servicos').body;
 if (!resolveChannel(site, 'whatsapp').pending) {
   for (const g of site.services) for (const s of g.items) check(servicos.includes(encodeURIComponent(s.name)), `Atendimento sem link do WhatsApp com o nome: ${s.name}`);
 }
-check(readFileSync(new URL('../public/cerebro-traco.svg', import.meta.url), 'utf8').includes('<svg'), 'Fundo do card de localização ausente');
+check(readFileSync(new URL('../public/cerebro-lado.svg', import.meta.url), 'utf8').includes('<svg'), 'Cérebro em traço do card de localização ausente');
 
 // 4. Links: com os dados preenchidos, nenhum destino pode ficar pendente
 const filled = structuredClone(site);

@@ -47,35 +47,35 @@ export function Therapies(site) {
   });
 }
 
-/** Card azul do Instagram: selo com carinha, cérebro 3D na faixa bege, título e papel rasgado. */
+/** Card do Instagram: faixa bege com o cérebro realista na mão, painel azul, selo saindo do card e papel rasgado. */
 export function Content(site) {
   const { content: c } = site;
   const target = resolveAction(site, c.action);
   return renderTarget(target, {
-    className: 'card card--azul card--conteudo reveal',
+    className: 'card card--conteudo reveal',
     label: c.title,
-    content: `<span class="conteudo__faixa" aria-hidden="true">${Art('cerebro', 'art--cerebro2')}</span>
-      <span class="selo">${Art('sorriso-coracoes', 'art--selo')}<span>${esc(c.badge)}</span></span>
+    content: `<span class="card__fundo" aria-hidden="true"><span class="conteudo__painel"></span>${Art('cerebro-mao.webp', 'art--cerebro-mao', [520, 500])}</span>
+      <span class="selo">${Art('carinha-mao', 'art--selo')}<span>${c.badge.map(esc).join('<br>')}</span></span>
       <span class="card__texto">
-        <span class="card__titulo card__titulo--redondo">${esc(c.title)}</span>
-        <span class="papel">${esc(c.text)}</span>
-        <span class="card__ir card__ir--claro">${icon('instagram', { size: 16 })} Ver no Instagram ${icon('chevronRight', { size: 16, stroke: 2 })}</span>
+        <span class="card__titulo card__titulo--display">${esc(c.title)}</span>
+        <span class="papel-real papel-real--faixa">${esc(c.text)}</span>
       </span>`,
   });
 }
 
-/** Card azul da localização: fundo com cérebro em traço, polaroid presa com tachinha e o horário. */
+/** Card da localização: cérebro em traço ao fundo, bilhete com esboço preso por tachinha e o horário em papel rasgado. */
 export function Place(site) {
   const { place: p } = site;
   const target = resolveAction(site, p.action);
   return renderTarget(target, {
     className: 'card card--azul card--local reveal',
     label: p.title,
-    content: `<span class="polaroid" aria-hidden="true">${Picture(p.photo, { className: 'polaroid__foto', sizes: '140px' })}${Art('tachinha', 'art--tachinha')}</span>
-      <span class="papel papel--nota">${esc(p.note)}</span>
+    content: `<span class="card__fundo" aria-hidden="true"><span class="local__traco"></span></span>
+      <span class="bilhete" aria-hidden="true"><span class="bilhete__esboco"></span>${Art('tachinha-real.webp', 'art--tachinha', [96, 154])}</span>
+      <span class="papel-real papel-real--nota">${esc(p.note)} <b>${esc(p.hour)}</b></span>
       ${Art('sorriso', 'art--sorriso1')}${Art('sorriso', 'art--sorriso2')}
       <span class="card__texto">
-        <span class="card__titulo card__titulo--redondo">${esc(p.title)}</span>
+        <span class="card__titulo card__titulo--display">${esc(p.title)}</span>
         <span class="card__apoio card__apoio--claro">${esc(p.text)}</span>
       </span>`,
   });

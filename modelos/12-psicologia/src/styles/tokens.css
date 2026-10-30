@@ -32,6 +32,7 @@
   /* Tipografia */
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --redonda: 'Fredoka', 'Poppins', system-ui, sans-serif;
+  --display: 'Gluten', 'Fredoka', system-ui, sans-serif; /* títulos dos cards azuis, como no print */
 
   /* Forma */
   --raio: 22px;
@@ -41,7 +42,4 @@
   /* Movimento */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur: 260ms;
-
-  /* Cérebro 3D do card do Instagram em tom de pele (o original é rosa forte) */
-  --filtro-cerebro: saturate(0.55) hue-rotate(12deg) brightness(1.04);
 }
