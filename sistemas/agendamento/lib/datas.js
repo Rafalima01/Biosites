@@ -64,8 +64,11 @@ export function somaMeses(mes, n) {
   return new Date(Date.UTC(y, m - 1 + n, 1)).toISOString().slice(0, 7);
 }
 
+/** Primeira letra maiúscula ("outubro de 2026" → "Outubro de 2026"). */
+export const maiuscula = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
 export const nomeMes = (mes) =>
-  new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(new Date(`${mes}-15T12:00:00Z`));
+  maiuscula(new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(new Date(`${mes}-15T12:00:00Z`)));
 
 export function diasNoMes(mes) {
   const [y, m] = mes.split('-').map(Number);

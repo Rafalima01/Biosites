@@ -46,8 +46,8 @@ begin
     for i in 1 .. n loop
       t := t + (floor(random() * 3) * 30 || ' minutes')::interval;
       select id, name, minutes, price into sv from public.services where studio_id = sid and active order by random() limit 1;
-      if t < time '12:00' and t + make_interval(mins => sv.minutes) > time '12:00' then
-        t := time '13:00'; -- não invade o almoço
+      if (t < time '12:00' and t + make_interval(mins => sv.minutes) > time '12:00') or (t >= time '12:00' and t < time '13:00') then
+        t := time '13:00'; -- não invade o almoço (12h às 13h)
       end if;
       exit when t + make_interval(mins => sv.minutes) > time '19:00' or t < time '09:00';
       ini := (d + t) at time zone tz;

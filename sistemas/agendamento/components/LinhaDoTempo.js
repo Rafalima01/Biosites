@@ -34,6 +34,33 @@ export function LinhaDoTempo({ dia, tz, ags, blocos, faixas, agora }) {
   const horas = [];
   for (let m = ini; m <= fim; m += 60) horas.push(m);
 
+  // Atendimentos que se cruzam (ex.: um sinal pendente no mesmo horário) ficam lado a lado.
+  const coluna = [];
+  const colunas = [];
+  const ordem = eventos.map((_, i) => i).sort((a, b) => eventos[a][0] - eventos[b][0]);
+  let grupo = [];
+  let fimGrupo = -1;
+  const fechar = () => {
+    const n = Math.max(1, ...grupo.map((i) => coluna[i] + 1));
+    grupo.forEach((i) => (colunas[i] = n));
+    grupo = [];
+  };
+  const livres = [];
+  for (const i of ordem) {
+    const [a, b] = eventos[i];
+    if (a >= fimGrupo && grupo.length) {
+      fechar();
+      livres.length = 0;
+    }
+    let c = livres.findIndex((f) => f <= a);
+    if (c === -1) c = livres.length;
+    livres[c] = b;
+    coluna[i] = c;
+    grupo.push(i);
+    fimGrupo = Math.max(fimGrupo, b);
+  }
+  if (grupo.length) fechar();
+
   return (
     <div className="tl" style={{ height: (fim - ini) * PX }} aria-label="Agenda do dia por horário">
       {horas.map((m) => (
@@ -56,8 +83,12 @@ export function LinhaDoTempo({ dia, tz, ags, blocos, faixas, agora }) {
           <a
             key={a.id}
             href={`#at-${a.id}`}
-            className={`tl__ev tl__ev--${classe}${alto < 44 ? ' tl__ev--curto' : ''}`}
-            style={{ top: y(eventos[i][0]), height: Math.max(alto - 2, 26) }}
+            className={`tl__ev tl__ev--${classe}${alto < 52 ? ' tl__ev--curto' : ''}`}
+            style={{
+              top: y(eventos[i][0]),
+              height: Math.max(alto - 2, 26),
+              ...(colunas[i] > 1 ? { left: `calc(4px + ${(coluna[i] / colunas[i]) * 100}%)`, right: 'auto', width: `calc(${100 / colunas[i]}% - 6px)` } : {}),
+            }}
           >
             <strong>{hora(a.starts_at, tz)}–{hora(a.ends_at, tz)} · {a.client_name}</strong>
             <span>{a.service_name}</span>

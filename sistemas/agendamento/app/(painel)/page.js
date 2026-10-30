@@ -5,6 +5,8 @@ import {
   diaDaSemana, diaDe, diasNoMes, hoje, hora, mesDe, mesValido, minutos, nomeMes, noFuso, reais, somaMeses, valido,
 } from '@/lib/datas';
 
+export const metadata = { title: 'Dashboard · Painel do studio' };
+
 const pct = (n) => `${Math.round(n * 100)}%`;
 const qtd = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
@@ -170,7 +172,7 @@ export default async function DashboardPage({ searchParams }) {
             </div>
             <div className="barras__eixo" aria-hidden="true">
               {porDia.map((x) => (
-                <span key={x.d}>{x.d === 1 || x.d % 5 === 0 || x.d === diaHoje ? x.d : ''}</span>
+                <span key={x.d}>{x.d === diaHoje || ((x.d === 1 || x.d % 5 === 0) && !(diaHoje && Math.abs(x.d - diaHoje) <= 1)) ? x.d : ''}</span>
               ))}
             </div>
             <details className="tabela">

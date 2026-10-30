@@ -4,7 +4,7 @@ import { Atendimento, Retorno, statusReal } from '@/components/Atendimento';
 import { Calendario } from '@/components/Calendario';
 import { LinhaDoTempo } from '@/components/LinhaDoTempo';
 import {
-  diaDaSemana, diaDe, diaLongo, hoje, hora, mesDe, minutos, noFuso, reais, somaDias, somaMeses, valido,
+  diaDaSemana, diaDe, diaLongo, hoje, maiuscula, hora, mesDe, minutos, noFuso, reais, somaDias, somaMeses, valido,
 } from '@/lib/datas';
 
 // Agenda: calendário do mês (quantos atendimentos por dia) e o dia escolhido dividido por horário.
@@ -72,7 +72,7 @@ export default async function AgendaPage({ searchParams }) {
         <div className="dia">
           <a className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, -1)}`} aria-label="Dia anterior">‹</a>
           <div className="dia__nome">
-            <h2 className="titulo" id="dia-titulo">{ehHoje ? 'Hoje' : diaLongo(dia)}</h2>
+            <h2 className="titulo" id="dia-titulo">{ehHoje ? 'Hoje' : maiuscula(diaLongo(dia))}</h2>
             {ehHoje ? <p className="muted">{diaLongo(dia)}</p> : <a className="link" href="/agenda">Voltar para hoje</a>}
           </div>
           <a className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, 1)}`} aria-label="Próximo dia">›</a>
