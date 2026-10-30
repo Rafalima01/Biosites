@@ -54,4 +54,19 @@ export function lerValor(texto) {
 
 export const CATEGORIAS = ['Material', 'Aluguel', 'Contas', 'Marketing', 'Equipamentos', 'Taxas', 'Pessoal', 'Outros'];
 
-export const UNIDADES = ['un', 'ml', 'g', 'par', 'cx', 'pct'];
+/** Tipos de embalagem do estoque. Controle por embalagem: acabou uma, dá baixa de uma. */
+export const UNIDADES = [
+  { id: 'un', nome: 'Unidade', plural: 'unidades' },
+  { id: 'cx', nome: 'Caixa', plural: 'caixas' },
+  { id: 'pct', nome: 'Pacote', plural: 'pacotes' },
+  { id: 'par', nome: 'Par', plural: 'pares' },
+];
+
+/** Caixa e pacote podem dizer quantas unidades vêm dentro (para saber quanto sai cada uma). */
+export const temConteudo = (unit) => unit === 'cx' || unit === 'pct';
+
+/** "2 caixas", "1 pacote", "3 unidades". */
+export function nomeEmbalagem(unit, n) {
+  const u = UNIDADES.find((x) => x.id === unit) || UNIDADES[0];
+  return Number(n) === 1 ? u.nome.toLowerCase() : u.plural;
+}

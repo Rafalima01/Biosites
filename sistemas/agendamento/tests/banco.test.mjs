@@ -264,6 +264,8 @@ ok(Number((await one(`select stock_restock($1, 4, 200, true, current_date) as q`
 ok(Number((await one('select unit_cost from products where id = $1', [GEL])).unit_cost) === 50, 'repor atualiza o custo por unidade');
 ok((await one(`select count(*)::int as n from expenses where description = 'Reposição: Gel construtor' and amount = 200`)).n === 1, 'repor com despesa lança a compra no financeiro');
 ok(await throws(() => db.query('select stock_restock($1, 0, 0, false, current_date)', [GEL])), 'repor exige quantidade');
+ok(await throws(() => db.query(`insert into products (studio_id, name, unit) values ($1, 'Removedor', 'ml')`, [LIVIA])), 'estoque só por embalagem (sem ml/grama)');
+ok(Number((await one(`insert into products (studio_id, name, unit, per_pack) values ($1, 'Luvas', 'cx', 100) returning per_pack`, [LIVIA])).per_pack) === 100, 'caixa guarda quantas unidades vêm nela');
 await as('authenticated', 'outra@ex.com');
 ok((await one('select count(*)::int as n from products')).n === 0, 'dona de outro studio não vê o estoque da Lívia');
 ok((await one('select stock_adjust($1, 5) as q', [GEL])).q === null, 'dona de outro studio não mexe no estoque da Lívia');

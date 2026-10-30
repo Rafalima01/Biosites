@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPainel, supabaseServer } from '@/lib/supabase/server';
 import { diaCurto, diaDe, hoje as hojeNoFuso, hora, noFuso, valido } from '@/lib/datas';
-import { CATEGORIAS, UNIDADES, lerValor } from '@/lib/financas';
+import { CATEGORIAS, UNIDADES, lerValor, temConteudo } from '@/lib/financas';
 
 const txt = (fd, k) => String(fd.get(k) ?? '').trim();
 
@@ -146,11 +146,14 @@ export async function adicionarProduto(fd) {
   const pago = lerValor(txt(fd, 'pago')) || 0;
   if (!txt(fd, 'nome')) voltar(fd, 'erro', 'Escreva o nome do produto.');
   if (quantidade < 0 || pago < 0) voltar(fd, 'erro', 'Confira a quantidade e o valor.');
+  const unidade = UNIDADES.some((u) => u.id === txt(fd, 'unidade')) ? txt(fd, 'unidade') : 'un';
+  const conteudo = Math.round(lerValor(txt(fd, 'conteudo')));
   const { error } = await supabase.from('products').insert({
     studio_id: studio.id,
     name: txt(fd, 'nome').slice(0, 80),
     category: txt(fd, 'categoria').slice(0, 40),
-    unit: UNIDADES.includes(txt(fd, 'unidade')) ? txt(fd, 'unidade') : 'un',
+    unit: unidade,
+    per_pack: temConteudo(unidade) && conteudo >= 1 ? conteudo : null,
     quantity: quantidade,
     min_quantity: lerValor(txt(fd, 'minimo')) || 0,
     unit_cost: quantidade > 0 && pago > 0 ? Math.round((pago / quantidade) * 100) / 100 : 0,

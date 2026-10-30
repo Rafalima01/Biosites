@@ -740,7 +740,7 @@ create table if not exists public.products (
   studio_id uuid not null references public.studios (id) on delete cascade,
   name text not null check (length(name) between 1 and 80),
   category text not null default '' check (length(category) <= 40),
-  unit text not null default 'un' check (unit in ('un', 'ml', 'g', 'par', 'cx', 'pct')),
+  unit text not null default 'un',
   quantity numeric(10, 2) not null default 0 check (quantity >= 0),
   min_quantity numeric(10, 2) not null default 0 check (min_quantity >= 0),
   unit_cost numeric(10, 2) not null default 0 check (unit_cost >= 0),
@@ -748,6 +748,12 @@ create table if not exists public.products (
   updated_at timestamptz not null default now()
 );
 create index if not exists products_studio_idx on public.products (studio_id, name);
+-- Controle por embalagem (unidade, caixa, pacote, par): acabou uma, dá baixa de uma. Sem ml/grama.
+update public.products set unit = 'un' where unit not in ('un', 'cx', 'pct', 'par');
+alter table public.products drop constraint if exists products_unit_check;
+alter table public.products add constraint products_unit_check check (unit in ('un', 'cx', 'pct', 'par'));
+-- Quantas unidades vêm em cada caixa ou pacote (opcional): mostra quanto sai cada unidade.
+alter table public.products add column if not exists per_pack int check (per_pack is null or per_pack between 1 and 100000);
 alter table public.products enable row level security;
 drop policy if exists "membro total" on public.products;
 create policy "membro total" on public.products for all to authenticated

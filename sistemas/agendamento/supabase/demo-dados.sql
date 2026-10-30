@@ -96,18 +96,19 @@ begin
 
   -- Produtos e estoque (alguns já no mínimo, para mostrar o aviso "Acabando").
   delete from public.products where studio_id = sid;
-  insert into public.products (studio_id, name, category, unit, quantity, min_quantity, unit_cost) values
-    (sid, 'Gel construtor rosa', 'Unhas', 'un', 4, 2, 48.90),
-    (sid, 'Gel construtor nude', 'Unhas', 'un', 1, 2, 48.90),
-    (sid, 'Tips bailarina (500 un)', 'Unhas', 'cx', 2, 1, 39.90),
-    (sid, 'Esmalte em gel (cores)', 'Unhas', 'un', 18, 6, 22.50),
-    (sid, 'Lixa 100/180', 'Descartáveis', 'pct', 3, 2, 17.00),
-    (sid, 'Removedor de esmalte', 'Unhas', 'ml', 900, 300, 0.05),
-    (sid, 'Henna para sobrancelha', 'Sobrancelhas', 'un', 1, 1, 34.90),
-    (sid, 'Linha para design', 'Sobrancelhas', 'un', 6, 2, 8.50),
-    (sid, 'Cílios em tufos (caixa)', 'Cílios', 'cx', 5, 2, 29.90),
-    (sid, 'Cola para cílios', 'Cílios', 'ml', 5, 5, 9.80),
-    (sid, 'Luvas descartáveis', 'Descartáveis', 'cx', 2, 1, 32.00);
+  insert into public.products (studio_id, name, category, unit, quantity, min_quantity, unit_cost, per_pack) values
+    (sid, 'Gel construtor rosa', 'Unhas', 'un', 4, 2, 48.90, null),
+    (sid, 'Gel construtor nude', 'Unhas', 'un', 1, 2, 48.90, null),
+    (sid, 'Tips bailarina', 'Unhas', 'cx', 2, 1, 39.90, 500),
+    (sid, 'Esmalte em gel (cores)', 'Unhas', 'un', 18, 6, 22.50, null),
+    (sid, 'Lixa 100/180', 'Descartáveis', 'pct', 3, 2, 17.00, 12),
+    (sid, 'Removedor de esmalte (1 litro)', 'Unhas', 'un', 2, 1, 45.00, null),
+    (sid, 'Henna para sobrancelha', 'Sobrancelhas', 'un', 1, 1, 34.90, null),
+    (sid, 'Linha para design', 'Sobrancelhas', 'un', 6, 2, 8.50, null),
+    (sid, 'Cílios em tufos', 'Cílios', 'cx', 5, 2, 29.90, 120),
+    (sid, 'Cola para cílios (7 g)', 'Cílios', 'un', 3, 2, 25.00, null),
+    (sid, 'Luvas descartáveis', 'Descartáveis', 'cx', 2, 1, 32.00, 100),
+    (sid, 'Pinça de precisão', 'Sobrancelhas', 'par', 2, 1, 18.00, null);
 end $$;
 
 -- Conferência

@@ -46,6 +46,10 @@
 
 .prazo--marcar { color: var(--rose-deep); }
 
+/* Conta na hora no cadastro/reposição do estoque */
+.calculo { padding: 10px 12px; border-radius: 12px; background: var(--rose-tint); font-size: 13.5px; color: var(--rose-deep); }
+.calculo strong { font-variant-numeric: tabular-nums; }
+
 .fin__linha--total dt { font-weight: 700; color: var(--ink); }
 .fin__linha--total dd { color: var(--rose-deep); }
 .fin__total { font-size: 18px; color: var(--rose-deep); font-variant-numeric: tabular-nums; }

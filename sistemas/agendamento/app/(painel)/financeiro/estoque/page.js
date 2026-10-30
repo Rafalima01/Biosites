@@ -1,7 +1,8 @@
 import { getPainel } from '@/lib/supabase/server';
 import { adicionarProduto, ajustarEstoque, apagarProduto, reporEstoque } from '../../../actions';
 import { Retorno } from '@/components/Atendimento';
-import { UNIDADES } from '@/lib/financas';
+import { FormProduto, FormRepor } from '@/components/FormEstoque';
+import { nomeEmbalagem, temConteudo } from '@/lib/financas';
 import { reais } from '@/lib/datas';
 
 export const metadata = { title: 'Estoque · Painel do studio' };
@@ -15,7 +16,7 @@ export default async function EstoquePage({ searchParams }) {
   const voltar = '/financeiro/estoque';
   const { data, error: semTabela } = await supabase
     .from('products')
-    .select('id, name, category, unit, quantity, min_quantity, unit_cost')
+    .select('id, name, category, unit, quantity, min_quantity, unit_cost, per_pack')
     .eq('studio_id', studio.id)
     .order('name');
   const produtos = (data || []).map((p) => ({ ...p, acabando: Number(p.quantity) <= Number(p.min_quantity) }));
@@ -44,30 +45,7 @@ export default async function EstoquePage({ searchParams }) {
 
       <section className="card fin__nova" aria-labelledby="p-titulo">
         <h2 className="subtitulo" id="p-titulo">Cadastrar produto</h2>
-        <form action={adicionarProduto} className="form">
-          <input type="hidden" name="voltar" value={voltar} />
-          <label className="campo">Produto<input name="nome" required maxLength={80} placeholder="Ex.: gel construtor nude" /></label>
-          <label className="campo">Categoria (opcional)
-            <input name="categoria" maxLength={40} list="categorias-produto" placeholder="Ex.: Unhas, Cílios, Descartáveis" />
-            <datalist id="categorias-produto">
-              {[...new Set(['Unhas', 'Sobrancelhas', 'Cílios', 'Descartáveis', ...categorias])].map((c) => <option key={c} value={c} />)}
-            </datalist>
-          </label>
-          <div className="form__linha">
-            <label className="campo">Quantidade<input name="quantidade" inputMode="decimal" defaultValue="1" /></label>
-            <label className="campo">Unidade
-              <select name="unidade" defaultValue="un">
-                {UNIDADES.map((u) => <option key={u} value={u}>{u}</option>)}
-              </select>
-            </label>
-          </div>
-          <div className="form__linha">
-            <label className="campo">Valor pago (total)<input name="pago" inputMode="decimal" placeholder="0,00" /></label>
-            <label className="campo">Avisar quando tiver<input name="minimo" inputMode="decimal" placeholder="Ex.: 2" /></label>
-          </div>
-          <label className="check"><input type="checkbox" name="despesa" value="1" defaultChecked /> Lançar a compra nas despesas</label>
-          <button className="btn btn--primario btn--bloco" type="submit">Cadastrar</button>
-        </form>
+        <FormProduto action={adicionarProduto} voltar={voltar} categorias={[...new Set(['Unhas', 'Sobrancelhas', 'Cílios', 'Descartáveis', ...categorias])]} />
       </section>
 
       <section className="fin__lista fin__lista--grade" aria-labelledby="e-titulo">
@@ -81,7 +59,8 @@ export default async function EstoquePage({ searchParams }) {
                     <strong>{p.name}</strong>
                     <small>
                       {p.category ? `${p.category} · ` : ''}
-                      {Number(p.unit_cost) ? `${reais(p.unit_cost)} por ${p.unit}` : 'sem valor de compra'}
+                      {Number(p.unit_cost) ? `${reais(p.unit_cost)} por ${nomeEmbalagem(p.unit, 1)}` : 'sem valor de compra'}
+                      {Number(p.unit_cost) && temConteudo(p.unit) && p.per_pack ? ` · ${reais(Number(p.unit_cost) / p.per_pack)} cada unidade (${p.per_pack} por ${nomeEmbalagem(p.unit, 1)})` : ''}
                     </small>
                   </span>
                   {p.acabando ? <span className="selo selo--pendente">Acabando</span> : null}
@@ -91,29 +70,20 @@ export default async function EstoquePage({ searchParams }) {
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="delta" value="-1" />
                     <input type="hidden" name="voltar" value={voltar} />
-                    <button className="produto__btn" type="submit" aria-label={`Dar baixa de 1 ${p.unit} em ${p.name}`} disabled={Number(p.quantity) <= 0}>−</button>
+                    <button className="produto__btn" type="submit" aria-label={`Dar baixa de 1 ${nomeEmbalagem(p.unit, 1)} em ${p.name}`} disabled={Number(p.quantity) <= 0}>−</button>
                   </form>
-                  <span className="produto__num"><strong>{qtdTexto(p.quantity)}</strong> {p.unit}</span>
+                  <span className="produto__num"><strong>{qtdTexto(p.quantity)}</strong> {nomeEmbalagem(p.unit, p.quantity)}</span>
                   <form action={ajustarEstoque}>
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="delta" value="1" />
                     <input type="hidden" name="voltar" value={voltar} />
-                    <button className="produto__btn" type="submit" aria-label={`Somar 1 ${p.unit} em ${p.name}`}>+</button>
+                    <button className="produto__btn" type="submit" aria-label={`Somar 1 ${nomeEmbalagem(p.unit, 1)} em ${p.name}`}>+</button>
                   </form>
-                  <small className="produto__min">mínimo {qtdTexto(p.min_quantity)}</small>
+                  <small className="produto__min">avisar com {qtdTexto(p.min_quantity)}</small>
                 </div>
                 <details className="produto__repor">
                   <summary>Repor · apagar</summary>
-                  <form action={reporEstoque} className="form">
-                    <input type="hidden" name="id" value={p.id} />
-                    <input type="hidden" name="voltar" value={voltar} />
-                    <div className="form__linha">
-                      <label className="campo">Quantos chegaram ({p.unit})<input name="quantidade" required inputMode="decimal" /></label>
-                      <label className="campo">Valor pago (total)<input name="pago" inputMode="decimal" placeholder="0,00" /></label>
-                    </div>
-                    <label className="check"><input type="checkbox" name="despesa" value="1" defaultChecked /> Lançar a compra nas despesas</label>
-                    <button className="btn btn--mini btn--primario" type="submit">Repor estoque</button>
-                  </form>
+                  <FormRepor action={reporEstoque} voltar={voltar} produto={p} />
                   <form action={apagarProduto}>
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="voltar" value={voltar} />
