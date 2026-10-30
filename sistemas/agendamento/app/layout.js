@@ -2,6 +2,7 @@ import './painel.css';
 import './painel-agenda.css';
 import './painel-telas.css';
 import './painel-menu.css';
+import './painel-financeiro.css';
 
 export const metadata = {
   title: 'Agenda · Painel do studio',

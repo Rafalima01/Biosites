@@ -3,5 +3,8 @@
   "framework": "nextjs",
   "git": {
     "deploymentEnabled": false
-  }
+  },
+  "regions": [
+    "gru1"
+  ]
 }

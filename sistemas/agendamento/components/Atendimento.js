@@ -43,6 +43,9 @@ export function Atendimento({ a, tz, studio, voltar, mostrarDia = false, nota = 
         </p>
         {a.notes ? <p className="item__obs">“{a.notes}”</p> : null}
         {nota ? <p className="prazo">{nota}</p> : null}
+        {st === 'confirmed' && new Date(a.ends_at) <= new Date() ? (
+          <p className="prazo prazo--marcar">Já passou: marque “Realizado” para lançar o restante ({reais(Number(a.price) - Number(a.deposit))}).</p>
+        ) : null}
         <div className="item__acoes">
           <span className={`selo selo--${classe}`}>{rotulo}</span>
           {zap ? <a className="btn btn--mini" href={zap} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}

@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const Icone = ({ d, size = 20 }) => (
@@ -14,17 +15,22 @@ const I = {
   relogio: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M12 7v5l3 2'],
   bloqueio: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M5.6 5.6l12.8 12.8'],
   clientes: ['M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', 'M2.5 20a6.5 6.5 0 0 1 13 0', 'M16 3.5a4 4 0 0 1 0 7.5', 'M18.5 14a6.5 6.5 0 0 1 3 6'],
+  financeiro: ['M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M6.5 9v.01', 'M17.5 15v.01'],
+  despesas: ['M7 3h10v18l-2.5-1.5L12 21l-2.5-1.5L7 21z', 'M10 8h4', 'M10 12h4'],
+  estoque: ['M3 8l9-5 9 5v8l-9 5-9-5z', 'M3 8l9 5 9-5', 'M12 13v8'],
   seta: ['M9 6l6 6-6 6'],
   recolher: ['M15 6l-6 6 6 6', 'M20 4v16'],
 };
 
-/** Menu do painel. Agenda é um grupo (Calendário e Bloqueios). */
+/** Menu do painel. Agenda e Financeiro são grupos com subopções. */
 const ITENS = [
   { href: '/', label: 'Dashboard', icone: I.dashboard },
   {
+    id: 'agenda',
     href: '/agenda',
     label: 'Agenda',
     icone: I.agenda,
+    dentro: ['/agenda', '/bloqueios'],
     filhos: [
       { href: '/agenda', label: 'Calendário', icone: I.agenda, repete: true },
       { href: '/bloqueios', label: 'Bloqueios', icone: I.bloqueio },
@@ -32,15 +38,28 @@ const ITENS = [
   },
   { href: '/pedidos', label: 'Aguardando sinal', icone: I.relogio, contador: true },
   { href: '/clientes', label: 'Clientes', icone: I.clientes },
+  {
+    id: 'financeiro',
+    href: '/financeiro',
+    label: 'Financeiro',
+    icone: I.financeiro,
+    dentro: ['/financeiro'],
+    filhos: [
+      { href: '/financeiro', label: 'Resumo', icone: I.financeiro, repete: true, exato: true },
+      { href: '/financeiro/despesas', label: 'Despesas', icone: I.despesas },
+      { href: '/financeiro/estoque', label: 'Produtos e estoque', icone: I.estoque },
+    ],
+  },
 ];
 
 const fechar = () => document.documentElement.classList.remove('menu-aberto');
-const ativoEm = (path, href) => (href === '/' ? path === '/' : path.startsWith(href));
+const ativoEm = (path, item) => (item.href === '/' || item.exato ? path === item.href : path.startsWith(item.href));
+const dentroDe = (path, grupo) => grupo.dentro.some((h) => path.startsWith(h));
 
-function Link({ item, path, pendentes, sub = false }) {
-  const ativo = ativoEm(path, item.href);
+function ItemMenu({ item, path, pendentes, sub = false }) {
+  const ativo = ativoEm(path, item);
   return (
-    <a
+    <Link
       href={item.href}
       className={`${sub ? 'menu__sub' : ''}${ativo ? ' is-ativo' : ''}`.trim() || undefined}
       aria-current={ativo ? 'page' : undefined}
@@ -51,18 +70,47 @@ function Link({ item, path, pendentes, sub = false }) {
       <Icone d={item.icone} size={sub ? 18 : 20} />
       <span>{item.label}</span>
       {item.contador && pendentes ? <b className="menu__qtd" aria-label={`${pendentes} pendentes`}>{pendentes}</b> : null}
-    </a>
+    </Link>
+  );
+}
+
+/** Grupo com subopções: abre sozinho quando a página aberta é dele; a seta abre e fecha. */
+function Grupo({ grupo, path, pendentes }) {
+  const dentro = dentroDe(path, grupo);
+  const [aberto, setAberto] = useState(dentro);
+  useEffect(() => {
+    if (dentro) setAberto(true);
+  }, [dentro]);
+  return (
+    <div className={`menu__grupo${aberto ? ' is-aberto' : ''}`}>
+      <div className="menu__linha">
+        <Link href={grupo.href} className={dentro ? 'is-ativo-grupo' : undefined} title={grupo.label} onClick={fechar}>
+          <Icone d={grupo.icone} />
+          <span>{grupo.label}</span>
+        </Link>
+        <button
+          type="button"
+          className="menu__abrir"
+          aria-expanded={aberto}
+          aria-controls={`submenu-${grupo.id}`}
+          aria-label={`${aberto ? 'Fechar' : 'Abrir'} opções de ${grupo.label}`}
+          onClick={() => setAberto((v) => !v)}
+        >
+          <Icone d={I.seta} size={16} />
+        </button>
+      </div>
+      <div className="menu__filhos" id={`submenu-${grupo.id}`}>
+        {grupo.filhos.map((f) => (
+          <ItemMenu key={f.href + f.label} item={f} path={path} pendentes={pendentes} sub />
+        ))}
+      </div>
+    </div>
   );
 }
 
 /** Abas do menu lateral. `pendentes`: quantos agendamentos aguardam o sinal (número ao lado). */
 export function Menu({ pendentes = 0 }) {
   const path = usePathname();
-  const naAgenda = path.startsWith('/agenda') || path.startsWith('/bloqueios');
-  const [agendaAberta, setAgendaAberta] = useState(naAgenda);
-  useEffect(() => {
-    if (naAgenda) setAgendaAberta(true);
-  }, [naAgenda]);
   // No celular o menu é uma gaveta: fecha ao trocar de página e com a tecla Esc.
   useEffect(fechar, [path]);
   useEffect(() => {
@@ -75,31 +123,9 @@ export function Menu({ pendentes = 0 }) {
     <nav className="menu" aria-label="Painel">
       {ITENS.map((item) =>
         item.filhos ? (
-          <div key={item.href} className={`menu__grupo${agendaAberta ? ' is-aberto' : ''}${naAgenda ? ' is-dentro' : ''}`}>
-            <div className="menu__linha">
-              <a href={item.href} className={naAgenda ? 'is-ativo-grupo' : undefined} title={item.label} onClick={fechar}>
-                <Icone d={item.icone} />
-                <span>{item.label}</span>
-              </a>
-              <button
-                type="button"
-                className="menu__abrir"
-                aria-expanded={agendaAberta}
-                aria-controls="submenu-agenda"
-                aria-label={agendaAberta ? 'Fechar opções da agenda' : 'Abrir opções da agenda'}
-                onClick={() => setAgendaAberta((v) => !v)}
-              >
-                <Icone d={I.seta} size={16} />
-              </button>
-            </div>
-            <div className="menu__filhos" id="submenu-agenda">
-              {item.filhos.map((f) => (
-                <Link key={f.href + f.label} item={f} path={path} pendentes={pendentes} sub />
-              ))}
-            </div>
-          </div>
+          <Grupo key={item.id} grupo={item} path={path} pendentes={pendentes} />
         ) : (
-          <Link key={item.href} item={item} path={path} pendentes={pendentes} />
+          <ItemMenu key={item.href} item={item} path={path} pendentes={pendentes} />
         ),
       )}
     </nav>

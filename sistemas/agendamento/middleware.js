@@ -14,9 +14,10 @@ export async function middleware(request) {
       },
     },
   });
-  const { data } = await supabase.auth.getUser();
+  // getClaims confere a assinatura do token localmente (e renova a sessão quando vence).
+  const { data } = await supabase.auth.getClaims();
   const livre = request.nextUrl.pathname === '/login' || request.nextUrl.pathname.startsWith('/convite/');
-  if (!data?.user && !livre) {
+  if (!data?.claims && !livre) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.search = '';

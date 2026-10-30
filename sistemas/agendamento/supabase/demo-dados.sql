@@ -73,6 +73,41 @@ begin
       t := t + make_interval(mins => sv.minutes);
     end loop;
   end loop;
+
+  -- Despesas do mês passado e deste mês (só até hoje): aluguel, contas, material, marketing e taxas.
+  delete from public.expenses where studio_id = sid;
+  insert into public.expenses (studio_id, spent_on, description, category, amount)
+  select sid, x.dia, x.descricao, x.categoria, x.valor
+  from (
+    select (m + (v.dia - 1) * interval '1 day')::date as dia, v.descricao, v.categoria, v.valor
+    from generate_series(date_trunc('month', hoje) - interval '1 month', date_trunc('month', hoje), interval '1 month') m
+    cross join (values
+      (5, 'Aluguel da sala', 'Aluguel', 900.00),
+      (8, 'Gel, tips e lixas', 'Material', 236.40),
+      (10, 'Luz, água e internet', 'Contas', 284.90),
+      (14, 'Anúncio no Instagram', 'Marketing', 150.00),
+      (18, 'Esmaltes e removedor', 'Material', 128.70),
+      (22, 'Henna e linha de sobrancelha', 'Material', 96.00),
+      (25, 'Taxas da maquininha', 'Taxas', 87.35),
+      (27, 'Cílios e cola', 'Material', 174.20)
+    ) as v (dia, descricao, categoria, valor)
+  ) x
+  where x.dia <= hoje;
+
+  -- Produtos e estoque (alguns já no mínimo, para mostrar o aviso "Acabando").
+  delete from public.products where studio_id = sid;
+  insert into public.products (studio_id, name, category, unit, quantity, min_quantity, unit_cost) values
+    (sid, 'Gel construtor rosa', 'Unhas', 'un', 4, 2, 48.90),
+    (sid, 'Gel construtor nude', 'Unhas', 'un', 1, 2, 48.90),
+    (sid, 'Tips bailarina (500 un)', 'Unhas', 'cx', 2, 1, 39.90),
+    (sid, 'Esmalte em gel (cores)', 'Unhas', 'un', 18, 6, 22.50),
+    (sid, 'Lixa 100/180', 'Descartáveis', 'pct', 3, 2, 17.00),
+    (sid, 'Removedor de esmalte', 'Unhas', 'ml', 900, 300, 0.05),
+    (sid, 'Henna para sobrancelha', 'Sobrancelhas', 'un', 1, 1, 34.90),
+    (sid, 'Linha para design', 'Sobrancelhas', 'un', 6, 2, 8.50),
+    (sid, 'Cílios em tufos (caixa)', 'Cílios', 'cx', 5, 2, 29.90),
+    (sid, 'Cola para cílios', 'Cílios', 'ml', 5, 5, 9.80),
+    (sid, 'Luvas descartáveis', 'Descartáveis', 'cx', 2, 1, 32.00);
 end $$;
 
 -- Conferência

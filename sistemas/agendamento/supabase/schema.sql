@@ -714,6 +714,83 @@ $$;
 revoke all on function public.novo_convite(text) from public, anon, authenticated;
 
 -- =============================================================================
+-- Financeiro: despesas do studio (material, aluguel, contas...). Só quem é do studio vê e anota.
+-- =============================================================================
+create table if not exists public.expenses (
+  id uuid primary key default gen_random_uuid(),
+  studio_id uuid not null references public.studios (id) on delete cascade,
+  spent_on date not null,
+  description text not null check (length(description) between 1 and 120),
+  category text not null default 'Outros'
+    check (category in ('Material', 'Aluguel', 'Contas', 'Marketing', 'Equipamentos', 'Taxas', 'Pessoal', 'Outros')),
+  amount numeric(10, 2) not null check (amount > 0 and amount < 1000000),
+  created_at timestamptz not null default now()
+);
+create index if not exists expenses_studio_idx on public.expenses (studio_id, spent_on);
+alter table public.expenses enable row level security;
+drop policy if exists "membro total" on public.expenses;
+create policy "membro total" on public.expenses for all to authenticated
+  using (public.is_member(studio_id)) with check (public.is_member(studio_id));
+
+-- =============================================================================
+-- Produtos e estoque do studio (gel, tips, esmaltes, descartáveis...). Só quem é do studio vê.
+-- =============================================================================
+create table if not exists public.products (
+  id uuid primary key default gen_random_uuid(),
+  studio_id uuid not null references public.studios (id) on delete cascade,
+  name text not null check (length(name) between 1 and 80),
+  category text not null default '' check (length(category) <= 40),
+  unit text not null default 'un' check (unit in ('un', 'ml', 'g', 'par', 'cx', 'pct')),
+  quantity numeric(10, 2) not null default 0 check (quantity >= 0),
+  min_quantity numeric(10, 2) not null default 0 check (min_quantity >= 0),
+  unit_cost numeric(10, 2) not null default 0 check (unit_cost >= 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists products_studio_idx on public.products (studio_id, name);
+alter table public.products enable row level security;
+drop policy if exists "membro total" on public.products;
+create policy "membro total" on public.products for all to authenticated
+  using (public.is_member(studio_id)) with check (public.is_member(studio_id));
+
+-- Dar baixa ou somar no estoque (− / +). Roda com as permissões de quem chama: só o próprio studio.
+create or replace function public.stock_adjust(p_id uuid, p_delta numeric)
+returns numeric
+language sql volatile security invoker set search_path = public
+as $$
+  update products set quantity = greatest(0, quantity + p_delta), updated_at = now()
+  where id = p_id
+  returning quantity
+$$;
+
+-- Repor: soma a quantidade, atualiza o custo por unidade e, se pedir, lança a compra nas despesas.
+create or replace function public.stock_restock(p_id uuid, p_qty numeric, p_total numeric, p_expense boolean, p_day date)
+returns numeric
+language plpgsql volatile security invoker set search_path = public
+as $$
+declare p products;
+begin
+  if p_qty is null or p_qty <= 0 then raise exception 'Informe a quantidade' using errcode = '22023'; end if;
+  update products
+  set quantity = quantity + p_qty,
+      unit_cost = case when coalesce(p_total, 0) > 0 then round(p_total / p_qty, 2) else unit_cost end,
+      updated_at = now()
+  where id = p_id
+  returning * into p;
+  if p.id is null then raise exception 'Acesso negado' using errcode = '42501'; end if;
+  if p_expense and coalesce(p_total, 0) > 0 then
+    insert into expenses (studio_id, spent_on, description, category, amount)
+    values (p.studio_id, coalesce(p_day, current_date), left('Reposição: ' || p.name, 120), 'Material', round(p_total, 2));
+  end if;
+  return p.quantity;
+end;
+$$;
+revoke all on function public.stock_adjust(uuid, numeric) from public, anon;
+revoke all on function public.stock_restock(uuid, numeric, numeric, boolean, date) from public, anon;
+grant execute on function public.stock_adjust(uuid, numeric) to authenticated;
+grant execute on function public.stock_restock(uuid, numeric, numeric, boolean, date) to authenticated;
+
+-- =============================================================================
 -- Primeiro acesso da agência (troque o e-mail e rode esta linha separadamente):
 -- insert into public.agency_admins (email) values ('voce@exemplo.com') on conflict do nothing;
 -- =============================================================================

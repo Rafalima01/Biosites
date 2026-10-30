@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getPainel } from '@/lib/supabase/server';
 import { STATUS, statusReal } from '@/components/Atendimento';
+import { resumoFinanceiro } from '@/lib/financas';
 import {
   diaDaSemana, diaDe, diasNoMes, hoje, hora, mesDe, mesValido, minutos, nomeMes, noFuso, reais, somaMeses, valido,
 } from '@/lib/datas';
@@ -10,21 +12,14 @@ export const metadata = { title: 'Dashboard · Painel do studio' };
 const pct = (n) => `${Math.round(n * 100)}%`;
 const qtd = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
-/** Números de um mês: o que já foi feito (faturado), o que está marcado (agendado) e o desempenho. */
-function resumo(lista, agora, ateDia = 31) {
-  const doPeriodo = lista.filter((a) => Number(a.dia.slice(8)) <= ateDia);
-  const realizados = doPeriodo.filter((a) => a.status === 'done' || (a.status === 'confirmed' && new Date(a.ends_at) <= agora));
-  const agendados = doPeriodo.filter((a) => a.status === 'confirmed' && new Date(a.ends_at) > agora);
+/** Desempenho de um mês: atendimentos realizados (marcados), confirmados, faltas e perdas. */
+function resumo(doPeriodo) {
+  const realizados = doPeriodo.filter((a) => a.status === 'done');
+  const agendados = doPeriodo.filter((a) => a.status === 'confirmed');
   const faltas = doPeriodo.filter((a) => a.status === 'no_show').length;
-  const soma = (l, k = 'price') => l.reduce((s, a) => s + Number(a[k] || 0), 0);
-  const faturado = soma(realizados);
   return {
     realizados,
     agendados,
-    faturado,
-    previsto: soma(agendados),
-    sinais: soma(doPeriodo.filter((a) => ['confirmed', 'done', 'no_show'].includes(a.status)), 'deposit'),
-    ticket: realizados.length ? faturado / realizados.length : 0,
     faltas,
     comparecimento: realizados.length + faltas ? realizados.length / (realizados.length + faltas) : null,
     cancelados: doPeriodo.filter((a) => a.status === 'cancelled').length,
@@ -50,10 +45,10 @@ export default async function DashboardPage({ searchParams }) {
   const inicio = (m) => noFuso(`${m}-01`, '00:00', tz).toISOString();
   const ehAtual = mes === mesAtual;
 
-  const [{ data: ags }, { count: novas }, { data: faixas }, { data: pend }, { data: deHoje }] = await Promise.all([
+  const [{ data: ags }, { count: novas }, { data: faixas }, { data: pend }, { data: deHoje }, { data: gastos }, { data: semMarcar }] = await Promise.all([
     supabase
       .from('appointments')
-      .select('starts_at, ends_at, status, expires_at, price, deposit, service_name, client_id, client_phone, client_name')
+      .select('starts_at, ends_at, status, expires_at, confirmed_at, price, deposit, service_name, client_id, client_phone, client_name')
       .eq('studio_id', studio.id)
       .gte('starts_at', inicio(anterior))
       .lt('starts_at', inicio(somaMeses(mes, 1))),
@@ -68,14 +63,19 @@ export default async function DashboardPage({ searchParams }) {
       .gte('starts_at', noFuso(hojeDia, '00:00', tz).toISOString())
       .lt('starts_at', noFuso(hojeDia, '23:59', tz).toISOString())
       .order('starts_at'),
+    supabase.from('expenses').select('amount').eq('studio_id', studio.id).gte('spent_on', `${mes}-01`).lt('spent_on', `${somaMeses(mes, 1)}-01`),
+    // Já passaram e continuam só confirmados: o restante só entra quando marcar "Realizado".
+    supabase.from('appointments').select('starts_at').eq('studio_id', studio.id).eq('status', 'confirmed').lt('ends_at', agora.toISOString()).order('starts_at').limit(100),
   ]);
 
   const todos = (ags || []).map((a) => ({ ...a, dia: diaDe(a.starts_at, tz) }));
   const doMes = todos.filter((a) => mesDe(a.dia) === mes);
-  const r = resumo(doMes, agora);
-  // Comparação justa: no mês atual, compara com o mês passado até o mesmo dia.
-  const base = resumo(todos.filter((a) => mesDe(a.dia) === anterior), agora, ehAtual ? Number(hojeDia.slice(8)) : 31);
-  const variacao = base.faturado > 0 ? (r.faturado - base.faturado) / base.faturado : null;
+  const r = resumo(doMes);
+  // Recebido: sinal ao confirmar e o restante ao marcar "Realizado" (lib/financas.js).
+  const fin = resumoFinanceiro(doMes, agora);
+  const finAnt = resumoFinanceiro(todos.filter((a) => mesDe(a.dia) === anterior), agora);
+  const despesas = (gastos || []).reduce((s, g) => s + Number(g.amount), 0);
+  const lucro = fin.faturamento - despesas;
 
   // Ocupação: minutos marcados ÷ minutos de expediente no mês.
   const porSemana = {};
@@ -85,7 +85,7 @@ export default async function DashboardPage({ searchParams }) {
   for (let d = 1; d <= n; d++) disponivel += porSemana[diaDaSemana(`${mes}-${String(d).padStart(2, '0')}`)] || 0;
   const ocupacao = disponivel ? Math.min(1, r.minutosOcupados / disponivel) : null;
 
-  // Gráfico: valor por dia (realizado ou agendado).
+  // Gráfico: valor por dia (realizado = marcado como feito; confirmado = sinal pago, ainda não marcado).
   const porDia = Array.from({ length: n }, (_, i) => ({ d: i + 1, feito: 0, marcado: 0 }));
   for (const a of r.realizados) porDia[Number(a.dia.slice(8)) - 1].feito += Number(a.price);
   for (const a of r.agendados) porDia[Number(a.dia.slice(8)) - 1].marcado += Number(a.price);
@@ -108,41 +108,56 @@ export default async function DashboardPage({ searchParams }) {
   return (
     <div className="dash">
       <div className="dia dash__topo">
-        <a className="btn btn--mini" href={`/?mes=${anterior}`} aria-label="Mês anterior">‹</a>
+        <Link className="btn btn--mini" href={`/?mes=${anterior}`} aria-label="Mês anterior">‹</Link>
         <div className="dia__nome">
           <p className="kicker">Resumo do mês</p>
           <h1 className="titulo">{nomeMes(mes)}</h1>
-          {ehAtual ? null : <a className="link" href="/">Voltar para este mês</a>}
+          {ehAtual ? null : <Link className="link" href="/">Voltar para este mês</Link>}
         </div>
-        <a className="btn btn--mini" href={`/?mes=${somaMeses(mes, 1)}`} aria-label="Próximo mês">›</a>
+        <Link className="btn btn--mini" href={`/?mes=${somaMeses(mes, 1)}`} aria-label="Próximo mês">›</Link>
       </div>
 
-      {pendentes ? (
-        <a className="alerta dash__alerta" href="/pedidos">
-          <strong>{qtd(pendentes, 'agendamento aguardando sinal', 'agendamentos aguardando sinal')}</strong>
-          <span>Confira os comprovantes →</span>
-        </a>
-      ) : null}
+      <div className="dash__alertas">
+        {pendentes ? (
+          <Link className="alerta" href="/pedidos">
+            <strong>{qtd(pendentes, 'agendamento aguardando sinal', 'agendamentos aguardando sinal')}</strong>
+            <span>Confira os comprovantes →</span>
+          </Link>
+        ) : null}
+
+        {(semMarcar || []).length ? (
+          <Link className="alerta alerta--marcar" href={`/agenda?dia=${diaDe(semMarcar[0].starts_at, tz)}`}>
+            <strong>{qtd(semMarcar.length, 'atendimento já passou', 'atendimentos já passaram')} sem marcar como realizado</strong>
+            <span>O restante do pagamento só entra quando você marca "Realizado" →</span>
+          </Link>
+        ) : null}
+
+      </div>
 
       <section className="card destaque dash__destaque" aria-labelledby="faturado">
-        <p className="destaque__rotulo" id="faturado">Faturado {ehAtual ? 'até hoje' : 'no mês'}</p>
-        <p className="destaque__valor">{reais(r.faturado)}</p>
-        <p className="destaque__nota">
-          {variacao == null
-            ? `${qtd(r.realizados.length, 'atendimento realizado', 'atendimentos realizados')}`
-            : (
+        <p className="destaque__rotulo" id="faturado">Recebido no mês</p>
+        <p className="destaque__valor">{reais(fin.recebido)}</p>
+        <p className="destaque__nota">{reais(fin.aReceber)} a receber · previsto {reais(fin.previsto)}</p>
+        {finAnt.faturamento > 0 ? (
+          <p className="destaque__nota">
+            {ehAtual ? (
+              <>{pct(fin.faturamento / finAnt.faturamento)} do mês passado ({reais(finAnt.faturamento)})</>
+            ) : (
               <>
-                <span className={variacao >= 0 ? 'sobe' : 'desce'}>{variacao >= 0 ? '▲' : '▼'} {pct(Math.abs(variacao))}</span>{' '}
-                {ehAtual ? 'que o mês passado até o mesmo dia' : 'que o mês anterior'}
+                <span className={fin.faturamento >= finAnt.faturamento ? 'sobe' : 'desce'}>
+                  {fin.faturamento >= finAnt.faturamento ? '▲' : '▼'} {pct(Math.abs(fin.faturamento - finAnt.faturamento) / finAnt.faturamento)}
+                </span>{' '}
+                que o mês anterior
               </>
             )}
-        </p>
+          </p>
+        ) : null}
       </section>
 
       <div className="kpis dash__kpis">
-        <div className="kpi"><span>Agendado</span><strong>{reais(r.previsto)}</strong><small>{qtd(r.agendados.length, 'atendimento por vir', 'atendimentos por vir')}</small></div>
-        <div className="kpi"><span>Sinais recebidos</span><strong>{reais(r.sinais)}</strong><small>no mês</small></div>
-        <div className="kpi"><span>Ticket médio</span><strong>{reais(r.ticket)}</strong><small>por atendimento</small></div>
+        <div className="kpi"><span>A receber</span><strong>{reais(fin.aReceber)}</strong><small>restante de {qtd(fin.qtdConfirmados, 'confirmado', 'confirmados')}</small></div>
+        <Link className="kpi kpi--link" href={`/financeiro?mes=${mes}`}><span>Despesas</span><strong>{reais(despesas)}</strong><small>ver no financeiro →</small></Link>
+        <div className="kpi"><span>Lucro</span><strong className={lucro < 0 ? 'desce' : undefined}>{reais(lucro)}</strong><small>recebido − despesas</small></div>
         <div className="kpi"><span>Clientes</span><strong>{r.clientes}</strong><small>{qtd(novas || 0, 'nova', 'novas')} no mês</small></div>
       </div>
 
@@ -151,7 +166,7 @@ export default async function DashboardPage({ searchParams }) {
           <h2 className="subtitulo" id="g-titulo">Faturamento por dia</h2>
           <p className="grafico__legenda">
             <span><i className="sw sw--feito" />Realizado</span>
-            <span><i className="sw sw--marcado" />Agendado</span>
+            <span><i className="sw sw--marcado" />Confirmado</span>
           </p>
         </div>
         {temGrafico ? (
@@ -159,7 +174,7 @@ export default async function DashboardPage({ searchParams }) {
             <div className="barras" role="img" aria-label={`Faturamento por dia em ${nomeMes(mes)}`}>
               {porDia.map((x) => {
                 const total = x.feito + x.marcado;
-                const dica = `Dia ${x.d}: ${total ? `${x.feito ? `${reais(x.feito)} realizado` : ''}${x.feito && x.marcado ? ' + ' : ''}${x.marcado ? `${reais(x.marcado)} agendado` : ''}` : 'nada'}`;
+                const dica = `Dia ${x.d}: ${total ? `${x.feito ? `${reais(x.feito)} realizado` : ''}${x.feito && x.marcado ? ' + ' : ''}${x.marcado ? `${reais(x.marcado)} confirmado` : ''}` : 'nada'}`;
                 return (
                   <div key={x.d} className={`barras__col${x.d === diaHoje ? ' barras__col--hoje' : ''}`} title={dica} data-dica={dica}>
                     <div className="barras__pilha" style={{ height: `${(total / maxDia) * 100}%` }}>
@@ -178,7 +193,7 @@ export default async function DashboardPage({ searchParams }) {
             <details className="tabela">
               <summary>Ver em tabela</summary>
               <table>
-                <thead><tr><th>Dia</th><th>Realizado</th><th>Agendado</th></tr></thead>
+                <thead><tr><th>Dia</th><th>Realizado</th><th>Confirmado</th></tr></thead>
                 <tbody>
                   {porDia.filter((x) => x.feito + x.marcado).map((x) => (
                     <tr key={x.d}><td>{x.d}</td><td>{reais(x.feito)}</td><td>{reais(x.marcado)}</td></tr>
@@ -209,7 +224,7 @@ export default async function DashboardPage({ searchParams }) {
           <div className="desemp__item">
             <span>Atendimentos</span>
             <strong>{r.realizados.length + r.agendados.length}</strong>
-            <small>{r.realizados.length} feitos · {r.agendados.length} por vir</small>
+            <small>{r.realizados.length} realizados · {r.agendados.length} confirmados</small>
           </div>
           <div className="desemp__item">
             <span>Perdidos</span>
@@ -240,7 +255,7 @@ export default async function DashboardPage({ searchParams }) {
       <section className="proximos dash__hoje" aria-labelledby="h-titulo">
         <div className="secao__topo">
           <h2 className="subtitulo" id="h-titulo">Hoje</h2>
-          <a className="link" href="/agenda">Abrir agenda →</a>
+          <Link className="link" href="/agenda">Abrir agenda →</Link>
         </div>
         {hojeLista.length ? (
           <ul className="lista lista--compacta">
@@ -248,11 +263,11 @@ export default async function DashboardPage({ searchParams }) {
               const [rotulo, classe] = STATUS[statusReal(a)];
               return (
                 <li key={a.id}>
-                  <a className={`linha linha--${classe}`} href={`/agenda#at-${a.id}`}>
+                  <Link className={`linha linha--${classe}`} href={`/agenda#at-${a.id}`}>
                     <span className="linha__quando"><strong>{hora(a.starts_at, tz)}</strong></span>
                     <span className="linha__quem"><strong>{a.client_name}</strong><small>{a.service_name}</small></span>
                     <span className={`selo selo--${classe}`}>{rotulo}</span>
-                  </a>
+                  </Link>
                 </li>
               );
             })}

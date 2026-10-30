@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPainel, supabaseServer } from '@/lib/supabase/server';
-import { diaCurto, diaDe, hora, noFuso } from '@/lib/datas';
+import { diaCurto, diaDe, hoje as hojeNoFuso, hora, noFuso, valido } from '@/lib/datas';
+import { CATEGORIAS, UNIDADES, lerValor } from '@/lib/financas';
 
 const txt = (fd, k) => String(fd.get(k) ?? '').trim();
 
@@ -109,4 +110,95 @@ export async function desbloquear(fd) {
   revalidatePath('/', 'layout');
   if (error) voltar(fd, 'erro', amigavel(error));
   voltar(fd, 'ok', 'Bloqueio removido.');
+}
+
+export async function adicionarDespesa(fd) {
+  const { supabase, studio } = await studioAtual();
+  const dia = txt(fd, 'dia');
+  const valor = lerValor(txt(fd, 'valor'));
+  const categoria = CATEGORIAS.includes(txt(fd, 'categoria')) ? txt(fd, 'categoria') : 'Outros';
+  if (!valido(dia)) voltar(fd, 'erro', 'Informe a data da despesa.');
+  if (!(valor > 0)) voltar(fd, 'erro', 'Informe o valor da despesa (ex.: 120,50).');
+  if (!txt(fd, 'descricao')) voltar(fd, 'erro', 'Escreva com o que foi a despesa.');
+  const { error } = await supabase.from('expenses').insert({
+    studio_id: studio.id,
+    spent_on: dia,
+    description: txt(fd, 'descricao').slice(0, 120),
+    category: categoria,
+    amount: Math.round(valor * 100) / 100,
+  });
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', 'Despesa anotada.');
+}
+
+export async function apagarDespesa(fd) {
+  const { supabase } = await studioAtual();
+  const { error } = await supabase.from('expenses').delete().eq('id', txt(fd, 'id'));
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', 'Despesa apagada.');
+}
+
+export async function adicionarProduto(fd) {
+  const { supabase, studio } = await studioAtual();
+  const quantidade = lerValor(txt(fd, 'quantidade')) || 0;
+  const pago = lerValor(txt(fd, 'pago')) || 0;
+  if (!txt(fd, 'nome')) voltar(fd, 'erro', 'Escreva o nome do produto.');
+  if (quantidade < 0 || pago < 0) voltar(fd, 'erro', 'Confira a quantidade e o valor.');
+  const { error } = await supabase.from('products').insert({
+    studio_id: studio.id,
+    name: txt(fd, 'nome').slice(0, 80),
+    category: txt(fd, 'categoria').slice(0, 40),
+    unit: UNIDADES.includes(txt(fd, 'unidade')) ? txt(fd, 'unidade') : 'un',
+    quantity: quantidade,
+    min_quantity: lerValor(txt(fd, 'minimo')) || 0,
+    unit_cost: quantidade > 0 && pago > 0 ? Math.round((pago / quantidade) * 100) / 100 : 0,
+  });
+  if (error) voltar(fd, 'erro', amigavel(error));
+  // A compra pode entrar direto nas despesas do mês.
+  if (txt(fd, 'despesa') && pago > 0) {
+    await supabase.from('expenses').insert({
+      studio_id: studio.id,
+      spent_on: hojeNoFuso(studio.timezone),
+      description: `Compra: ${txt(fd, 'nome')}`.slice(0, 120),
+      category: 'Material',
+      amount: Math.round(pago * 100) / 100,
+    });
+  }
+  revalidatePath('/', 'layout');
+  voltar(fd, 'ok', 'Produto cadastrado.');
+}
+
+export async function ajustarEstoque(fd) {
+  const { supabase } = await studioAtual();
+  const delta = Number(txt(fd, 'delta')) || 0;
+  const { error } = await supabase.rpc('stock_adjust', { p_id: txt(fd, 'id'), p_delta: delta });
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', delta < 0 ? 'Baixa feita no estoque.' : 'Estoque atualizado.');
+}
+
+export async function reporEstoque(fd) {
+  const { supabase, studio } = await studioAtual();
+  const qtd = lerValor(txt(fd, 'quantidade'));
+  if (!(qtd > 0)) voltar(fd, 'erro', 'Informe quantos chegaram.');
+  const { error } = await supabase.rpc('stock_restock', {
+    p_id: txt(fd, 'id'),
+    p_qty: qtd,
+    p_total: lerValor(txt(fd, 'pago')) || 0,
+    p_expense: Boolean(txt(fd, 'despesa')),
+    p_day: hojeNoFuso(studio.timezone),
+  });
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', txt(fd, 'despesa') && lerValor(txt(fd, 'pago')) > 0 ? 'Estoque reposto e compra lançada nas despesas.' : 'Estoque reposto.');
+}
+
+export async function apagarProduto(fd) {
+  const { supabase } = await studioAtual();
+  const { error } = await supabase.from('products').delete().eq('id', txt(fd, 'id'));
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', 'Produto apagado.');
 }

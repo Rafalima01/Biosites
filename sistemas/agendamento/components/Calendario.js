@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { diaDaSemana, diasNoMes, mesDe, nomeMes, somaDias, somaMeses } from '@/lib/datas';
 
 const SEMANA = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
@@ -20,9 +21,9 @@ export function Calendario({ dia, hojeDia, marcas }) {
   return (
     <section className="card cal" aria-label={`Calendário de ${nomeMes(mes)}`}>
       <div className="cal__topo">
-        <a className="btn btn--mini" href={`/agenda?dia=${irPara(somaMeses(mes, -1))}`} aria-label="Mês anterior">‹</a>
+        <Link className="btn btn--mini" href={`/agenda?dia=${irPara(somaMeses(mes, -1))}`} aria-label="Mês anterior">‹</Link>
         <h1 className="cal__mes">{nomeMes(mes)}</h1>
-        <a className="btn btn--mini" href={`/agenda?dia=${irPara(somaMeses(mes, 1))}`} aria-label="Próximo mês">›</a>
+        <Link className="btn btn--mini" href={`/agenda?dia=${irPara(somaMeses(mes, 1))}`} aria-label="Próximo mês">›</Link>
       </div>
       <div className="cal__grade" role="grid">
         {SEMANA.map((s, i) => (
@@ -42,14 +43,14 @@ export function Calendario({ dia, hojeDia, marcas }) {
           if (m.pendentes) partes.push(`${m.pendentes} aguardando sinal`);
           if (m.bloqueio) partes.push('com bloqueio');
           return (
-            <a key={d} className={classes} href={`/agenda?dia=${d}`} aria-label={partes.join(', ')} aria-current={d === dia ? 'date' : undefined}>
+            <Link key={d} className={classes} href={`/agenda?dia=${d}`} prefetch={false} aria-label={partes.join(', ')} aria-current={d === dia ? 'date' : undefined}>
               <span className="cal__num">{Number(d.slice(8))}</span>
               {m.total ? (
                 <span className={`cal__qtd${m.pendentes ? ' cal__qtd--pendente' : ''}`} aria-hidden="true">{m.total}</span>
               ) : (
                 <span className="cal__qtd cal__qtd--vazio" aria-hidden="true" />
               )}
-            </a>
+            </Link>
           );
         })}
       </div>

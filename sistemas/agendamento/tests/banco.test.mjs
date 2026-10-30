@@ -243,6 +243,35 @@ await as('authenticated', 'agencia@ex.com');
 ok((await one(`select count(*)::int as n from appointments`)).n >= 3, 'agência vê todos os studios');
 ok((await one(`select ping() as p`)).p.startsWith('ok:'), 'ping do despertador responde');
 
+// ---------------- despesas (financeiro) ----------------
+await as('authenticated', 'livia@ex.com');
+await db.query(`insert into expenses (studio_id, spent_on, description, category, amount) values ($1, current_date, 'Gel e tips', 'Material', 120.50)`, [LIVIA]);
+ok((await one(`select sum(amount)::float as s from expenses`)).s === 120.5, 'dona anota despesa do próprio studio');
+ok(await throws(() => db.query(`insert into expenses (studio_id, spent_on, description, amount) values ($1, current_date, 'x', 0)`, [LIVIA])), 'despesa precisa de valor maior que zero');
+ok(await throws(() => db.query(`insert into expenses (studio_id, spent_on, description, category, amount) values ($1, current_date, 'x', 'Viagem', 10)`, [LIVIA])), 'categoria fora da lista é recusada');
+await as('authenticated', 'outra@ex.com');
+ok((await one('select count(*)::int as n from expenses')).n === 0, 'dona de outro studio não vê as despesas da Lívia');
+ok(await throws(() => db.query(`insert into expenses (studio_id, spent_on, description, amount) values ($1, current_date, 'x', 10)`, [LIVIA])), 'dona de outro studio não anota despesa na Lívia');
+await as('anon');
+ok((await one('select count(*)::int as n from expenses')).n === 0, 'site não vê despesas');
+
+// ---------------- produtos e estoque ----------------
+await as('authenticated', 'livia@ex.com');
+const { id: GEL } = await one(`insert into products (studio_id, name, unit, quantity, min_quantity, unit_cost) values ($1, 'Gel construtor', 'un', 3, 2, 45) returning id`, [LIVIA]);
+ok(Number((await one('select stock_adjust($1, -1) as q', [GEL])).q) === 2, 'dar baixa tira 1 do estoque');
+ok(Number((await one('select stock_adjust($1, -10) as q', [GEL])).q) === 0, 'estoque nunca fica negativo');
+ok(Number((await one(`select stock_restock($1, 4, 200, true, current_date) as q`, [GEL])).q) === 4, 'repor soma a quantidade');
+ok(Number((await one('select unit_cost from products where id = $1', [GEL])).unit_cost) === 50, 'repor atualiza o custo por unidade');
+ok((await one(`select count(*)::int as n from expenses where description = 'Reposição: Gel construtor' and amount = 200`)).n === 1, 'repor com despesa lança a compra no financeiro');
+ok(await throws(() => db.query('select stock_restock($1, 0, 0, false, current_date)', [GEL])), 'repor exige quantidade');
+await as('authenticated', 'outra@ex.com');
+ok((await one('select count(*)::int as n from products')).n === 0, 'dona de outro studio não vê o estoque da Lívia');
+ok((await one('select stock_adjust($1, 5) as q', [GEL])).q === null, 'dona de outro studio não mexe no estoque da Lívia');
+ok(await throws(() => db.query(`select stock_restock($1, 1, 10, true, current_date)`, [GEL])), 'dona de outro studio não repõe o estoque da Lívia');
+await as('anon');
+ok(await throws(() => db.query('select stock_adjust($1, 1)', [GEL])), 'site não mexe no estoque');
+await as('authenticated', 'agencia@ex.com');
+
 // ---------------- convites de cadastro ----------------
 ok(await throws(() => db.query(`select novo_convite('outro-studio')`)), 'nem a agência pelo login gera convite (só no SQL Editor)');
 await as(null);

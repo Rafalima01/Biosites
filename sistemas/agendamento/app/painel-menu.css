@@ -110,6 +110,17 @@
 
 .agenda__atalhos { display: flex; justify-content: flex-end; gap: 8px; }
 
+/* Carregando (entre uma página e outra) */
+.carregando { display: grid; gap: 14px; }
+.esqueleto-grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.esqueleto { border-radius: var(--radius); background: linear-gradient(90deg, #f6eaee 0%, #fdf6f8 50%, #f6eaee 100%); background-size: 200% 100%; animation: brilho 1.2s ease-in-out infinite; }
+.esqueleto--titulo { width: 55%; height: 34px; border-radius: 12px; }
+.esqueleto--cartao { height: 86px; }
+.esqueleto--bloco { height: 260px; }
+@keyframes brilho { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (min-width: 1024px) { .esqueleto-grade { grid-template-columns: repeat(4, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .esqueleto { animation: none; } }
+
 /* Computador com o menu recolhido: faixa estreita só com os ícones */
 @media (min-width: 1024px) {
   .lateral__marca { padding-right: 44px; }

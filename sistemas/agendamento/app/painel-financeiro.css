@@ -1,0 +1,84 @@
+/* Financeiro: resumo do mês, entradas, despesas por categoria e lançamentos. */
+.fin { display: grid; gap: 14px; }
+.dash__alertas { display: grid; gap: 10px; }
+.dash__alertas:empty { display: none; }
+.alerta--marcar { background: var(--rose-tint); color: var(--rose-deep); border-color: var(--line); }
+.fin__resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.kpi--destaque { grid-column: 1 / -1; background: linear-gradient(140deg, #ffffff 0%, var(--rose-tint) 100%); }
+.kpi--destaque strong { font-family: var(--serif); font-size: 32px; font-weight: 500; color: var(--rose-deep); }
+.kpi--link { text-decoration: none; color: inherit; }
+.kpi--link:hover { box-shadow: 0 0 0 2px var(--line), var(--shadow); }
+.kpi--link small { color: var(--rose-deep); }
+
+.fin__linhas { display: grid; gap: 0; margin: 10px 0 0; }
+.fin__linhas div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.fin__linhas div:last-child { border-bottom: 0; }
+.fin__linhas dt { font-size: 14px; color: var(--muted); }
+.fin__linhas dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin__regra { margin-top: 8px; font-size: 12.5px; }
+
+.fin__lista { display: grid; gap: 10px; }
+.despesa { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto 34px; align-items: center; gap: 10px; padding: 12px 10px 12px 14px; border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); }
+.despesa__dia { font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.despesa__corpo { display: grid; gap: 1px; min-width: 0; }
+.despesa__corpo strong { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.despesa__corpo small { font-size: 12px; color: var(--muted); }
+.despesa__valor { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.despesa form { margin: 0; }
+.despesa__apagar { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; }
+.despesa__apagar:hover { background: var(--erro-tint); color: var(--erro); }
+
+@media (min-width: 768px) {
+  .fin__resumo { grid-template-columns: 1.4fr 1fr 1fr; }
+  .kpi--destaque { grid-column: auto; }
+}
+
+/* Computador: resumo em cima; entradas e categorias lado a lado; formulário ao lado da lista */
+@media (min-width: 1024px) {
+  .fin { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .fin > * { grid-column: 1 / -1; }
+  .fin__topo { grid-column: 1 / span 6; justify-self: start; min-width: 420px; }
+  .fin__entradas { grid-column: span 6; }
+  .fin__categorias { grid-column: span 6; }
+  .fin__nova { grid-column: span 5; position: sticky; top: 20px; }
+  .fin__lista { grid-column: span 7; }
+}
+
+.prazo--marcar { color: var(--rose-deep); }
+
+.fin__linha--total dt { font-weight: 700; color: var(--ink); }
+.fin__linha--total dd { color: var(--rose-deep); }
+.fin__total { font-size: 18px; color: var(--rose-deep); font-variant-numeric: tabular-nums; }
+
+/* Resumo: cartão do estoque */
+.fin__estoque { display: grid; gap: 8px; text-decoration: none; color: inherit; }
+.fin__estoque:hover { box-shadow: 0 0 0 2px var(--line), var(--shadow); }
+.fin__estoque .subtitulo { margin: 0; }
+.fin__estoque-numeros { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--muted); }
+.fin__estoque-numeros strong { font-size: 17px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fin__acabando strong { color: var(--warn); }
+
+/* Produtos e estoque */
+.produto { display: grid; gap: 10px; padding: 14px; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); border-left: 4px solid transparent; }
+.produto--acabando { border-left-color: var(--warn); }
+.produto__topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.produto__nome { display: grid; gap: 2px; min-width: 0; }
+.produto__nome strong { font-size: 14.5px; }
+.produto__nome small { font-size: 12px; color: var(--muted); }
+.produto__qtd { display: flex; align-items: center; gap: 10px; }
+.produto__qtd form { margin: 0; }
+.produto__btn { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--rose-deep); font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; }
+.produto__btn:hover { border-color: var(--rose); background: var(--rose-tint); }
+.produto__btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.produto__num { min-width: 64px; text-align: center; font-size: 13px; color: var(--muted); }
+.produto__num strong { font-size: 18px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.produto__min { margin-left: auto; font-size: 12px; color: var(--muted); }
+.produto__repor summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--rose-deep); }
+.produto__repor[open] { display: grid; gap: 10px; }
+.produto__repor .form { margin-top: 8px; padding: 12px; border-radius: 14px; background: var(--bg); }
+.produto__repor > form:last-child { margin: 0; }
+
+@media (min-width: 1024px) {
+  .fin__estoque { grid-column: span 12; }
+  .fin__lista--grade .lista--compacta { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}

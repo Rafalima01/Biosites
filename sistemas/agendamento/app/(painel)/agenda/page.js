@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getPainel } from '@/lib/supabase/server';
 import { encaixar, desbloquear } from '../../actions';
 import { Atendimento, Retorno, statusReal } from '@/components/Atendimento';
@@ -75,20 +76,20 @@ export default async function AgendaPage({ searchParams }) {
       <Retorno sp={sp} />
 
       <div className="agenda__atalhos">
-        <a className="btn btn--mini" href="/bloqueios">
+        <Link className="btn btn--mini" href="/bloqueios">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" /><path d="M5.6 5.6l12.8 12.8" /></svg>
           Bloquear horários
-        </a>
+        </Link>
       </div>
 
       <section className="dia-sel" aria-labelledby="dia-titulo">
         <div className="dia">
-          <a className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, -1)}`} aria-label="Dia anterior">‹</a>
+          <Link className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, -1)}`} aria-label="Dia anterior">‹</Link>
           <div className="dia__nome">
             <h2 className="titulo" id="dia-titulo">{ehHoje ? 'Hoje' : maiuscula(diaLongo(dia))}</h2>
-            {ehHoje ? <p className="muted">{diaLongo(dia)}</p> : <a className="link" href="/agenda">Voltar para hoje</a>}
+            {ehHoje ? <p className="muted">{diaLongo(dia)}</p> : <Link className="link" href="/agenda">Voltar para hoje</Link>}
           </div>
-          <a className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, 1)}`} aria-label="Próximo dia">›</a>
+          <Link className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, 1)}`} aria-label="Próximo dia">›</Link>
         </div>
 
         <div className="numeros">

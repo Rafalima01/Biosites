@@ -41,7 +41,7 @@
   .dash { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 18px; align-items: start; }
   .dash > * { grid-column: 1 / -1; }
   .dash__topo { grid-column: 1 / span 6; justify-self: start; min-width: 420px; }
-  .dash__alerta { grid-column: 7 / -1; align-self: center; }
+  .dash__alertas { grid-column: 7 / -1; align-self: center; }
   .dash__destaque { grid-column: span 5; align-self: stretch; align-content: center; padding: 26px; }
   .dash__destaque .destaque__valor { font-size: 52px; }
   .dash__kpis { grid-column: span 7; grid-template-columns: repeat(2, 1fr); }
