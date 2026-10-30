@@ -1,0 +1,86 @@
+/*
+ * Menu lateral. Celular e tablet: gaveta que desliza da esquerda (botão ☰ no topo).
+ * Computador (≥ 1024px): barra fixa à esquerda, o conteúdo ao lado.
+ */
+.lateral {
+  position: fixed;
+  z-index: 40;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: min(290px, 86vw);
+  padding: 20px 14px 18px;
+  background: var(--surface);
+  box-shadow: 18px 0 40px -24px rgba(156, 68, 98, 0.45);
+  transform: translateX(-104%);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  overflow-y: auto;
+}
+.menu-aberto .lateral { transform: none; }
+.menu-aberto body { overflow: hidden; }
+
+.menu-fundo {
+  position: fixed;
+  z-index: 35;
+  inset: 0;
+  background: rgba(52, 38, 43, 0.38);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+}
+.menu-aberto .menu-fundo { opacity: 1; pointer-events: auto; }
+
+.lateral__marca { position: relative; display: grid; gap: 4px; padding: 0 44px 16px 8px; border-bottom: 1px solid var(--line); }
+.lateral__marca .topo__nome { font-size: 21px; line-height: 1.2; }
+.lateral__marca .topo__troca { flex-wrap: wrap; }
+.lateral__marca .topo__troca select { flex: 1; min-width: 0; max-width: none; }
+.lateral__fechar { position: absolute; top: -4px; right: 0; width: 38px; height: 38px; border: 0; border-radius: 12px; background: transparent; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
+.lateral__fechar:hover { background: var(--rose-tint); color: var(--rose-deep); }
+
+.menu { display: grid; gap: 4px; }
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--muted);
+  transition: background var(--dur, 200ms) ease, color 200ms ease;
+}
+.menu a svg { flex: none; }
+.menu a span { white-space: nowrap; }
+.menu a:hover { background: var(--rose-tint); color: var(--rose-deep); }
+.menu a:focus-visible { outline: 3px solid rgba(196, 106, 133, 0.35); outline-offset: 1px; }
+.menu a.is-ativo { background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff; box-shadow: var(--shadow); }
+.menu__qtd { margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; background: var(--warn-tint); color: var(--warn); font-size: 12px; line-height: 22px; text-align: center; }
+.menu a.is-ativo .menu__qtd { background: rgba(255, 255, 255, 0.92); }
+
+.lateral__pe { display: grid; gap: 8px; margin-top: auto; padding: 14px 8px 0; border-top: 1px solid var(--line); }
+.lateral__email { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Topo do conteúdo: ☰ + nome do studio (celular) e, à direita, Meu site e avisos */
+.menu-btn { flex: none; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--rose-deep); cursor: pointer; }
+.menu-btn:hover { border-color: var(--rose); }
+.topo { justify-content: flex-start; }
+.topo__marca { flex: 1; }
+.topo .topo__nome { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lateral, .menu-fundo { transition: none; }
+}
+
+/* Computador: barra lateral fixa */
+@media (min-width: 1024px) {
+  .app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; }
+  .lateral { position: sticky; top: 0; height: 100vh; width: auto; transform: none; box-shadow: 1px 0 0 var(--line); padding: 26px 16px 20px; }
+  .lateral__fechar, .menu-fundo, .menu-btn { display: none; }
+  .lateral__marca { padding-right: 8px; }
+  .menu-aberto body { overflow: auto; }
+  /* O nome do studio já está na barra lateral */
+  .topo__marca { visibility: hidden; }
+  .topo { min-height: 64px; }
+}

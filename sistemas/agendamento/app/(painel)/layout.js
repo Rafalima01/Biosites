@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation';
 import { getPainel } from '@/lib/supabase/server';
 import { escolherStudio, sair } from '../actions';
-import { Menu } from '@/components/Menu';
+import { BotaoMenu, FecharMenu, FundoMenu, Menu } from '@/components/Menu';
 import { Avisos } from '@/components/Avisos';
 import { MeuSite } from '@/components/MeuSite';
 
 export const dynamic = 'force-dynamic';
 
 export default async function PainelLayout({ children }) {
-  const { user, studios, studio } = await getPainel();
+  const { supabase, user, studios, studio } = await getPainel();
   if (!user) redirect('/login');
   if (!studio) {
     return (
@@ -21,32 +21,59 @@ export default async function PainelLayout({ children }) {
       </main>
     );
   }
+  // Número ao lado de "Aguardando sinal" no menu.
+  const { count: pendentes } = await supabase
+    .from('appointments')
+    .select('id', { count: 'exact', head: true })
+    .eq('studio_id', studio.id)
+    .eq('status', 'pending')
+    .gt('expires_at', new Date().toISOString());
+
+  const marca =
+    studios.length > 1 ? (
+      <form action={escolherStudio} className="topo__troca">
+        <select name="slug" defaultValue={studio.slug} aria-label="Studio">
+          {studios.map((s) => (
+            <option key={s.id} value={s.slug}>{s.name}</option>
+          ))}
+        </select>
+        <button className="btn btn--mini" type="submit">Trocar</button>
+      </form>
+    ) : (
+      <strong className="topo__nome">{studio.name}</strong>
+    );
+
   return (
-    <div className="painel">
-      <header className="topo">
-        <div className="topo__marca">
+    <div className="app">
+      {/* Menu lateral: fixo no computador, gaveta que desliza da esquerda no celular */}
+      <aside className="lateral" id="menu-lateral" aria-label="Menu do painel">
+        <div className="lateral__marca">
           <span className="kicker">Painel</span>
-          {studios.length > 1 ? (
-            <form action={escolherStudio} className="topo__troca">
-              <select name="slug" defaultValue={studio.slug} aria-label="Studio">
-                {studios.map((s) => (
-                  <option key={s.id} value={s.slug}>{s.name}</option>
-                ))}
-              </select>
-              <button className="btn btn--mini" type="submit">Trocar</button>
-            </form>
-          ) : (
+          {marca}
+          <FecharMenu />
+        </div>
+        <Menu pendentes={pendentes || 0} />
+        <div className="lateral__pe">
+          <span className="lateral__email" title={user.email}>{user.email}</span>
+          <form action={sair}><button className="btn btn--mini btn--fantasma btn--bloco" type="submit">Sair</button></form>
+        </div>
+      </aside>
+      <FundoMenu />
+
+      <div className="painel">
+        <header className="topo">
+          <BotaoMenu />
+          <div className="topo__marca">
+            <span className="kicker">Painel</span>
             <strong className="topo__nome">{studio.name}</strong>
-          )}
-        </div>
-        <div className="topo__acoes">
-          <MeuSite url={studio.site_url} />
-          <Avisos studioId={studio.id} email={user.email} />
-          <form action={sair}><button className="btn btn--mini btn--fantasma" type="submit" title={user.email}>Sair</button></form>
-        </div>
-      </header>
-      <Menu />
-      <main className="conteudo">{children}</main>
+          </div>
+          <div className="topo__acoes">
+            <MeuSite url={studio.site_url} />
+            <Avisos studioId={studio.id} email={user.email} />
+          </div>
+        </header>
+        <main className="conteudo">{children}</main>
+      </div>
     </div>
   );
 }

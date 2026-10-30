@@ -35,7 +35,6 @@
 @media (min-width: 1024px) {
   .painel { max-width: 1180px; padding-inline: 32px; }
   .topo { padding-top: 22px; }
-  .menu { padding-bottom: 16px; }
   .conteudo { gap: 18px; }
 
   /* Dashboard: faturado ao lado dos números, gráfico com "Hoje" ao lado, desempenho e serviços lado a lado */
@@ -49,13 +48,14 @@
   .dash__grafico { grid-column: span 8; }
   .dash__grafico .barras { height: 220px; }
   .dash__hoje { grid-column: span 4; }
+  .dash__hoje .linha { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; padding: 12px; }
   .dash__desemp { grid-column: span 7; }
   .dash__desemp .desemp { grid-template-columns: repeat(2, 1fr); }
   .dash__rank { grid-column: span 5; }
 
   /* Agenda: calendário fixo à esquerda (com o encaixe embaixo), o dia por horário à direita */
   .agenda { display: grid; grid-template-columns: minmax(360px, 400px) minmax(0, 1fr); gap: 22px; align-items: start; }
-  .agenda__lado { display: grid; gap: 14px; position: sticky; top: 72px; }
+  .agenda__lado { display: grid; gap: 14px; position: sticky; top: 20px; }
   .agenda__dia { order: 0; }
   .agenda .cal, .agenda .encaixe { order: 0; }
   .cal__dia { min-height: 52px; }
@@ -65,7 +65,7 @@
 
   /* Bloqueios: formulário ao lado da lista */
   .duas-col { grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); gap: 22px; align-items: start; }
-  .duas-col > .form { position: sticky; top: 72px; }
+  .duas-col > .form { position: sticky; top: 20px; }
   .duas-col__lista .subtitulo { margin-top: 0; }
 
   .busca { max-width: 560px; }

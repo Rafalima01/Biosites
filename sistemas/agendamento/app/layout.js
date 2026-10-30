@@ -1,6 +1,7 @@
 import './painel.css';
 import './painel-agenda.css';
 import './painel-telas.css';
+import './painel-menu.css';
 
 export const metadata = {
   title: 'Agenda · Painel do studio',
