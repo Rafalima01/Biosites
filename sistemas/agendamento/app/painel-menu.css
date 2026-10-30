@@ -83,4 +83,71 @@
   /* O nome do studio já está na barra lateral */
   .topo__marca { visibility: hidden; }
   .topo { min-height: 64px; }
+  .lateral__recolher { display: grid; }
+  .app { transition: grid-template-columns 240ms cubic-bezier(0.22, 0.61, 0.36, 1); }
+}
+
+/* Grupo Agenda: link + seta que abre Calendário e Bloqueios */
+.menu__grupo { display: grid; gap: 2px; }
+.menu__linha { display: flex; align-items: center; gap: 2px; }
+.menu__linha > a { flex: 1; min-width: 0; }
+.menu__linha > a.is-ativo-grupo { color: var(--rose-deep); background: var(--rose-tint); }
+.menu__abrir { display: grid; place-items: center; width: 34px; height: 34px; flex: none; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }
+.menu__abrir:hover { background: var(--rose-tint); color: var(--rose-deep); }
+.menu__abrir svg { transition: transform 200ms ease; }
+.menu__grupo.is-aberto .menu__abrir svg { transform: rotate(90deg); }
+.menu__filhos { display: none; gap: 2px; margin-left: 24px; padding-left: 10px; border-left: 1.5px solid var(--line); }
+.menu__grupo.is-aberto .menu__filhos { display: grid; }
+.menu a.menu__sub { padding: 9px 12px; font-size: 13.5px; }
+
+/* Monograma do studio (aparece com o menu recolhido) e botão de recolher */
+.lateral__monograma { display: none; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff; font-family: var(--serif); font-size: 16px; font-weight: 500; }
+.lateral__nome { display: grid; gap: 4px; min-width: 0; }
+.lateral__recolher { display: none; place-items: center; position: absolute; top: -2px; right: -2px; width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--muted); cursor: pointer; }
+.lateral__recolher:hover { border-color: var(--rose); color: var(--rose-deep); }
+.lateral__recolher svg { transition: transform 240ms ease; }
+.lateral__sair { gap: 8px; }
+
+.agenda__atalhos { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Computador com o menu recolhido: faixa estreita só com os ícones */
+@media (min-width: 1024px) {
+  .lateral__marca { padding-right: 44px; }
+  .lateral__recolher { display: grid; }
+  .app--recolhido { grid-template-columns: 80px minmax(0, 1fr); }
+  .app--recolhido .lateral { padding-inline: 12px; align-items: stretch; overflow: visible; }
+  .app--recolhido .lateral__marca { display: grid; justify-items: center; gap: 12px; padding: 0 0 16px; }
+  .app--recolhido .lateral__monograma { display: grid; }
+  .app--recolhido .lateral__nome { display: none; }
+  .app--recolhido .lateral__recolher { position: static; }
+  .app--recolhido .lateral__recolher svg { transform: rotate(180deg); }
+  .app--recolhido .menu a { justify-content: center; padding: 12px 0; }
+  .app--recolhido .menu a span { display: none; }
+  .app--recolhido .menu__linha { display: block; }
+  .app--recolhido .menu__abrir { display: none; }
+  .app--recolhido .menu__filhos { display: grid; margin: 0; padding: 0; border: 0; }
+  .app--recolhido .menu__filhos a[data-repete] { display: none; }
+  .app--recolhido .menu a.menu__sub { padding: 10px 0; }
+  .app--recolhido .menu a { position: relative; }
+  .app--recolhido .menu__qtd { position: absolute; top: 6px; right: 12px; min-width: 18px; height: 18px; padding: 0 5px; font-size: 10.5px; line-height: 18px; box-shadow: 0 0 0 2px var(--surface); }
+  .app--recolhido .lateral__email { display: none; }
+  .app--recolhido .lateral__pe { padding-inline: 0; }
+  .app--recolhido .lateral__sair span { display: none; }
+  /* Nome ao passar o mouse sobre o ícone */
+  .app--recolhido .menu a:hover::after {
+    content: attr(title);
+    position: absolute;
+    z-index: 50;
+    left: calc(100% + 10px);
+    top: 50%;
+    translate: 0 -50%;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+  }
 }

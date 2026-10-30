@@ -74,6 +74,13 @@ export default async function AgendaPage({ searchParams }) {
       <div className="agenda__dia">
       <Retorno sp={sp} />
 
+      <div className="agenda__atalhos">
+        <a className="btn btn--mini" href="/bloqueios">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" /><path d="M5.6 5.6l12.8 12.8" /></svg>
+          Bloquear horários
+        </a>
+      </div>
+
       <section className="dia-sel" aria-labelledby="dia-titulo">
         <div className="dia">
           <a className="btn btn--mini" href={`/agenda?dia=${somaDias(dia, -1)}`} aria-label="Dia anterior">‹</a>
