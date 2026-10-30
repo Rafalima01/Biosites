@@ -70,6 +70,10 @@
 .melhor__topo { display: flex; justify-content: space-between; gap: 10px; }
 .melhor__nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .melhor__valor { color: var(--rose-deep); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 559px) {
+  .melhor { grid-template-columns: 40px minmax(0, 1fr); align-items: start; }
+  .melhor > .btn { grid-column: 2; justify-self: start; }
+}
 
 /* Aniversariantes */
 .niver-msg { display: grid; gap: 8px; }
