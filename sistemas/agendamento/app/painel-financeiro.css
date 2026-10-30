@@ -82,3 +82,9 @@
   .fin__estoque { grid-column: span 12; }
   .fin__lista--grade .lista--compacta { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
 }
+
+/* Estoque no celular: a lista vem antes do formulário de cadastro (consulta é o mais comum) */
+@media (max-width: 1023px) {
+  .fin--estoque .fin__lista { order: 1; }
+  .fin--estoque .fin__nova { order: 2; }
+}

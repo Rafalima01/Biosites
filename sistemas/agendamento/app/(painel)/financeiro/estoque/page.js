@@ -26,7 +26,7 @@ export default async function EstoquePage({ searchParams }) {
   const categorias = [...new Set(produtos.map((p) => p.category).filter(Boolean))];
 
   return (
-    <div className="fin">
+    <div className="fin fin--estoque">
       <div className="fin__topo">
         <p className="kicker">Financeiro</p>
         <h1 className="titulo">Produtos e estoque</h1>
