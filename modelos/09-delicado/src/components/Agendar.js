@@ -19,6 +19,8 @@ export const bookingData = (site) => ({
   firstName: site.brand.firstName,
   rules: site.booking,
   pix: site.pix,
+  // Sistema de Agendamento (chave pública "anon"). Sem ele, a página usa a agenda do Google.
+  sistema: site.sistema?.url ? site.sistema : null,
   services: site.services.flatMap((g) =>
     g.items.map((s) => ({ id: slug(s.name), name: s.name, category: g.category, minutes: s.minutes, price: s.price })),
   ),
@@ -92,13 +94,15 @@ export function Booking(site) {
 
     <form class="bk-card" data-step="dados" hidden novalidate>
       <h2 class="bk-title" tabindex="-1">Seus dados</h2>
-      <label class="field">
-        <span class="field__label">Nome</span>
-        <input class="field__input" name="nome" autocomplete="name" required>
-      </label>
+      ${site.sistema?.url ? '<p class="bk-lead" data-dados-lead>Digite seu WhatsApp. Se você já agendou aqui antes, a gente te reconhece.</p>' : ''}
       <label class="field">
         <span class="field__label">WhatsApp com DDD</span>
         <input class="field__input" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(71) 99999-9999" required>
+      </label>
+      <p class="bk-welcome" data-welcome role="status" hidden></p>
+      <label class="field" data-name-field${site.sistema?.url ? ' hidden' : ''}>
+        <span class="field__label">Nome e sobrenome</span>
+        <input class="field__input" name="nome" autocomplete="name">
       </label>
       <p class="field__error" data-error role="alert" hidden></p>
       <div class="bk-actions">

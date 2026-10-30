@@ -89,7 +89,17 @@ export default {
   },
 
   // Agendamento online (/agendar/): calendário com os horários livres, sinal por Pix e envio pelo WhatsApp.
-  // Os horários ocupados vêm da agenda do Google (endereço secreto iCal na variável AGENDA_ICS_URL da Vercel).
+  // Com `sistema`, os horários vêm do Sistema de Agendamento da Vertex e o agendamento fica gravado no
+  // painel (https://sistema-agendamento-sand.vercel.app). Na maquete, aponta para o studio de
+  // demonstração "studio-livia" (sistemas/agendamento/supabase/seed.sql). A chave é a pública ("anon").
+  // Sem `sistema`, os ocupados vêm da agenda do Google (iCal em AGENDA_ICS_URL) e `booking` define o expediente.
+  sistema: {
+    url: 'https://jbudmvywhaskaemicubn.supabase.co',
+    chave:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidWRtdnl3aGFza2FlbWljdWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzMDYxMTksImV4cCI6MjEwODg4MjExOX0.zziLB69DZhG9eubnS1cICOItrKwVCDTygnw7Jviuu0A',
+    studio: 'studio-livia',
+  },
+
   booking: {
     days: [1, 2, 3, 4, 5, 6],
     open: '09:00',

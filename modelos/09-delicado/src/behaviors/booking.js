@@ -1,9 +1,13 @@
 // Agendamento online: serviço → dia e horário livres → dados → revisão → sinal por Pix → WhatsApp.
-// Nada é gravado: os horários ocupados vêm da agenda do Google (/api/disponibilidade) e o pedido
-// segue como mensagem para o WhatsApp, onde a profissional confirma com o comprovante do sinal.
+//
+// Com o Sistema de Agendamento ligado (`cfg.sistema`): os horários vêm do sistema (expediente,
+// bloqueios e agendamentos do painel) e, ao enviar, o agendamento é GRAVADO no sistema (aparece no
+// painel em "Aguardando sinal" e segura o horário) antes de abrir o WhatsApp com o comprovante.
+// Sem o sistema: os ocupados vêm da agenda do Google (/api/disponibilidade) e nada é gravado.
 import { renderSVG } from 'uqr';
 import { pixPayload } from '../lib/pix.js';
 import { addDays, daySlots, deposit, localDate, slotsForDay, weekday } from '../lib/agenda.js';
+import { carregarStudio, horariosDoDia, ligarServicos, reservar, resumoDias } from '../lib/sistema.js';
 
 const ORDER = ['servico', 'data', 'dados', 'revisao', 'sinal', 'pronto'];
 const duration = (m) => (m % 60 === 0 ? `${m / 60} h` : m > 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`);
@@ -47,13 +51,19 @@ export function initBooking(root, { toast }) {
 
   const today = localDate(Date.now(), rules.offset);
   const last = addDays(today, rules.daysAhead);
-  const state = { service: null, date: null, time: null, name: '', phone: '', busy: [], status: 'loading', month: today.slice(0, 7), step: null };
+  const state = {
+    service: null, date: null, time: null, name: '', phone: '', busy: [], status: 'loading', month: today.slice(0, 7), step: null,
+    summary: {}, slots: {}, code: '', sending: false,
+  };
+  const sis = cfg.sistema && cfg.sistema.url ? cfg.sistema : null;
+  let studioPronto = null; // carrega os serviços do sistema uma vez
 
-  // ---------- Disponibilidade (uma consulta para todo o período) ----------
+  // ---------- Disponibilidade ----------
   const midnight = (date) => new Date(Date.parse(`${date}T00:00:00Z`) - rules.offset * 60000).toISOString();
   function loadAvailability() {
     state.status = 'loading';
     renderCalendar();
+    if (sis) return loadFromSystem();
     fetch(`/api/disponibilidade?de=${encodeURIComponent(midnight(today))}&ate=${encodeURIComponent(midnight(addDays(last, 1)))}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((data) => {
@@ -69,19 +79,55 @@ export function initBooking(root, { toast }) {
       });
   }
 
-  const freeSlots = (date) =>
-    state.service && date >= today && date <= last ? slotsForDay(date, state.service.minutes, rules, state.busy, Date.now()) : [];
+  // Sistema: resumo de dias livres do serviço escolhido e, depois, os horários do dia selecionado.
+  async function loadFromSystem() {
+    try {
+      studioPronto ??= carregarStudio(sis).then((st) => {
+        cfg.services = ligarServicos(cfg.services, st.services || []);
+        if (state.service) state.service = cfg.services.find((s) => s.id === state.service.id) || state.service;
+      });
+      await studioPronto;
+      if (!state.service) {
+        state.status = 'ready';
+        return;
+      }
+      if (!state.service.uuid) throw new Error('Serviço sem cadastro no sistema');
+      state.summary = await resumoDias(sis, state.service.uuid, today, last);
+      state.slots = {};
+      state.status = 'ready';
+      pickFirstFreeDay();
+      if (state.date) await loadDay(state.date);
+      if (state.time && !freeSlots(state.date).includes(state.time)) state.time = null;
+    } catch {
+      state.status = 'error';
+    }
+    renderCalendar();
+  }
+
+  async function loadDay(date) {
+    if (!sis || !state.service?.uuid) return;
+    state.slots[date] = await horariosDoDia(sis, state.service.uuid, date);
+  }
+
+  const freeSlots = (date) => {
+    if (!state.service || date < today || date > last) return [];
+    if (sis) return (state.slots[date] || []).filter((s) => s.free).map((s) => s.time);
+    return slotsForDay(date, state.service.minutes, rules, state.busy, Date.now());
+  };
+  /** O dia tem horário livre? (no sistema, vem do resumo; o dia escolhido é conferido na lista completa) */
+  const dayHasFree = (date) => (sis ? (state.summary[date] || 0) > 0 : freeSlots(date).length > 0);
+  const dayFreeCount = (date) => (sis ? state.summary[date] || 0 : freeSlots(date).length);
 
   function pickFirstFreeDay() {
-    if (state.date && freeSlots(state.date).includes(state.time)) return;
-    if (state.date && freeSlots(state.date).length) {
-      state.time = null;
+    if (state.date && dayHasFree(state.date)) {
+      // No sistema, o horário escolhido é conferido quando a lista do dia chega (loadFromSystem).
+      if (!sis && !freeSlots(state.date).includes(state.time)) state.time = null;
       return;
     }
     state.date = null;
     state.time = null;
     for (let d = today; d <= last; d = addDays(d, 1)) {
-      if (freeSlots(d).length) {
+      if (dayHasFree(d)) {
         state.date = d;
         state.month = d.slice(0, 7);
         return;
@@ -102,14 +148,14 @@ export function initBooking(root, { toast }) {
     const cells = Array.from({ length: weekday(first) }, () => '<span class="cal__blank"></span>');
     for (let day = 1; day <= daysInMonth; day++) {
       const date = `${state.month}-${String(day).padStart(2, '0')}`;
-      const slots = state.status === 'ready' ? freeSlots(date) : [];
+      const livres = state.status === 'ready' ? dayFreeCount(date) : 0;
       const open = date >= today && date <= last && rules.days.includes(weekday(date));
-      const label = `${cap(fmt(date, { weekday: 'long', day: 'numeric', month: 'long' }))}${slots.length ? `, ${slots.length} horários livres` : ', sem horários'}`;
+      const label = `${cap(fmt(date, { weekday: 'long', day: 'numeric', month: 'long' }))}${livres ? `, ${livres} horários livres` : ', sem horários'}`;
       const cls = ['cal__day', date === today && 'is-today', date === state.date && 'is-selected', open && state.status === 'loading' && 'is-loading']
         .filter(Boolean)
         .join(' ');
       cells.push(
-        `<button type="button" class="${cls}" data-date="${date}" aria-label="${label}" aria-pressed="${date === state.date}"${slots.length ? '' : ' disabled'}>${day}</button>`,
+        `<button type="button" class="${cls}" data-date="${date}" aria-label="${label}" aria-pressed="${date === state.date}"${livres ? '' : ' disabled'}>${day}</button>`,
       );
     }
     $('[data-cal-grid]').innerHTML = cells.join('');
@@ -129,7 +175,17 @@ export function initBooking(root, { toast }) {
   // Ocupados aparecem riscados e sem clique, para a cliente ver que o horário existe mas já foi reservado.
   function renderSlots() {
     const box = $('[data-slots]');
-    const slots = state.status === 'ready' && state.date ? daySlots(state.date, state.service.minutes, rules, state.busy, Date.now()) : [];
+    const slots =
+      state.status === 'ready' && state.date
+        ? sis
+          ? state.slots[state.date] || []
+          : daySlots(state.date, state.service.minutes, rules, state.busy, Date.now())
+        : [];
+    if (sis && state.status === 'ready' && state.date && !state.slots[state.date]) {
+      box.innerHTML = '<p class="slots__title">Carregando horários…</p>';
+      $('[data-need-time]').disabled = true;
+      return;
+    }
     const hasBusy = slots.some((s) => !s.free);
     box.innerHTML = slots.length
       ? `<p class="slots__title">Horários · ${cap(fmt(state.date, { weekday: 'long', day: '2-digit', month: '2-digit' }))}</p>
@@ -153,6 +209,7 @@ export function initBooking(root, { toast }) {
   function summaryRows() {
     const s = state.service;
     return [
+      ...(state.code ? [['Código', state.code]] : []),
       ['Serviço', s.name],
       ['Data', cap(longDate(state.date))],
       ['Horário', `${state.time.replace(':', 'h')} · ${duration(s.minutes)}`],
@@ -169,11 +226,14 @@ export function initBooking(root, { toast }) {
       .join('');
   };
 
+  // A mensagem já sai do WhatsApp da cliente: o número dela não precisa ir no texto.
   function message() {
     return [
       `Olá, ${cfg.firstName}! Fiz um agendamento pelo site.`,
       '',
-      ...summaryRows().map(([k, v]) => `${k}: ${v}`),
+      ...summaryRows()
+        .filter(([k]) => k !== 'WhatsApp')
+        .map(([k, v]) => `${k}: ${v}`),
       '',
       'Segue o comprovante do sinal.',
     ].join('\n');
@@ -228,7 +288,7 @@ export function initBooking(root, { toast }) {
       renderCalendar();
     }
     if (step === 'dados') {
-      form.elements.nome.value = state.name;
+      form.elements.nome.value = state.known ? '' : state.name;
       form.elements.whatsapp.value = phoneMask(state.phone);
     }
     if (step === 'revisao') renderSummary($('[data-summary]'));
@@ -251,8 +311,66 @@ export function initBooking(root, { toast }) {
     if (!service) return;
     const changed = state.service?.id !== id;
     state.service = service;
+    state.code = '';
+    if (sis) {
+      // Cada serviço tem duração própria: o sistema recalcula os dias e horários livres.
+      if (changed) state.time = null;
+      show('data');
+      if (changed || state.status !== 'ready') loadAvailability();
+      return;
+    }
     if (changed && state.date && !freeSlots(state.date).includes(state.time)) state.time = null;
     show('data');
+  }
+
+  // Grava o agendamento no sistema (aguardando sinal) e só então abre o WhatsApp com o código.
+  async function enviarPeloSistema() {
+    if (state.sending) return;
+    const slot = (state.slots[state.date] || []).find((s) => s.time === state.time);
+    if (!slot) {
+      toast.show('Escolha o horário de novo, por favor.');
+      return show('data');
+    }
+    state.sending = true;
+    const send = $('[data-send]');
+    const textoBotao = send.querySelector('span').textContent;
+    send.querySelector('span').textContent = 'Reservando seu horário…';
+    send.setAttribute('aria-disabled', 'true');
+    // Abre a aba já no clique (o navegador bloqueia janelas abertas depois de uma espera).
+    const aba = window.open('', '_blank');
+    try {
+      const r = await reservar(sis, { uuid: state.service.uuid, startsAt: slot.startsAt, name: state.known ? '' : state.name, phone: phoneMask(state.phone) });
+      if (!r.ok && r.needName) {
+        aba?.close();
+        toast.show('Precisamos do seu nome e sobrenome para o cadastro.');
+        state.known = false;
+        conhecida = null;
+        consultado = state.phone;
+        nameField.hidden = false;
+        show('dados');
+        return;
+      }
+      if (!r.ok) {
+        aba?.close();
+        toast.show(r.reason || 'Não foi possível reservar esse horário.');
+        state.time = null;
+        loadAvailability();
+        show('data');
+        return;
+      }
+      state.code = r.code;
+      const url = whatsappUrl();
+      if (aba) aba.location.href = url;
+      else location.href = url;
+      show('pronto');
+    } catch {
+      aba?.close();
+      toast.show('Sem conexão com a agenda agora. Tente de novo em instantes.');
+    } finally {
+      state.sending = false;
+      send.querySelector('span').textContent = textoBotao;
+      updateSend();
+    }
   }
 
   // ---------- Eventos ----------
@@ -263,7 +381,14 @@ export function initBooking(root, { toast }) {
     if (t.dataset.date) {
       state.date = t.dataset.date;
       state.time = null;
-      return renderCalendar();
+      renderCalendar();
+      if (sis && !state.slots[state.date]) {
+        const dia = state.date;
+        loadDay(dia)
+          .catch(() => toast.show('Não foi possível carregar os horários desse dia.'))
+          .finally(() => state.date === dia && renderSlots());
+      }
+      return;
     }
     if (t.dataset.time) {
       state.time = t.dataset.time;
@@ -288,6 +413,11 @@ export function initBooking(root, { toast }) {
         $('[data-agree]').focus();
         return;
       }
+      if (sis) {
+        event.preventDefault();
+        enviarPeloSistema();
+        return;
+      }
       // O link abre o WhatsApp; a página mostra a etapa final.
       setTimeout(() => show('pronto'), 300);
       return;
@@ -297,21 +427,75 @@ export function initBooking(root, { toast }) {
 
   $('[data-agree]').addEventListener('change', updateSend);
 
+  // Com o sistema: cliente cadastrada é reconhecida pelo WhatsApp; cliente nova informa o nome.
+  const nameField = $('[data-name-field]');
+  const welcome = $('[data-welcome]');
+  let conhecida = null; // { phone, firstName } quando o número já tem cadastro
+  let consultado = ''; // último número consultado
+
   form.elements.whatsapp.addEventListener('input', (e) => {
     e.target.value = phoneMask(e.target.value);
+    if (sis && digits(e.target.value) !== consultado) {
+      conhecida = null;
+      welcome.hidden = true;
+      if (consultado) nameField.hidden = true;
+    }
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = form.elements.nome.value.trim().replace(/\s+/g, ' ');
     const phone = digits(form.elements.whatsapp.value);
     const error = $('[data-error]');
-    const problem = name.length < 2 ? 'Digite seu nome.' : phone.length < 10 || phone.length > 11 ? 'Digite seu WhatsApp com DDD, ex.: (71) 99999-9999.' : '';
-    error.hidden = !problem;
-    error.textContent = problem;
-    if (problem) return (name.length < 2 ? form.elements.nome : form.elements.whatsapp).focus();
+    const erro = (msg, campo) => {
+      error.hidden = !msg;
+      error.textContent = msg || '';
+      if (msg) campo?.focus();
+      return Boolean(msg);
+    };
+    if (erro(phone.length < 10 || phone.length > 11 ? 'Digite seu WhatsApp com DDD, ex.: (71) 99999-9999.' : '', form.elements.whatsapp)) return;
+
+    if (sis) {
+      if (consultado !== phone) {
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        try {
+          const r = await fetch(`${sis.url}/rest/v1/rpc/find_client`, {
+            method: 'POST',
+            headers: { apikey: sis.chave, Authorization: `Bearer ${sis.chave}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ p_slug: sis.studio, p_phone: phone }),
+          }).then((x) => x.json());
+          consultado = phone;
+          conhecida = r.found ? { phone, firstName: r.firstName } : null;
+        } catch {
+          botao.disabled = false;
+          return erro('Não foi possível verificar agora. Tente de novo.', form.elements.whatsapp);
+        }
+        botao.disabled = false;
+      }
+      if (conhecida) {
+        welcome.hidden = false;
+        welcome.textContent = `Que bom te ver de novo, ${conhecida.firstName}! 💜`;
+        nameField.hidden = true;
+        erro('');
+        state.name = conhecida.firstName;
+        state.phone = phone;
+        state.known = true;
+        return show('revisao');
+      }
+      if (nameField.hidden) {
+        nameField.hidden = false;
+        welcome.hidden = false;
+        welcome.textContent = 'Primeira vez por aqui? Digite seu nome e sobrenome para fazer seu cadastro.';
+        erro('');
+        return form.elements.nome.focus();
+      }
+    }
+
+    if (erro(!/^\S{2,}(\s+\S+)+$/.test(name) ? 'Digite seu nome e sobrenome.' : '', form.elements.nome)) return;
     state.name = name;
     state.phone = phone;
+    state.known = false;
     show('revisao');
   });
 

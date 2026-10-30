@@ -593,3 +593,14 @@
     grid-template-columns: repeat(5, 1fr);
   }
 }
+
+/* Cliente reconhecida pelo WhatsApp / primeira vez */
+.bk-welcome {
+  margin: -4px 0 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+  font-size: 14px;
+  font-weight: 500;
+}

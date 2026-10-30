@@ -60,7 +60,27 @@ Ações dos cards:
 
 ## Agendamento online (`/agendar/`)
 
-Sem banco de dados. Etapas: **serviço → data e horário livres → nome e WhatsApp → revisão → sinal**.
+Dois modos, escolhidos pelo `site.config.js`:
+
+### Com o Sistema de Agendamento (padrão da maquete)
+
+Com `sistema` preenchido (`url`, `chave` pública "anon" e `studio`), o site usa o
+[Sistema de Agendamento](../../sistemas/agendamento) da Vertex. A maquete aponta para o studio de
+demonstração `studio-livia` (instalado por `sistemas/agendamento/supabase/seed.sql`).
+
+- **Horários livres:** vêm do sistema (expediente, bloqueios e agendamentos do painel), respeitando a duração de
+  cada serviço. Os serviços do site se ligam aos do sistema **pelo nome**; valor e duração passam a ser os do sistema.
+- **Etapas:** serviço → data e horário → WhatsApp (cliente já cadastrada é reconhecida; cliente nova digita
+  nome e sobrenome) → revisão → sinal.
+- **Envio:** o agendamento é **gravado** no sistema ("Aguardando sinal" no painel, horário segurado) e só então
+  abre o WhatsApp com o código do agendamento. A profissional recebe o aviso no celular.
+- **Cliente real:** copie a pasta para `clientes/<cliente>`, cadastre o studio no banco (README do sistema) e
+  troque `sistema.studio` pelo slug dela.
+
+### Sem o sistema (agenda do Google)
+
+Apague o bloco `sistema` do `site.config.js`. Sem banco de dados.
+Etapas: **serviço → data e horário livres → nome e WhatsApp → revisão → sinal**.
 
 - **Horários livres:** gerados a partir de `booking` (dias, abertura, fechamento, intervalo entre horários,
   pausas, antecedência mínima e quantos dias à frente), respeitando a duração de cada serviço.
