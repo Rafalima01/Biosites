@@ -1,4 +1,5 @@
 import './painel.css';
+import './painel-agenda.css';
 
 export const metadata = {
   title: 'Agenda · Painel do studio',

@@ -51,3 +51,40 @@ export function whatsapp(fone, texto = '') {
   if (d.length <= 11) d = `55${d}`;
   return `https://wa.me/${d}${texto ? `?text=${encodeURIComponent(texto)}` : ''}`;
 }
+
+// ---------- Mês (calendário e dashboard) ----------
+
+export const mesDe = (dia) => dia.slice(0, 7);
+
+export const mesValido = (mes) => /^\d{4}-(0[1-9]|1[0-2])$/.test(mes || '');
+
+/** Soma meses a "AAAA-MM". */
+export function somaMeses(mes, n) {
+  const [y, m] = mes.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1 + n, 1)).toISOString().slice(0, 7);
+}
+
+export const nomeMes = (mes) =>
+  new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(new Date(`${mes}-15T12:00:00Z`));
+
+export function diasNoMes(mes) {
+  const [y, m] = mes.split('-').map(Number);
+  return new Date(Date.UTC(y, m, 0)).getUTCDate();
+}
+
+/** 0 = domingo … 6 = sábado (igual à coluna weekday dos horários). */
+export const diaDaSemana = (dia) => new Date(`${dia}T12:00:00Z`).getUTCDay();
+
+/** Minutos desde a meia-noite do dia, no fuso do studio ("09:30" → 570). */
+export const minutos = (hhmm) => {
+  const [h, m] = String(hhmm).split(':').map(Number);
+  return h * 60 + m;
+};
+
+/** Minuto de um instante dentro do `dia` (antes do dia = 0, depois = 1440). */
+export function minutoNoDia(iso, dia, tz) {
+  const d = diaDe(iso, tz);
+  if (d < dia) return 0;
+  if (d > dia) return 1440;
+  return minutos(hora(iso, tz));
+}

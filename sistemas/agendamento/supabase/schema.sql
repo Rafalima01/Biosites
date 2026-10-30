@@ -614,7 +614,7 @@ begin
       new.studio_id,
       case when new.status = 'pending' then 'Novo agendamento · aguardando sinal' else 'Novo agendamento' end,
       split_part(new.client_name, ' ', 1) || ' · ' || new.service_name || ' · ' || quando,
-      case when new.status = 'pending' then '/pedidos' else '/?dia=' || to_char(new.starts_at at time zone tz, 'YYYY-MM-DD') end,
+      case when new.status = 'pending' then '/pedidos' else '/agenda?dia=' || to_char(new.starts_at at time zone tz, 'YYYY-MM-DD') end,
       'novo-' || new.code
     );
   end if;
@@ -646,7 +646,7 @@ begin
       a.studio_id,
       'Daqui a ' || faltam || ' min: ' || split_part(a.client_name, ' ', 1) || ' às ' || to_char(a.starts_at at time zone a.timezone, 'HH24:MI'),
       a.client_name || ' · ' || a.service_name,
-      '/?dia=' || to_char(a.starts_at at time zone a.timezone, 'YYYY-MM-DD'),
+      '/agenda?dia=' || to_char(a.starts_at at time zone a.timezone, 'YYYY-MM-DD'),
       'lembrete-' || a.code
     );
     update appointments set reminded_at = now() where id = a.id;

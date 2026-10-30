@@ -28,7 +28,7 @@ export function Atendimento({ a, tz, studio, voltar, mostrarDia = false, nota = 
   const primeiro = a.client_name.split(' ')[0];
   const zap = whatsapp(a.client_phone, `Olá, ${primeiro}! Aqui é do ${studio}, sobre seu horário de ${a.service_name} (${diaCurto(a.starts_at, tz)} às ${hora(a.starts_at, tz)}).`);
   return (
-    <li className={`item item--${classe}`}>
+    <li id={`at-${a.id}`} className={`item item--${classe}`}>
       <div className="item__hora">
         {mostrarDia ? <small>{diaCurto(a.starts_at, tz)}</small> : null}
         <strong>{hora(a.starts_at, tz)}</strong>

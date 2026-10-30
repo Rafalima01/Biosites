@@ -135,6 +135,20 @@
         "--strictPort"
       ],
       "port": 5182
+    },
+    {
+      "name": "painel-agenda",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "sistemas/agendamento",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3010"
+      ],
+      "port": 3010
     }
   ]
 }

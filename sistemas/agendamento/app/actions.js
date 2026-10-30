@@ -58,11 +58,11 @@ export async function mudarStatus(fd) {
   revalidatePath('/', 'layout');
   if (error) voltar(fd, 'erro', amigavel(error));
   // Confirmou o sinal fora da agenda (ex.: em "Aguardando sinal"): leva para o dia do atendimento.
-  if (status === 'confirmed' && !txt(fd, 'voltar').startsWith('/?')) {
+  if (status === 'confirmed' && !txt(fd, 'voltar').startsWith('/agenda')) {
     const { data } = await supabase.from('appointments').select('starts_at').eq('id', id).single();
     if (data) {
       const dia = diaDe(data.starts_at, studio.timezone);
-      redirect(`/?dia=${dia}&ok=${encodeURIComponent(`Sinal confirmado. O atendimento está na agenda de ${diaCurto(data.starts_at, studio.timezone)} às ${hora(data.starts_at, studio.timezone)}.`)}`);
+      redirect(`/agenda?dia=${dia}&ok=${encodeURIComponent(`Sinal confirmado. O atendimento está na agenda de ${diaCurto(data.starts_at, studio.timezone)} às ${hora(data.starts_at, studio.timezone)}.`)}`);
     }
   }
   voltar(fd, 'ok', MENSAGENS[status] || 'Salvo.');

@@ -55,7 +55,7 @@ export default async function ClientesPage({ searchParams }) {
                 {c.ultimo ? <span>Último: {diaCurto(c.ultimo.starts_at, tz)}</span> : null}
               </p>
               {c.proximo ? (
-                <a className="link" href={`/?dia=${diaDe(c.proximo.starts_at, tz)}`}>
+                <a className="link" href={`/agenda?dia=${diaDe(c.proximo.starts_at, tz)}`}>
                   Próximo: {c.proximo.service_name} · {diaCurto(c.proximo.starts_at, tz)} às {hora(c.proximo.starts_at, tz)}
                   {c.proximo.status === 'pending' ? ' (aguardando sinal)' : ''}
                 </a>

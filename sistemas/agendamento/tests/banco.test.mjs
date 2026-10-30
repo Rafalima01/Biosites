@@ -77,7 +77,7 @@ const domingo = new Date(`${seg}T12:00:00Z`);
 domingo.setUTCDate(domingo.getUTCDate() - 1);
 ok((await all(`select * from day_slots('studio-livia', $1, $2::date)`, [DESIGN, domingo.toISOString().slice(0, 10)])).length === 0, 'domingo fechado');
 ok((await all(`select * from day_slots('studio-livia', $1, current_date + 60)`, [DESIGN])).length === 0, 'não agenda além de 30 dias');
-ok((await all(`select * from day_slots('studio-livia', $1, current_date - 1)`, [DESIGN])).length === 0, 'não agenda no passado');
+ok((await all(`select * from day_slots('studio-livia', $1, (now() at time zone 'America/Sao_Paulo')::date - 1)`, [DESIGN])).length === 0, 'não agenda no passado');
 
 const slot10 = slots.find((s) => s.slot === '10:00').starts_at;
 let r = (await one(`select book('studio-livia', $1, $2, 'Ana Souza', '(71) 99999-0001', 'primeira vez') as j`, [ALONGAMENTO, slot10])).j;
