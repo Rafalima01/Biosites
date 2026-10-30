@@ -82,7 +82,8 @@ export default {
       title: 'Serviços e valores',
       text: 'Corte, barba, combos e pigmentação, com duração e valor.',
       button: 'Ver valores',
-      badge: 'scissors', // selo laranja no canto (nome de um ícone de icons.js)
+      // selo no canto: imagem 3D (feita por scripts/blender/selo.py) ou nome de um ícone de icons.js
+      badge: '/media/selo-tesoura.png',
       photo: unsplash('photo-1589985494639-69e60c82cab2', 'Barbeiro de luvas laranja fazendo degradê na máquina', { width: 520, height: 600, crop: 'entropy' }),
       action: { type: 'page', href: '/servicos/' },
     },

@@ -23,6 +23,8 @@ servidor de imagens do Unsplash, com `srcset`. Calendário 3D: 31 imagens em `pu
 Blender por [`scripts/blender/calendario.py`](../../scripts/blender/calendario.py) no estilo grafite e dourado;
 o card mostra o dia de hoje (`art: '/media/calendario/{dia}.png'`). Para outras cores, rode o script com
 `--base`, `--folha` e `--dourado` (instruções no topo do arquivo).
+O selo do card "Serviços e valores" (`public/media/selo-tesoura.png`, em `badge`) também é 3D, feito por
+[`scripts/blender/selo.py`](../../scripts/blender/selo.py) no mesmo estilo do calendário.
 
 O topo termina numa linha laranja; logo abaixo, a seção dos cards começa com um fade escuro que
 clareia para o cobre (`.cards::before`).

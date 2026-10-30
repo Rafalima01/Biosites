@@ -33,7 +33,12 @@ export function Cards(site) {
       const media = c.art
         ? `<span class="card__art">${Art3d(c.art)}</span>`
         : `<span class="card__media">${Picture(c.photo, { className: 'card__photo', sizes: '(min-width: 560px) 260px, 50vw' })}</span>`;
-      const badge = c.badge ? `<span class="card__badge" aria-hidden="true">${icon(c.badge, { size: 20, stroke: 2 })}</span>` : '';
+      // Selo no canto: imagem 3D (caminho começando com /) ou nome de um ícone de icons.js
+      const badge = !c.badge
+        ? ''
+        : c.badge.startsWith('/')
+          ? `<span class="card__badge card__badge--3d" aria-hidden="true"><img src="${esc(c.badge)}" alt="" width="200" height="200" loading="lazy" decoding="async"></span>`
+          : `<span class="card__badge" aria-hidden="true">${icon(c.badge, { size: 20, stroke: 2 })}</span>`;
       return `<li class="reveal" style="--i:${i}">${renderTarget(target, {
         className: `card card--${c.art ? 'art' : 'photo'}${i % 2 ? ' card--flip' : ''}`,
         label: c.title,

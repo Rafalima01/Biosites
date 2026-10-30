@@ -33,6 +33,7 @@ Produtos com banco de dados e painel, além da vitrine.
 | Ferramenta | Pasta | Descrição |
 | --- | --- | --- |
 | **Calendário 3D (Blender)** | [`scripts/blender/calendario.py`](scripts/blender/calendario.py) | Gera o calendário 3D em PNG sem fundo, com qualquer número e as cores da marca (grafite e dourado por padrão). Precisa do Blender instalado; uso no topo do arquivo. |
+| **Selo 3D com tesoura (Blender)** | [`scripts/blender/selo.py`](scripts/blender/selo.py) | Placa laranja com tesoura em relevo, no mesmo estilo, luz e ângulo do calendário 3D. Cores por opção (`--placa`, `--tesoura`, `--dourado`). |
 
 ## Clientes
 

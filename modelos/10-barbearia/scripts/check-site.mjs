@@ -19,6 +19,7 @@ for (const c of site.cards) {
   // Com `{dia}`, confere as 31 imagens do calendário
   const arts = !c.art ? [] : c.art.includes('{dia}') ? Array.from({ length: 31 }, (_, d) => c.art.replace('{dia}', d + 1)) : [c.art];
   for (const a of arts) check(existsSync(new URL(`../public${a}`, import.meta.url)), `Ilustração não encontrada: public${a}`);
+  if (c.badge?.startsWith('/')) check(existsSync(new URL(`../public${c.badge}`, import.meta.url)), `Selo não encontrado: public${c.badge}`);
   if (c.action.type === 'section') check(sectionIds.has(c.action.target), `Card "${c.id}" aponta para seção inexistente "${c.action.target}"`);
   if (c.action.type === 'page') check(existsSync(new URL(`..${c.action.href}index.html`, import.meta.url)), `Página não encontrada: ${c.action.href}index.html`);
 }
