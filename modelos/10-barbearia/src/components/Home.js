@@ -19,26 +19,14 @@ export function Hero(site) {
 }
 
 /**
- * Folhinha de calendário em 3D com o dia de hoje (o número é atualizado no navegador por
- * main.js; o HTML pré-renderizado traz o dia do build).
+ * Calendário 3D (Fluent Emoji da Microsoft, licença MIT) recolorido para o laranja da marca,
+ * com o dia de hoje por cima (atualizado no navegador por main.js; o HTML traz o dia do build).
  */
-const CalendarArt = () => `<svg class="cal3d" viewBox="0 0 140 140" aria-hidden="true" focusable="false">
-    <defs>
-      <linearGradient id="cal-page" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8ec"/><stop offset="1" stop-color="#e7cfa9"/></linearGradient>
-      <linearGradient id="cal-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9bb8d"/><stop offset="1" stop-color="#a98157"/></linearGradient>
-      <linearGradient id="cal-top" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6ad5a"/><stop offset="1" stop-color="#c25f1c"/></linearGradient>
-      <linearGradient id="cal-ring" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2416"/><stop offset=".5" stop-color="#8a6446"/><stop offset="1" stop-color="#2a180d"/></linearGradient>
-      <linearGradient id="cal-curl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf1"/><stop offset="1" stop-color="#c9a77a"/></linearGradient>
-    </defs>
-    <ellipse cx="72" cy="128" rx="46" ry="6" fill="#000" opacity=".45"/>
-    <rect x="24" y="32" width="96" height="88" rx="14" fill="url(#cal-back)" transform="rotate(6 72 76)"/>
-    <path d="M30 26h80a12 12 0 0 1 12 12v58l-26 22H30a12 12 0 0 1-12-12V38a12 12 0 0 1 12-12z" fill="url(#cal-page)"/>
-    <path d="M30 26h80a12 12 0 0 1 12 12v12H18V38a12 12 0 0 1 12-12z" fill="url(#cal-top)"/>
-    <path d="M122 96 96 118v-14a8 8 0 0 1 8-8z" fill="url(#cal-curl)"/>
-    <rect x="42" y="14" width="10" height="26" rx="5" fill="url(#cal-ring)"/>
-    <rect x="88" y="14" width="10" height="26" rx="5" fill="url(#cal-ring)"/>
-    <text x="68" y="98" text-anchor="middle" font-family="Oswald, Impact, sans-serif" font-weight="600" font-size="46" fill="#2a170b" data-today>${new Date().getDate()}</text>
-  </svg>`;
+const CalendarArt = () => `<span class="cal3d" aria-hidden="true">
+    <img class="cal3d__img" src="/media/calendario-3d.png" alt="" width="256" height="256" loading="lazy" decoding="async">
+    <img class="cal3d__img cal3d__img--top" src="/media/calendario-3d.png" alt="" width="256" height="256" loading="lazy" decoding="async">
+    <span class="cal3d__day" data-today>${new Date().getDate()}</span>
+  </span>`;
 
 /** Cards grandes: texto e botão em pílula de um lado, foto (ou a folhinha) do outro. */
 export function Cards(site) {

@@ -19,7 +19,13 @@ e as seções à direita.
 
 Fontes: DM Serif Display (nome e títulos), Great Vibes (manuscrita), Oswald (títulos dos cards e
 rótulos) e Montserrat (texto). Fotos do Unsplash (licença gratuita), recortadas e entregues em webp pelo
-servidor de imagens do Unsplash, com `srcset`.
+servidor de imagens do Unsplash, com `srcset`. Calendário 3D: `public/media/calendario-3d.png`, do
+[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) da Microsoft (licença MIT, uso livre inclusive
+comercial), recolorido para laranja e creme no CSS (`.cal3d` em `cards.css`), com o dia de hoje por cima.
+Os outros emojis 3D do Fluent (tesoura, poste de barbearia, relógio) podem ser usados do mesmo jeito.
+
+A foto do topo tem um fade na base (`mask-image` em `.hero__media`): ela some aos poucos e revela o fundo
+da página, sem emenda com os cards, como no site da Jailane.
 
 ## Executar
 
