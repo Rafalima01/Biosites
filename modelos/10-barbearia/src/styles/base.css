@@ -8,17 +8,13 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-padding-top: 16px;
-  background: var(--bg-deep);
+  background: var(--bg);
 }
 
 body {
   position: relative;
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(60% 40% at 15% 0%, var(--spot), transparent 70%),
-    radial-gradient(50% 35% at 90% 8%, rgba(200, 100, 30, 0.14), transparent 70%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 14.5px;
@@ -28,15 +24,25 @@ body {
   overflow-x: hidden;
 }
 
-/* Textura de ferramentas de barbeiro em linha (tesoura, navalha, pente, máquina) */
-body::before {
+/* Fundo cobre (camada fixa, funciona também no iPhone) e, por cima, a textura de ferramentas
+   de barbeiro em traço preto (tesoura, navalha, pente, máquina) */
+body::before,
+body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -1;
-  background: var(--tools) 0 0 / 260px 260px repeat;
-  opacity: var(--tools-opacity);
   pointer-events: none;
+}
+
+body::before {
+  z-index: -2;
+  background: var(--page);
+}
+
+body::after {
+  z-index: -1;
+  background: var(--tools) 0 0 / 300px 300px repeat;
+  opacity: var(--tools-opacity);
 }
 
 img,
@@ -178,9 +184,9 @@ button.pill:hover {
   align-items: center;
   gap: 10px;
   font-family: var(--font-title);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.32em;
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--amber);
 }
@@ -213,14 +219,14 @@ button.pill:hover {
   font-size: clamp(38px, 11vw, 50px);
 }
 
-/* Painel: bloco em café com borda âmbar suave */
+/* Painel: bloco grafite com borda laranja, igual aos cards */
 .panel {
   position: relative;
   padding: 26px 20px;
   border-radius: var(--radius-card);
-  background: var(--card-glow), var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  box-shadow: var(--card-glow);
 }
 
 /* Layout: uma coluna no celular */
@@ -250,8 +256,8 @@ button.pill:hover {
   .intro {
     overflow: hidden;
     border-radius: 40px;
-    background: var(--bg);
-    border: 1px solid var(--line);
+    background: rgba(26, 13, 4, 0.35);
+    border: 2px solid var(--card-border);
     box-shadow: var(--shadow-strong);
     padding-bottom: 22px;
   }

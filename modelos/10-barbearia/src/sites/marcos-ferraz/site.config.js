@@ -34,14 +34,14 @@ export default {
   meta: {
     title: 'Marcos Ferraz · Ferraz Barber Club',
     description: 'Corte, barba e combos com Marcos Ferraz, barbeiro no Rio de Janeiro. Serviços, valores e agendamento pelo WhatsApp.',
-    themeColor: '#140c07',
+    themeColor: '#2a1606',
     siteUrl: 'https://biosite-10-barbearia.vercel.app',
-    ogImage: 'https://images.unsplash.com/photo-1656337789708-cdf37b07112d?auto=format&fit=crop&crop=faces&w=1200&h=630&q=78',
+    ogImage: 'https://images.unsplash.com/photo-1693756222572-23e251a7737d?auto=format&fit=crop&crop=faces&w=1200&h=630&q=78',
   },
 
   theme: {
     fontsHref:
-      'https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap',
+      'https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Great+Vibes&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,800;1,800&display=swap',
     // Paleta café e âmbar do modelo (src/styles/tokens.css). Para um cliente, sobrescreva aqui as variáveis.
     tokens: {},
   },
@@ -54,7 +54,7 @@ export default {
   },
 
   hero: {
-    photo: unsplash('photo-1656337789708-cdf37b07112d', 'Barbeiro de barba e braço tatuado sorrindo na barbearia', { width: 1000, height: 1250 }),
+    photo: unsplash('photo-1693756222572-23e251a7737d', 'Barbeiro de barba apontando a tesoura para a câmera', { width: 1000, height: 1250 }),
   },
 
   // Cards grandes do início. `art: 'calendar'` desenha a folhinha com o dia de hoje no lugar da foto.
@@ -80,7 +80,7 @@ export default {
       title: 'Serviços e valores',
       text: 'Corte, barba, combos e pigmentação, com duração e valor.',
       button: 'Ver valores',
-      badge: { top: 'desde', value: 'R$ 35' },
+      badge: 'scissors', // selo laranja no canto (nome de um ícone de icons.js)
       photo: unsplash('photo-1589985494639-69e60c82cab2', 'Barbeiro de luvas laranja fazendo degradê na máquina', { width: 520, height: 600, crop: 'entropy' }),
       action: { type: 'page', href: '/servicos/' },
     },

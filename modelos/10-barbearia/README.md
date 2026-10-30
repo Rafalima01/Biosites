@@ -1,7 +1,7 @@
 # Modelo 10 · Barbearia
 
-Bio site escuro para barbeiros e barbearias, em café, âmbar e laranja queimado, com clima de barbearia
-clássica (luz dourada de spots e textura de ferramentas desenhadas em linha no fundo).
+Bio site para barbeiros e barbearias: foto do barbeiro com tom quente e linha laranja na base, fundo cobre
+com ferramentas de barbeiro desenhadas em traço preto e cards grafite com borda laranja.
 Demonstração: **Marcos Ferraz · Ferraz Barber Club**, Rio de Janeiro (marca fictícia).
 **Sem sistema de agendamento:** todos os botões de agendar abrem o WhatsApp com a mensagem pronta.
 
@@ -17,15 +17,15 @@ abre o WhatsApp com o nome e o valor dele.
 No celular é uma coluna só. No desktop o início vira duas colunas: o "celular" (topo e cards) à esquerda
 e as seções à direita.
 
-Fontes: DM Serif Display (nome e títulos), Great Vibes (manuscrita), Oswald (títulos dos cards e
-rótulos) e Montserrat (texto). Fotos do Unsplash (licença gratuita), recortadas e entregues em webp pelo
+Fontes: DM Serif Display (nome e títulos das seções), Great Vibes (sobrenome manuscrito) e Poppins
+(títulos dos cards, rótulos e texto). Fotos do Unsplash (licença gratuita), recortadas e entregues em webp pelo
 servidor de imagens do Unsplash, com `srcset`. Calendário 3D: `public/media/calendario-3d.png`, do
 [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) da Microsoft (licença MIT, uso livre inclusive
-comercial), recolorido para laranja e creme no CSS (`.cal3d` em `cards.css`), com o dia de hoje por cima.
+comercial), recolorido para papel bege no CSS (`.cal3d` em `cards.css`), com o dia de hoje por cima.
 Os outros emojis 3D do Fluent (tesoura, poste de barbearia, relógio) podem ser usados do mesmo jeito.
 
-A foto do topo tem um fade na base (`mask-image` em `.hero__media`): ela some aos poucos e revela o fundo
-da página, sem emenda com os cards, como no site da Jailane.
+O topo termina numa linha laranja; logo abaixo, a seção dos cards começa com um fade escuro que
+clareia para o cobre (`.cards::before`).
 
 ## Executar
 

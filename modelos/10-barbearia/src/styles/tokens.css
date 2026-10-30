@@ -3,42 +3,45 @@
  * qualquer variável em `theme.tokens` no seu site.config.js.
  */
 :root {
-  /* Fundo café */
-  --bg: #140c07;
-  --bg-deep: #0c0704;
-  --card: linear-gradient(160deg, #2c1b10 0%, #1b110a 62%, #150d07 100%);
-  --card-solid: #20140c;
-  --card-glow: radial-gradient(120% 90% at 0% 0%, rgba(240, 150, 64, 0.16), transparent 58%);
-  --panel: rgba(36, 23, 14, 0.78);
+  /* Fundo cobre/caramelo, mais claro nas laterais e mais escuro no centro */
+  --bg: #4a280c;
+  --bg-deep: #2a1606;
+  --page: radial-gradient(60% 50% at 50% 40%, rgba(30, 14, 4, 0.55), transparent 80%),
+    linear-gradient(90deg, #7c4718 0%, #5a3110 22%, #4a280c 50%, #5a3110 78%, #7c4718 100%);
+  --tools: url('/ferramentas.svg'); /* ferramentas de barbeiro em traço preto no fundo */
+  --tools-opacity: 0.55;
 
-  /* Âmbar, cobre e laranja queimado */
+  /* Cards grafite com borda laranja */
+  --card: linear-gradient(140deg, #2e2d2c 0%, #1f1e1d 55%, #161514 100%);
+  --card-solid: #1d1c1b;
+  --card-border: #e08a2e;
+  --card-glow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 0 22px -8px rgba(240, 140, 40, 0.55), 0 22px 40px -26px rgba(0, 0, 0, 0.9);
+
+  /* Laranja, âmbar e cobre */
   --amber: #f0a04b;
   --amber-deep: #c8641e;
-  --gold: #e8c48f; /* manuscrita e números */
-  --pill: linear-gradient(180deg, #f6b061 0%, #e08532 100%);
-  --pill-ink: #1d1007; /* texto escuro sobre o laranja (contraste AAA) */
+  --gold: #f1d2a2; /* sobrenome manuscrito e valores */
+  --line-orange: linear-gradient(90deg, #b8621a 0%, #f2a548 30%, #ffc777 50%, #f2a548 70%, #b8621a 100%);
+  --pill: linear-gradient(180deg, #f6b061 0%, #df8530 100%);
+  --pill-ink: #2a1505; /* texto escuro sobre o laranja (contraste AAA) */
   --glow: rgba(232, 128, 40, 0.55);
-  --spot: rgba(255, 176, 92, 0.22); /* luz dos spots ao fundo */
-  --tools: url('/ferramentas.svg'); /* textura de ferramentas no fundo da página */
-  --tools-opacity: 0.075;
 
   /* Texto */
-  --cream: #f6ead8;
-  --ink: #efe1cc;
-  --muted: #bfa88d; /* texto de apoio sobre o café (contraste AA) */
-  --line: rgba(240, 160, 75, 0.2);
-  --line-soft: rgba(246, 234, 216, 0.08);
+  --cream: #f7ecdc;
+  --ink: #ece4d8;
+  --muted: #cbc2b6; /* texto de apoio sobre o grafite (contraste AA) */
+  --line: rgba(224, 138, 46, 0.55);
+  --line-soft: rgba(247, 236, 220, 0.1);
 
   /* Tipografia */
   --font-display: 'DM Serif Display', 'Playfair Display', Georgia, serif;
   --font-script: 'Great Vibes', 'Snell Roundhand', cursive;
-  --font-title: 'Oswald', 'Arial Narrow', Impact, sans-serif;
-  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-title: 'Poppins', 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Forma */
-  --radius-card: 24px;
-  --radius-item: 16px;
-  --shadow: 0 26px 50px -30px rgba(0, 0, 0, 0.9);
+  --radius-card: 18px;
+  --radius-item: 14px;
   --shadow-strong: 0 60px 100px -50px rgba(0, 0, 0, 0.95);
 
   /* Movimento */

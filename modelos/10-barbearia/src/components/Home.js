@@ -13,7 +13,6 @@ export function Hero(site) {
     <div class="hero__text">
       <p class="hero__kicker">${esc(brand.kicker)}</p>
       <h1 class="hero__name"><span class="hero__first">${esc(brand.firstName)}</span> <span class="hero__last">${esc(brand.lastName)}</span></h1>
-      <a class="hero__more" href="#cards" data-scroll aria-label="Ver os links">${icon('chevronsDown', { size: 26, stroke: 1.8 })}</a>
     </div>
   </header>`;
 }
@@ -36,9 +35,7 @@ export function Cards(site) {
       const media = c.art === 'calendar'
         ? `<span class="card__art">${CalendarArt()}</span>`
         : `<span class="card__media">${Picture(c.photo, { className: 'card__photo', sizes: '(min-width: 560px) 260px, 50vw' })}</span>`;
-      const badge = c.badge
-        ? `<span class="card__badge">${icon('scissors', { size: 15, stroke: 1.8 })}<span>${esc(c.badge.top)}</span><strong>${esc(c.badge.value)}</strong></span>`
-        : '';
+      const badge = c.badge ? `<span class="card__badge" aria-hidden="true">${icon(c.badge, { size: 20, stroke: 2 })}</span>` : '';
       return `<li class="reveal" style="--i:${i}">${renderTarget(target, {
         className: `card card--${c.art ? 'art' : 'photo'}${i % 2 ? ' card--flip' : ''}`,
         label: c.title,
@@ -51,7 +48,10 @@ export function Cards(site) {
       })}</li>`;
     })
     .join('');
-  return `<nav class="cards" id="cards" aria-label="Links principais"><ul class="cards__list">${items}</ul></nav>`;
+  return `<nav class="cards" id="cards" aria-label="Links principais">
+    <a class="cards__more" href="#cards" data-scroll aria-label="Ver os links">${icon('chevronsDown', { size: 24, stroke: 2 })}</a>
+    <ul class="cards__list">${items}</ul>
+  </nav>`;
 }
 
 /** Cabeçalho das seções: rótulo espaçado + título em serifa com destaque manuscrito. */
@@ -91,7 +91,7 @@ export function Gallery(site) {
         content: `${icon('instagram', { size: 18 })}<span>${esc(gallery.more.label)}</span>${icon('chevronRight', { size: 16 })}`,
       })
     : '';
-  return `<section class="gallery" id="${esc(gallery.id)}" aria-labelledby="gallery-title">
+  return `<section class="panel gallery" id="${esc(gallery.id)}" aria-labelledby="gallery-title">
     ${Head({ id: 'gallery-title', kicker: gallery.kicker, title: gallery.title, focus: true })}
     <ul class="gallery__grid">${items}</ul>
     ${more}

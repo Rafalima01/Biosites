@@ -1,27 +1,58 @@
-/* Cards grandes empilhados */
+/* Seção dos cards: começa com um fade escuro logo abaixo da linha laranja e clareia para o cobre */
 .cards {
-  padding: 8px 16px 0;
+  position: relative;
+  padding: 4px 18px 0;
+}
+
+.cards::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 150px;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(22, 11, 3, 0.92) 0%, rgba(30, 15, 4, 0.55) 45%, transparent 100%);
+  pointer-events: none;
+}
+
+.cards__more {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 40px;
+  margin: 0 auto 10px;
+  color: var(--cream);
+  animation: nudge 2.2s var(--ease) infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
 }
 
 .cards__list {
   display: grid;
-  gap: 14px;
+  gap: 22px;
 }
 
+/* Card grafite com borda laranja */
 .card {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: 'body media';
-  min-height: 176px;
-  overflow: hidden;
+  min-height: 168px;
   border-radius: var(--radius-card);
-  background: var(--card-glow), var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  transition:
-    transform var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  box-shadow: var(--card-glow);
+  transition: transform var(--dur) var(--ease);
 }
 
 .card--flip {
@@ -30,7 +61,6 @@
 
 .card:hover {
   transform: translateY(-2px);
-  border-color: rgba(240, 160, 75, 0.45);
 }
 
 .card__body {
@@ -42,37 +72,64 @@
   justify-content: center;
   align-items: flex-start;
   gap: 6px;
-  padding: 20px 6px 20px 18px;
+  padding: 18px 4px 18px 16px;
 }
 
 .card--flip .card__body {
-  padding: 20px 18px 20px 6px;
+  padding: 18px 16px 18px 4px;
 }
 
 .card__title {
   font-family: var(--font-title);
-  font-weight: 600;
-  font-size: clamp(21px, 6vw, 25px);
-  line-height: 1.02;
+  font-weight: 800;
+  font-size: clamp(19px, 5.6vw, 23px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--cream);
+  color: #fff;
 }
 
 .card__text {
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.45;
   color: var(--muted);
 }
 
 .card .pill {
   margin-top: 6px;
+  min-height: 30px;
+  padding: 7px 14px;
+  font-size: 11.5px;
 }
 
-/* Foto que se dissolve no card */
+/* Card do calendário: título leve, sem caixa alta, e botão à direita; a folhinha sai do card */
+.card--art {
+  grid-template-columns: 47% 1fr;
+  grid-template-areas: 'media body';
+}
+
+.card--art .card__body {
+  padding: 18px 16px 16px 4px;
+}
+
+.card--art .card__title {
+  font-weight: 400;
+  font-size: clamp(25px, 7.4vw, 30px);
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.card--art .pill {
+  align-self: flex-end;
+}
+
+/* Foto que se dissolve no grafite (o card guarda o arredondado) */
 .card__media {
   grid-area: media;
   position: relative;
-  margin: -1px;
+  overflow: hidden;
+  border-radius: calc(var(--radius-card) - 2px);
 }
 
 .card__photo {
@@ -81,44 +138,44 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 45%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 45%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 42%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 42%);
 }
 
 .card--flip .card__photo {
-  -webkit-mask-image: linear-gradient(to left, transparent 0%, #000 45%);
-  mask-image: linear-gradient(to left, transparent 0%, #000 45%);
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, #000 42%);
+  mask-image: linear-gradient(to left, transparent 0%, #000 42%);
 }
 
-/* Folhinha 3D */
+/* Calendário 3D bege, inclinado e saindo pela borda de cima */
 .card__art {
   grid-area: media;
-  display: grid;
-  place-items: center;
-  padding: 12px;
+  position: relative;
 }
 
 .cal3d {
-  position: relative;
+  position: absolute;
+  left: -4px;
+  top: -30px;
   display: block;
-  width: min(140px, 100%);
+  width: min(156px, 40vw);
   aspect-ratio: 1;
-  transform: rotate(-8deg);
-  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.55));
+  transform: rotate(-10deg);
+  filter: drop-shadow(0 16px 16px rgba(0, 0, 0, 0.6));
 }
 
-/* Duas camadas da mesma imagem: folha em creme e, por cima, só a faixa do topo em laranja */
+/* Duas camadas da mesma imagem: folha em papel creme e, por cima, a faixa do topo em bege queimado */
 .cal3d__img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  filter: grayscale(1) sepia(0.3) brightness(1.06);
+  filter: grayscale(1) sepia(0.35) brightness(1.05);
 }
 
 .cal3d__img--top {
   clip-path: inset(0 0 64% 0);
-  filter: sepia(1) saturate(4.2) hue-rotate(-18deg) brightness(0.98);
+  filter: grayscale(1) sepia(1) saturate(1.1) brightness(0.86);
 }
 
 /* Dia de hoje sobre a folha, cobrindo a grade de quadradinhos */
@@ -131,42 +188,36 @@
   display: grid;
   place-items: center;
   border-radius: 6px;
-  background: var(--cal-page, #f3efe6);
+  background: #f3eee5;
   font-family: var(--font-title);
-  font-weight: 600;
-  font-size: clamp(38px, 11vw, 48px);
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(42px, 12vw, 54px);
   line-height: 1;
-  color: #2a170b;
+  letter-spacing: -0.04em;
+  color: #4d4a47;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.12);
 }
 
-/* Selo laranja no canto */
+/* Selo laranja no canto, saindo pela borda */
 .card__badge {
   position: absolute;
   z-index: 2;
-  top: 12px;
-  right: 12px;
+  top: -14px;
+  right: 14px;
   display: grid;
-  justify-items: center;
-  padding: 7px 9px 6px;
+  place-items: center;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   background: var(--pill);
   color: var(--pill-ink);
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1.1;
-  text-transform: uppercase;
-  transform: rotate(-6deg);
+  transform: rotate(8deg);
   box-shadow: 0 10px 18px -8px var(--glow);
 }
 
-/* Com a foto à esquerda, o selo vai para o canto esquerdo */
 .card--flip .card__badge {
   right: auto;
-  left: 12px;
-  transform: rotate(6deg);
-}
-
-.card__badge strong {
-  font-family: var(--font-title);
-  font-size: 15px;
+  left: 14px;
+  transform: rotate(-8deg);
 }

@@ -29,8 +29,8 @@
 
 .stat__value {
   font-family: var(--font-title);
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 800;
+  font-size: 17px;
   line-height: 1.1;
   color: var(--amber);
 }
@@ -81,9 +81,9 @@
   left: 12px;
   bottom: 10px;
   font-family: var(--font-title);
-  font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -157,8 +157,8 @@
   gap: 8px;
   margin-bottom: 8px;
   font-family: var(--font-title);
-  font-weight: 500;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--amber);
@@ -201,9 +201,10 @@
   overflow: hidden;
   border-radius: var(--radius-card);
   background:
-    radial-gradient(80% 120% at 50% 0%, rgba(240, 150, 64, 0.28), transparent 70%),
+    radial-gradient(80% 120% at 50% 0%, rgba(240, 150, 64, 0.22), transparent 70%),
     var(--card);
-  border: 1px solid rgba(240, 160, 75, 0.35);
+  border: 2px solid var(--card-border);
+  box-shadow: var(--card-glow);
   text-align: center;
 }
 
