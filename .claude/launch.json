@@ -105,6 +105,21 @@
         "--strictPort"
       ],
       "port": 5179
+    },
+    {
+      "name": "jailane-ferreira",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "clientes/jailane-ferreira",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5181",
+        "--strictPort"
+      ],
+      "port": 5181
     }
   ]
 }

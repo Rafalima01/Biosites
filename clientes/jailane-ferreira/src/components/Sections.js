@@ -70,7 +70,11 @@ function PriceGroups(site, groups) {
     .map((group, g) => {
       const rows = group.items
         .map((item) => {
-          const target = resolveChannel(site, 'whatsapp', { message: message.replace('{servico}', item.title) });
+          // `link` (ou `services.bookingUrl`): página de agendamento online; sem nenhum, abre o WhatsApp com o nome do serviço.
+          const link = item.link || site.services.bookingUrl;
+          const target = link
+            ? { href: link, external: true, pending: false }
+            : resolveChannel(site, 'whatsapp', { message: message.replace('{servico}', item.title) });
           const thumb = item.photo ? `<img class="price__photo" src="${esc(item.photo)}" alt="" width="72" height="72" loading="lazy" decoding="async">` : '';
           const content = `${thumb}<span class="price__main">
               <span class="price__title">${esc(item.title)}</span>
@@ -80,7 +84,7 @@ function PriceGroups(site, groups) {
               <span class="price__value">${esc(item.price)}</span>
               ${item.duration ? `<span class="price__time">${esc(item.duration)}</span>` : ''}
             </span>`;
-          return `<li>${renderTarget(target, { className: 'price', label: 'WhatsApp', ariaLabel: `Agendar ${item.title} pelo WhatsApp`, content })}</li>`;
+          return `<li>${renderTarget(target, { className: 'price', label: 'WhatsApp', ariaLabel: `Agendar ${item.title}${link ? '' : ' pelo WhatsApp'} (abre em nova aba)`, content })}</li>`;
         })
         .join('');
       return `<details class="price-group reveal" style="--i:${g}"${g === 0 ? ' open' : ''}>

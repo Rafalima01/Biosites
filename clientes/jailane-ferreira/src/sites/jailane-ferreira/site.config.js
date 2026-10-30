@@ -123,7 +123,9 @@ export default {
     id: 'servicos',
     eyebrow: 'Serviços e valores',
     title: 'Meus serviços',
-    intro: 'Toque no serviço para agendar pelo WhatsApp.',
+    intro: 'Toque no serviço para agendar online.',
+    // A Booksy não tem link por serviço: todos abrem a mesma página, onde a cliente escolhe o serviço e o horário.
+    bookingUrl: 'https://booksy.com/pt-br/instant-experiences/widget/278150',
     bookingMessage: 'Olá, Jailane! Quero agendar: {servico}.',
     groups: [
       {
