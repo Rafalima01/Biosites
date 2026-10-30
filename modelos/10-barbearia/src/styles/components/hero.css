@@ -20,14 +20,27 @@
   object-position: center 18%;
 }
 
-/* Dissolve a foto no fundo e acende os spots dourados */
+/* Tom quente sobre a foto (âmbar/cobre), como luz de barbearia */
+.hero__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(214, 120, 40, 0.28) 0%, rgba(150, 70, 20, 0.34) 55%, rgba(90, 40, 10, 0.4) 100%);
+  mix-blend-mode: soft-light;
+}
+
+/* Degradê: vinheta nas laterais, brilho laranja atrás do nome e foto se dissolvendo no café */
 .hero__media::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
     radial-gradient(40% 30% at 12% 10%, var(--spot), transparent 70%),
-    linear-gradient(180deg, rgba(20, 12, 7, 0.1) 0%, rgba(20, 12, 7, 0.15) 45%, rgba(20, 12, 7, 0.86) 78%, var(--bg) 100%);
+    radial-gradient(70% 22% at 50% 76%, rgba(232, 128, 40, 0.3), transparent 75%),
+    linear-gradient(90deg, rgba(20, 12, 7, 0.55) 0%, transparent 22%, transparent 78%, rgba(20, 12, 7, 0.55) 100%),
+    linear-gradient(180deg, rgba(20, 12, 7, 0.2) 0%, transparent 18%, rgba(46, 24, 10, 0.35) 48%, rgba(30, 16, 8, 0.88) 76%, var(--bg) 100%);
 }
 
 .hero__text {
