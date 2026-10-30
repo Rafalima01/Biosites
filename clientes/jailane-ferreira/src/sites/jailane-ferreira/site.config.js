@@ -129,10 +129,10 @@ export default {
       {
         title: 'Alongamento',
         items: [
-          { title: 'Molde F1 aplicação natural', price: 'R$ 120', duration: '1h45', note: `${COM_CUTILAGEM} · decorada R$ 150` },
-          { title: 'Gel na tip aplicação lisa', price: 'R$ 130', duration: '1h55', note: COM_CUTILAGEM },
-          { title: 'Fibra de vidro aplicação lisa', price: 'R$ 160', duration: '2h30', note: `${COM_CUTILAGEM} · decorada R$ 190` },
-          { title: 'Postiça realista', price: 'a partir de R$ 70', duration: '55min', note: 'Com cutilagem' },
+          { title: 'Molde F1 aplicação natural', photo: '/media/servicos/molde-f1.webp', price: 'R$ 120', duration: '1h45', note: `${COM_CUTILAGEM} · decorada R$ 150` },
+          { title: 'Gel na tip aplicação lisa', photo: '/media/servicos/gel-na-tip.webp', price: 'R$ 130', duration: '1h55', note: COM_CUTILAGEM },
+          { title: 'Fibra de vidro aplicação lisa', photo: '/media/servicos/fibra-de-vidro.webp', price: 'R$ 160', duration: '2h30', note: `${COM_CUTILAGEM} · decorada R$ 190` },
+          { title: 'Postiça realista', photo: '/media/servicos/postica-realista.webp', price: 'a partir de R$ 70', duration: '55min', note: 'Com cutilagem' },
         ],
       },
       {
@@ -146,7 +146,7 @@ export default {
       {
         title: 'Banho de gel e esmaltação',
         items: [
-          { title: 'Banho de gel', price: 'R$ 90', duration: '1h', note: `${COM_CUTILAGEM} · sem manutenção · decorado R$ 120` },
+          { title: 'Banho de gel', photo: '/media/servicos/banho-de-gel.webp', price: 'R$ 90', duration: '1h', note: `${COM_CUTILAGEM} · sem manutenção · decorado R$ 120` },
           { title: 'Esmaltação em gel (unha natural)', price: 'R$ 30', duration: '30min' },
         ],
       },
@@ -162,7 +162,7 @@ export default {
       {
         title: 'Combos',
         items: [
-          { title: 'Pé e mão', price: 'R$ 45', duration: '45min' },
+          { title: 'Pé e mão', photo: '/media/servicos/pe-e-mao.webp', price: 'R$ 45', duration: '45min' },
           { title: 'Postiça realista + pedicure', price: 'R$ 85', duration: '55min' },
           { title: 'Molde F1 + pedicure', price: 'R$ 125', duration: '1h30' },
         ],

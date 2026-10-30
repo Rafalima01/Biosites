@@ -71,7 +71,8 @@ function PriceGroups(site, groups) {
       const rows = group.items
         .map((item) => {
           const target = resolveChannel(site, 'whatsapp', { message: message.replace('{servico}', item.title) });
-          const content = `<span class="price__main">
+          const thumb = item.photo ? `<img class="price__photo" src="${esc(item.photo)}" alt="" width="72" height="72" loading="lazy" decoding="async">` : '';
+          const content = `${thumb}<span class="price__main">
               <span class="price__title">${esc(item.title)}</span>
               ${item.note ? `<span class="price__note">${esc(item.note)}</span>` : ''}
             </span>

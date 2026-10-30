@@ -367,8 +367,18 @@
   outline-offset: 2px;
 }
 
+.price__photo {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--color-line, #eadfd6);
+}
+
 .price__main {
   display: grid;
+  flex: 1;
   gap: 2px;
   min-width: 0;
 }
