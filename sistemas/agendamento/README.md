@@ -25,7 +25,8 @@ gerencia tudo num painel no celular. Substitui o Google Agenda.
 `day_slots(slug, serviço, dia)`, `days_summary(slug, serviço, de, até)`, `book(...)` e
 `get_appointment(código)`.
 
-**Painel** (`app/`), feito para o celular:
+**Painel** (`app/`), feito para o celular, com **identidade neutra** (igual para todos os studios: grafite,
+cinza-claro e azul-aço, fonte Inter; ícones do app em `public/`, gerados por `scripts/icones.ps1`):
 - **Agenda** do dia (ir e voltar de dia), com totais, status de cada atendimento, botão do WhatsApp
   da cliente e ações: confirmar sinal, realizado, faltou, cancelar, reativar;
 - **Encaixar atendimento** combinado pelo WhatsApp (entra confirmado e já ocupa o site);

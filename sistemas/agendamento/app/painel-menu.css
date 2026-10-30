@@ -12,7 +12,7 @@
   width: min(290px, 86vw);
   padding: 20px 14px 18px;
   background: var(--surface);
-  box-shadow: 18px 0 40px -24px rgba(156, 68, 98, 0.45);
+  box-shadow: 18px 0 40px -24px rgba(31, 66, 102, 0.45);
   transform: translateX(-104%);
   transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
   overflow-y: auto;
@@ -24,7 +24,7 @@
   position: fixed;
   z-index: 35;
   inset: 0;
-  background: rgba(52, 38, 43, 0.38);
+  background: rgba(31, 36, 48, 0.38);
   opacity: 0;
   pointer-events: none;
   transition: opacity 260ms ease;
@@ -36,7 +36,7 @@
 .lateral__marca .topo__troca { flex-wrap: wrap; }
 .lateral__marca .topo__troca select { flex: 1; min-width: 0; max-width: none; }
 .lateral__fechar { position: absolute; top: -4px; right: 0; width: 38px; height: 38px; border: 0; border-radius: 12px; background: transparent; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
-.lateral__fechar:hover { background: var(--rose-tint); color: var(--rose-deep); }
+.lateral__fechar:hover { background: var(--accent-tint); color: var(--accent-deep); }
 
 .menu { display: grid; gap: 4px; }
 .menu a {
@@ -53,9 +53,9 @@
 }
 .menu a svg { flex: none; }
 .menu a span { white-space: nowrap; }
-.menu a:hover { background: var(--rose-tint); color: var(--rose-deep); }
-.menu a:focus-visible { outline: 3px solid rgba(196, 106, 133, 0.35); outline-offset: 1px; }
-.menu a.is-ativo { background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff; box-shadow: var(--shadow); }
+.menu a:hover { background: var(--accent-tint); color: var(--accent-deep); }
+.menu a:focus-visible { outline: 3px solid rgba(47, 93, 138, 0.35); outline-offset: 1px; }
+.menu a.is-ativo { background: linear-gradient(135deg, var(--accent), var(--accent-deep)); color: #fff; box-shadow: var(--shadow); }
 .menu__qtd { margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; background: var(--warn-tint); color: var(--warn); font-size: 12px; line-height: 22px; text-align: center; }
 .menu a.is-ativo .menu__qtd { background: rgba(255, 255, 255, 0.92); }
 
@@ -63,8 +63,8 @@
 .lateral__email { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Topo do conteúdo: ☰ + nome do studio (celular) e, à direita, Meu site e avisos */
-.menu-btn { flex: none; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--rose-deep); cursor: pointer; }
-.menu-btn:hover { border-color: var(--rose); }
+.menu-btn { flex: none; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--accent-deep); cursor: pointer; }
+.menu-btn:hover { border-color: var(--accent); }
 .topo { justify-content: flex-start; }
 .topo__marca { flex: 1; }
 .topo .topo__nome { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -91,9 +91,9 @@
 .menu__grupo { display: grid; gap: 2px; }
 .menu__linha { display: flex; align-items: center; gap: 2px; }
 .menu__linha > a { flex: 1; min-width: 0; }
-.menu__linha > a.is-ativo-grupo { color: var(--rose-deep); background: var(--rose-tint); }
+.menu__linha > a.is-ativo-grupo { color: var(--accent-deep); background: var(--accent-tint); }
 .menu__abrir { display: grid; place-items: center; width: 34px; height: 34px; flex: none; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }
-.menu__abrir:hover { background: var(--rose-tint); color: var(--rose-deep); }
+.menu__abrir:hover { background: var(--accent-tint); color: var(--accent-deep); }
 .menu__abrir svg { transition: transform 200ms ease; }
 .menu__grupo.is-aberto .menu__abrir svg { transform: rotate(90deg); }
 .menu__filhos { display: none; gap: 2px; margin-left: 24px; padding-left: 10px; border-left: 1.5px solid var(--line); }
@@ -101,10 +101,10 @@
 .menu a.menu__sub { padding: 9px 12px; font-size: 13.5px; }
 
 /* Monograma do studio (aparece com o menu recolhido) e botão de recolher */
-.lateral__monograma { display: none; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff; font-family: var(--serif); font-size: 16px; font-weight: 500; }
+.lateral__monograma { display: none; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-deep)); color: #fff; font-family: var(--serif); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
 .lateral__nome { display: grid; gap: 4px; min-width: 0; }
 .lateral__recolher { display: none; place-items: center; position: absolute; top: -2px; right: -2px; width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--muted); cursor: pointer; }
-.lateral__recolher:hover { border-color: var(--rose); color: var(--rose-deep); }
+.lateral__recolher:hover { border-color: var(--accent); color: var(--accent-deep); }
 .lateral__recolher svg { transition: transform 240ms ease; }
 .lateral__sair { gap: 8px; }
 
@@ -113,7 +113,7 @@
 /* Carregando (entre uma página e outra) */
 .carregando { display: grid; gap: 14px; }
 .esqueleto-grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.esqueleto { border-radius: var(--radius); background: linear-gradient(90deg, #f6eaee 0%, #fdf6f8 50%, #f6eaee 100%); background-size: 200% 100%; animation: brilho 1.2s ease-in-out infinite; }
+.esqueleto { border-radius: var(--radius); background: linear-gradient(90deg, #eceef1 0%, #f7f8fa 50%, #eceef1 100%); background-size: 200% 100%; animation: brilho 1.2s ease-in-out infinite; }
 .esqueleto--titulo { width: 55%; height: 34px; border-radius: 12px; }
 .esqueleto--cartao { height: 86px; }
 .esqueleto--bloco { height: 260px; }

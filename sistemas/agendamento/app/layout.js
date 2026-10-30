@@ -11,7 +11,7 @@ export const metadata = {
   appleWebApp: { capable: true, title: 'Agenda', statusBarStyle: 'default' },
   icons: { icon: '/icone-192.png', apple: '/apple-touch-icon.png' },
 };
-export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#fbf3f3' };
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#f4f5f7' };
 
 export default function RootLayout({ children }) {
   return (
@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,500&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
       </head>
       <body>{children}</body>
     </html>
