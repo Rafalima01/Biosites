@@ -167,6 +167,21 @@
       "port": 5184
     },
     {
+      "name": "12-psicologia",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/12-psicologia",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5185",
+        "--strictPort"
+      ],
+      "port": 5185
+    },
+    {
       "name": "painel-agenda",
       "runtimeExecutable": "npm",
       "runtimeArgs": [

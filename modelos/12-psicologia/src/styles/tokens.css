@@ -1,0 +1,48 @@
+/*
+ * Tokens de design do Modelo 12 · Psicologia (bege, marrom e azul-marinho). Cada cliente pode
+ * sobrescrever qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Fundo e cards bege */
+  --bg: #f6f1ea;
+  --bege: linear-gradient(125deg, #efe6da 0%, #e3d4c2 100%);
+  --bege-solido: #e8dccd;
+  --creme: #fbf8f3;
+
+  /* Marrom (texto e botões) */
+  --marrom: #5a3b2c;
+  --marrom-escuro: #3d281e;
+  --psi: rgba(90, 59, 44, 0.08); /* Ψ grande ao fundo */
+
+  /* Azul-marinho (cards de conteúdo e localização) */
+  --azul: linear-gradient(140deg, #34558c 0%, #263f6e 100%);
+  --azul-solido: #2c4a7e;
+  --azul-claro: #b9d0ee;
+  --azul-tinta: #1f3561;
+
+  /* Papel rasgado */
+  --papel: #fbf8f2;
+  --papel-tinta: #3a3a3a;
+
+  /* Texto */
+  --ink: #3a2a22;
+  --muted: #74604f; /* apoio sobre o bege (contraste AA) */
+  --line: rgba(90, 59, 44, 0.16);
+
+  /* Tipografia */
+  --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --redonda: 'Fredoka', 'Poppins', system-ui, sans-serif;
+
+  /* Forma */
+  --raio: 22px;
+  --raio-sm: 14px;
+  --sombra: 0 18px 36px -24px rgba(61, 40, 30, 0.45);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+
+  /* Elementos 3D: cérebro em tom de pele e margarida creme (os originais são rosa forte e lilás) */
+  --filtro-cerebro: saturate(0.55) hue-rotate(12deg) brightness(1.04);
+  --filtro-flor: saturate(0.25) sepia(0.25) brightness(1.08);
+}

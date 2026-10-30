@@ -1,0 +1,19 @@
+{
+  "name": "biosite-12-psicologia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modelo 12 · Psicologia: bio site para psicólogas e terapeutas em bege, marrom e azul-marinho, com cards de abertura, saúde mental, conteúdos e localização, elementos 3D e página de atendimentos (agendamento pelo WhatsApp)",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
