@@ -1,0 +1,210 @@
+/* Seção dos cards: começa com um fade escuro logo abaixo da linha laranja e clareia para o cobre */
+.cards {
+  position: relative;
+  padding: 4px 18px 0;
+}
+
+.cards::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 150px;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(22, 11, 3, 0.92) 0%, rgba(30, 15, 4, 0.55) 45%, transparent 100%);
+  pointer-events: none;
+}
+
+.cards__more {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 40px;
+  margin: 0 auto 10px;
+  color: var(--cream);
+  animation: nudge 2.2s var(--ease) infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+.cards__list {
+  display: grid;
+  gap: 22px;
+}
+
+/* Card grafite com borda laranja */
+.card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'body media';
+  min-height: 168px;
+  border-radius: var(--radius-card);
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  box-shadow: var(--card-glow);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card--flip {
+  grid-template-areas: 'media body';
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card__body {
+  grid-area: body;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px 4px 18px 16px;
+}
+
+.card--flip .card__body {
+  padding: 18px 16px 18px 4px;
+}
+
+.card__title {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: clamp(19px, 5.6vw, 23px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.card__text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.card .pill {
+  margin-top: 6px;
+  min-height: 30px;
+  padding: 7px 14px;
+  font-size: 11.5px;
+}
+
+/* Card do calendário: título leve, sem caixa alta, e botão à direita; a folhinha sai do card */
+.card--art {
+  grid-template-columns: 47% 1fr;
+  grid-template-areas: 'media body';
+}
+
+.card--art .card__body {
+  padding: 18px 16px 16px 4px;
+}
+
+.card--art .card__title {
+  font-weight: 400;
+  font-size: clamp(25px, 7.4vw, 30px);
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.card--art .pill {
+  align-self: flex-end;
+}
+
+/* Foto que se dissolve no grafite (o card guarda o arredondado) */
+.card__media {
+  grid-area: media;
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--radius-card) - 2px);
+}
+
+.card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 42%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 42%);
+}
+
+.card--flip .card__photo {
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, #000 42%);
+  mask-image: linear-gradient(to left, transparent 0%, #000 42%);
+}
+
+/* Ilustração 3D (calendário) inclinada e saindo pela borda de cima */
+.card__art {
+  grid-area: media;
+  position: relative;
+}
+
+.cal3d {
+  position: absolute;
+  left: -2px;
+  top: -34px;
+  display: block;
+  width: min(160px, 41vw);
+  aspect-ratio: 1;
+  transform: rotate(-6deg);
+  filter: drop-shadow(0 16px 16px rgba(0, 0, 0, 0.6));
+}
+
+.cal3d__img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Selo laranja no canto, saindo pela borda */
+.card__badge {
+  position: absolute;
+  z-index: 2;
+  top: -14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--pill);
+  color: var(--pill-ink);
+  transform: rotate(8deg);
+  box-shadow: 0 10px 18px -8px var(--glow);
+}
+
+/* Selo 3D: a própria imagem já é a placa laranja */
+.card__badge--3d {
+  top: -26px;
+  right: 2px;
+  width: 72px;
+  height: 72px;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5));
+}
+
+.card__badge--3d img {
+  width: 100%;
+  height: 100%;
+}
+
+.card--flip .card__badge {
+  right: auto;
+  left: 14px;
+  transform: rotate(-8deg);
+}

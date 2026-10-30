@@ -152,6 +152,21 @@
       "port": 5183
     },
     {
+      "name": "11-barbearia-agenda",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "modelos/11-barbearia-agenda",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5184",
+        "--strictPort"
+      ],
+      "port": 5184
+    },
+    {
       "name": "painel-agenda",
       "runtimeExecutable": "npm",
       "runtimeArgs": [

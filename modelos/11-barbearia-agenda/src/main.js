@@ -1,0 +1,30 @@
+// Comportamentos do navegador. O conteúdo já vem pré-renderizado no HTML.
+import { initReveal } from './behaviors/reveal.js';
+import { initToast } from './behaviors/toast.js';
+import { initSmoothScroll } from './behaviors/scroll.js';
+
+const yearEl = document.querySelector('[data-year]');
+if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+// Calendário 3D do card "Agende seu corte": sempre o dia de hoje.
+for (const img of document.querySelectorAll('[data-art]')) img.src = img.dataset.art.replace('{dia}', new Date().getDate());
+
+const toast = initToast(document.querySelector('.toast'));
+
+// Destinos ainda não configurados: avisam em vez de abrir um link inventado.
+document.addEventListener('click', (event) => {
+  const el = event.target.closest('[data-pending]');
+  if (el) toast.show(el.dataset.pending);
+});
+
+// Agendamento: carregado só na página /agendar/ (calendário, Pix e QR Code).
+const booking = document.querySelector('[data-booking]');
+if (booking) import('./behaviors/booking.js').then(({ initBooking }) => initBooking(booking, { toast }));
+
+initSmoothScroll();
+initReveal();
+
+if (import.meta.env.DEV) {
+  const pending = [...new Set([...document.querySelectorAll('[data-pending]')].map((el) => el.dataset.pending))];
+  if (pending.length) console.info(`[biosite] Destinos pendentes de configuração:\n- ${pending.join('\n- ')}`);
+}

@@ -18,6 +18,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 08 | **Glam** | [`modelos/08-glam`](modelos/08-glam) | Rosé Nail Studio · Nail designer (marca fictícia) | Cara de app: cartões de vidro fosco sobre foto, letreiro em neon, serviço em destaque e galeria de inspirações com filtros, curtir e escolher; as escolhidas vão na mensagem do WhatsApp. Rosa com Poiret One e Poppins. |
 | 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Lívia Martins · Studio Lívia Beauty (marca fictícia) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes, página de serviços e agendamento online ligado ao Sistema de Agendamento (studio de demonstração: horários livres, sinal de 30% por Pix, agendamento gravado no painel e envio pelo WhatsApp). Playfair Display, Allura e Montserrat. |
 | 10 | **Barbearia** | [`modelos/10-barbearia`](modelos/10-barbearia) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | Foto do barbeiro com tom quente e linha laranja, fundo cobre com ferramentas em traço preto, nome em serifa + manuscrita e cards grafite com borda laranja e botão em pílula (calendário 3D em grafite e dourado com o dia de hoje, estilo, serviços com selo, espaço), sobre, cortes da semana, o espaço com horários e página de serviços. Sem sistema: tudo agenda pelo WhatsApp com o nome do serviço. DM Serif Display, Great Vibes e Poppins. |
+| 11 | **Barbearia com agenda** | [`modelos/11-barbearia-agenda`](modelos/11-barbearia-agenda) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | O Modelo 10 com o agendamento online do Sistema de Agendamento: página `/agendar/` com horários livres, sinal de 30% por Pix e agendamento gravado no painel (studio de demonstração `ferraz-barber`), na identidade da barbearia. O 10 é a versão básica, este é a versão com agenda. |
 
 ## Sistemas
 
@@ -103,6 +104,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 08 · Glam | `biosite-08-glam` | https://biosite-08-glam.vercel.app |
 | 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app |
 | 10 · Barbearia | `biosite-10-barbearia` | https://biosite-10-barbearia.vercel.app |
+| 11 · Barbearia com agenda | `biosite-11-barbearia-agenda` (ainda não criado) | — |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

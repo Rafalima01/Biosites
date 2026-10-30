@@ -60,6 +60,7 @@ Variáveis do projeto Vercel: `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY
 1. **Supabase:** crie um projeto em [supabase.com](https://supabase.com) (plano grátis), região São Paulo.
 2. **Banco:** em *SQL Editor*, cole e rode [`supabase/schema.sql`](supabase/schema.sql).
    Opcional: rode [`supabase/seed.sql`](supabase/seed.sql) para o studio de demonstração (fictício).
+   Para a maquete da barbearia (Modelo 11), rode [`supabase/demo-barbearia.sql`](supabase/demo-barbearia.sql) (studio `ferraz-barber`).
 3. **Login da agência:** em *Authentication → Users → Add user*, crie o seu e-mail e senha. Em
    *Authentication → Sign In / Providers*, desligue **Allow new users to sign up**. No *SQL Editor*:
    ```sql

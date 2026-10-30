@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="#140a03" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Tesoura -->
+  <g transform="translate(22 40) rotate(-32)">
+    <circle cx="0" cy="0" r="11"/>
+    <circle cx="0" cy="34" r="11"/>
+    <path d="M10 5c22 7 44 15 72 27M10 29c22-7 44-15 72-27"/>
+    <circle cx="40" cy="17" r="2.4"/>
+  </g>
+  <!-- Navalha -->
+  <g transform="translate(176 26) rotate(30)">
+    <path d="M0 0h60a7 7 0 0 1 0 14H0a7 7 0 0 1 0-14z"/>
+    <path d="M60 2l36-12c7-1 12 2 12 9v11l-48 8"/>
+    <circle cx="61" cy="7" r="2.4"/>
+    <path d="M12 7h34"/>
+  </g>
+  <!-- Pente -->
+  <g transform="translate(26 196) rotate(16)">
+    <rect x="0" y="0" width="92" height="13" rx="5"/>
+    <path d="M6 13v18M13 13v18M20 13v18M27 13v18M34 13v18M41 13v18M48 13v13M55 13v13M62 13v13M69 13v13M76 13v13M83 13v13"/>
+  </g>
+  <!-- Máquina -->
+  <g transform="translate(206 150) rotate(-18)">
+    <rect x="0" y="14" width="32" height="72" rx="13"/>
+    <path d="M-3 14h38V4H-3z"/>
+    <path d="M1 4V-1M7 4V-1M13 4V-1M19 4V-1M25 4V-1M31 4V-1"/>
+    <path d="M9 40h14M9 47h14"/>
+    <path d="M16 86c0 12 8 17 5 30"/>
+  </g>
+  <!-- Pincel de barba -->
+  <g transform="translate(132 226)">
+    <path d="M10 0c-10 10-12 26-7 36h24c5-10 3-26-7-36z"/>
+    <rect x="4" y="36" width="24" height="10" rx="4"/>
+    <path d="M8 46h16l-2 22H10z"/>
+  </g>
+</svg>

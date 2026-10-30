@@ -1,0 +1,23 @@
+{
+  "name": "biosite-11-barbearia-agenda",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modelo 11 · Barbearia com agenda: o bio site do Modelo 10 (café, âmbar e laranja) com agendamento online ligado ao Sistema de Agendamento (horários livres, sinal por Pix e agendamento gravado no painel)",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "ical.js": "^2.2.1",
+    "uqr": "^0.1.3"
+  }
+}
