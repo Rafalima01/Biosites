@@ -1,0 +1,47 @@
+/*
+ * Tokens de design do Modelo 10 · Barbearia. Cada cliente pode sobrescrever
+ * qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Fundo café */
+  --bg: #140c07;
+  --bg-deep: #0c0704;
+  --card: linear-gradient(160deg, #2c1b10 0%, #1b110a 62%, #150d07 100%);
+  --card-solid: #20140c;
+  --card-glow: radial-gradient(120% 90% at 0% 0%, rgba(240, 150, 64, 0.16), transparent 58%);
+  --panel: rgba(36, 23, 14, 0.78);
+
+  /* Âmbar, cobre e laranja queimado */
+  --amber: #f0a04b;
+  --amber-deep: #c8641e;
+  --gold: #e8c48f; /* manuscrita e números */
+  --pill: linear-gradient(180deg, #f6b061 0%, #e08532 100%);
+  --pill-ink: #1d1007; /* texto escuro sobre o laranja (contraste AAA) */
+  --glow: rgba(232, 128, 40, 0.55);
+  --spot: rgba(255, 176, 92, 0.22); /* luz dos spots ao fundo */
+  --tools: url('/ferramentas.svg'); /* textura de ferramentas no fundo da página */
+  --tools-opacity: 0.075;
+
+  /* Texto */
+  --cream: #f6ead8;
+  --ink: #efe1cc;
+  --muted: #bfa88d; /* texto de apoio sobre o café (contraste AA) */
+  --line: rgba(240, 160, 75, 0.2);
+  --line-soft: rgba(246, 234, 216, 0.08);
+
+  /* Tipografia */
+  --font-display: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  --font-script: 'Great Vibes', 'Snell Roundhand', cursive;
+  --font-title: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --radius-card: 24px;
+  --radius-item: 16px;
+  --shadow: 0 26px 50px -30px rgba(0, 0, 0, 0.9);
+  --shadow-strong: 0 60px 100px -50px rgba(0, 0, 0, 0.95);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+}

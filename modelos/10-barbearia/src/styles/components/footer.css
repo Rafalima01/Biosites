@@ -1,0 +1,79 @@
+/* Rodapé */
+.footer {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin-top: 40px;
+  padding: 34px 16px calc(28px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(36, 23, 14, 0.6), var(--bg-deep));
+  text-align: center;
+}
+
+.footer__brand {
+  display: grid;
+  justify-items: center;
+}
+
+.footer__script {
+  font-family: var(--font-script);
+  font-size: 56px;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.footer__name {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footer__social {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.footer__title {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.footer__icons {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card-solid);
+  color: var(--amber);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.footer__icon:hover {
+  background: var(--amber);
+  color: var(--pill-ink);
+}
+
+.footer__copy,
+.footer__demo {
+  max-width: 420px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer__demo {
+  opacity: 0.85;
+  font-style: italic;
+}

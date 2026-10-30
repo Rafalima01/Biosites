@@ -17,6 +17,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 07 | **Hospedagem** | [`modelos/07-hospedagem`](modelos/07-hospedagem) | Maré Mansa · Casas de temporada (marca fictícia) | Reserva direta para casas de temporada: casas com fotos e valores, pacotes de datas especiais, agenda interativa com preço por dia e reserva pronta no WhatsApp, sem taxa de plataforma. Areia, oceano e coral. |
 | 08 | **Glam** | [`modelos/08-glam`](modelos/08-glam) | Rosé Nail Studio · Nail designer (marca fictícia) | Cara de app: cartões de vidro fosco sobre foto, letreiro em neon, serviço em destaque e galeria de inspirações com filtros, curtir e escolher; as escolhidas vão na mensagem do WhatsApp. Rosa com Poiret One e Poppins. |
 | 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Lívia Martins · Studio Lívia Beauty (marca fictícia) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes, página de serviços e agendamento online ligado ao Sistema de Agendamento (studio de demonstração: horários livres, sinal de 30% por Pix, agendamento gravado no painel e envio pelo WhatsApp). Playfair Display, Allura e Montserrat. |
+| 10 | **Barbearia** | [`modelos/10-barbearia`](modelos/10-barbearia) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | Escuro em café, âmbar e laranja queimado, com textura de ferramentas de barbeiro: foto do barbeiro se dissolvendo no fundo, nome em serifa + manuscrita, cards grandes com botão em pílula laranja (folhinha 3D com o dia de hoje, estilo, serviços com selo, espaço), sobre, cortes da semana, o espaço com horários e página de serviços. Sem sistema: tudo agenda pelo WhatsApp com o nome do serviço. DM Serif Display, Great Vibes, Oswald e Montserrat. |
 
 ## Sistemas
 
@@ -94,6 +95,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 07 · Hospedagem | `biosite-07-hospedagem` | https://biosite-07-hospedagem.vercel.app |
 | 08 · Glam | `biosite-08-glam` | https://biosite-08-glam.vercel.app |
 | 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app |
+| 10 · Barbearia | `biosite-10-barbearia` (ainda não criado) | — |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

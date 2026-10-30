@@ -1,0 +1,7 @@
+@import './tokens.css';
+@import './base.css';
+@import './components/hero.css';
+@import './components/cards.css';
+@import './components/sections.css';
+@import './components/servicos.css';
+@import './components/footer.css';
