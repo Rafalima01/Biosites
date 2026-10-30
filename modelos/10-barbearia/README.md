@@ -76,6 +76,8 @@ os dados e as fotos e desligue `demo`.
 
 ## Publicar na Vercel
 
-Ainda não publicado. Precisa de um projeto novo na Vercel (sugestão: `biosite-10-barbearia`, Root
-Directory `modelos/10-barbearia`). Depois de criado, publique com `node scripts/publicar.mjs biosite-10-barbearia`
-na raiz do repositório.
+Projeto `biosite-10-barbearia` · Root Directory `modelos/10-barbearia` ·
+Produção: https://biosite-10-barbearia.vercel.app
+
+Publique só quando a pasta mudar, a partir da raiz do repositório (depois do `git push`):
+`node scripts/publicar.mjs biosite-10-barbearia`.

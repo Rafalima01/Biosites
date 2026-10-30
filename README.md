@@ -102,7 +102,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 07 · Hospedagem | `biosite-07-hospedagem` | https://biosite-07-hospedagem.vercel.app |
 | 08 · Glam | `biosite-08-glam` | https://biosite-08-glam.vercel.app |
 | 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app |
-| 10 · Barbearia | `biosite-10-barbearia` (ainda não criado) | — |
+| 10 · Barbearia | `biosite-10-barbearia` | https://biosite-10-barbearia.vercel.app |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |
