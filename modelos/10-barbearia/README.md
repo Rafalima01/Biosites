@@ -7,8 +7,8 @@ Demonstração: **Marcos Ferraz · Ferraz Barber Club**, Rio de Janeiro (marca f
 
 **Composição:** foto do barbeiro que se dissolve no fundo, rótulo espaçado ("BARBEIRO · RJ"), nome em
 serifa clássica + sobrenome em manuscrita dourada e setinha dupla; quatro cards grandes (texto e botão
-em pílula laranja de um lado, foto do outro, alternando): "Agende seu corte" com folhinha 3D que mostra
-o dia de hoje, "Estilo e tendências", "Serviços e valores" com selo laranja e "Conheça o espaço";
+em pílula laranja de um lado, foto do outro, alternando): "Agende seu corte" com calendário 3D
+(grafite e dourado) saindo pela borda, "Estilo e tendências", "Serviços e valores" com selo laranja e "Conheça o espaço";
 "Sobre o Marcos" com três destaques; cortes da semana; o espaço (foto, comodidades, horários,
 endereço e mapa); chamada final para o WhatsApp; rodapé com o nome em manuscrita e os canais.
 Página `/servicos/` com as categorias (cabelo, barba, combos, química e tratamento): tocar no serviço
@@ -19,10 +19,10 @@ e as seções à direita.
 
 Fontes: DM Serif Display (nome e títulos das seções), Great Vibes (sobrenome manuscrito) e Poppins
 (títulos dos cards, rótulos e texto). Fotos do Unsplash (licença gratuita), recortadas e entregues em webp pelo
-servidor de imagens do Unsplash, com `srcset`. Calendário 3D: `public/media/calendario-3d.png`, do
-[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) da Microsoft (licença MIT, uso livre inclusive
-comercial), recolorido para papel bege no CSS (`.cal3d` em `cards.css`), com o dia de hoje por cima.
-Os outros emojis 3D do Fluent (tesoura, poste de barbearia, relógio) podem ser usados do mesmo jeito.
+servidor de imagens do Unsplash, com `srcset`. Calendário 3D: `public/media/calendario-premium.png`, do [3dicons](https://3dicons.co) (licença CC0,
+uso livre inclusive comercial, sem crédito obrigatório), estilo "premium" no ângulo "dynamic". O mesmo
+pacote tem os estilos clay (branco), color (vermelho) e gradient, e outros ícones 3D no site. Para trocar,
+ponha o PNG sem fundo em `public/media/` e aponte `art` do card para ele. O número (25) vem no desenho.
 
 O topo termina numa linha laranja; logo abaixo, a seção dos cards começa com um fade escuro que
 clareia para o cobre (`.cards::before`).
@@ -45,7 +45,7 @@ Tudo fica em `src/sites/marcos-ferraz/site.config.js`:
 | --- | --- |
 | Nome, sobrenome (manuscrita), nome da barbearia e rótulo do topo | `brand` |
 | Foto do topo | `hero.photo` |
-| Cards grandes (título, texto, botão, foto ou `art: 'calendar'`, selo, ação) | `cards` |
+| Cards grandes (título, texto, botão, foto ou ilustração 3D em `art`, selo, ação) | `cards` |
 | Sobre o barbeiro e destaques | `about` |
 | Cortes da semana | `gallery` |
 | O espaço (foto, comodidades, endereço) | `space` |

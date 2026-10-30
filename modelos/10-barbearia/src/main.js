@@ -6,10 +6,6 @@ import { initSmoothScroll } from './behaviors/scroll.js';
 const yearEl = document.querySelector('[data-year]');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-// Folhinha do card "Agende seu corte": sempre o dia de hoje.
-const todayEl = document.querySelector('[data-today]');
-if (todayEl) todayEl.textContent = String(new Date().getDate());
-
 const toast = initToast(document.querySelector('.toast'));
 
 // Destinos ainda não configurados: avisam em vez de abrir um link inventado.

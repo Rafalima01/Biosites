@@ -57,11 +57,12 @@ export default {
     photo: unsplash('photo-1693756222572-23e251a7737d', 'Barbeiro de barba apontando a tesoura para a câmera', { width: 1000, height: 1250 }),
   },
 
-  // Cards grandes do início. `art: 'calendar'` desenha a folhinha com o dia de hoje no lugar da foto.
+  // Cards grandes do início. `art` põe uma ilustração 3D (PNG sem fundo) no lugar da foto.
+  // Calendário do 3dicons.co (CC0); outros estilos no mesmo pacote: clay (branco), color (vermelho), gradient.
   cards: [
     {
       id: 'agendar',
-      art: 'calendar',
+      art: '/media/calendario-premium.png',
       title: 'Agende seu corte',
       text: 'Escolha o melhor horário e garanta sua cadeira sem fila.',
       button: 'Agende seu horário',

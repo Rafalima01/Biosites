@@ -17,14 +17,9 @@ export function Hero(site) {
   </header>`;
 }
 
-/**
- * Calendário 3D (Fluent Emoji da Microsoft, licença MIT) recolorido para o laranja da marca,
- * com o dia de hoje por cima (atualizado no navegador por main.js; o HTML traz o dia do build).
- */
-const CalendarArt = () => `<span class="cal3d" aria-hidden="true">
-    <img class="cal3d__img" src="/media/calendario-3d.png" alt="" width="256" height="256" loading="lazy" decoding="async">
-    <img class="cal3d__img cal3d__img--top" src="/media/calendario-3d.png" alt="" width="256" height="256" loading="lazy" decoding="async">
-    <span class="cal3d__day" data-today>${new Date().getDate()}</span>
+/** Ilustração 3D do card (ex.: o calendário do 3dicons, licença CC0), saindo pela borda. */
+const Art3d = (src) => `<span class="cal3d" aria-hidden="true">
+    <img class="cal3d__img" src="${esc(src)}" alt="" width="320" height="320" decoding="async">
   </span>`;
 
 /** Cards grandes: texto e botão em pílula de um lado, foto (ou a folhinha) do outro. */
@@ -32,8 +27,8 @@ export function Cards(site) {
   const items = site.cards
     .map((c, i) => {
       const target = resolveAction(site, c.action);
-      const media = c.art === 'calendar'
-        ? `<span class="card__art">${CalendarArt()}</span>`
+      const media = c.art
+        ? `<span class="card__art">${Art3d(c.art)}</span>`
         : `<span class="card__media">${Picture(c.photo, { className: 'card__photo', sizes: '(min-width: 560px) 260px, 50vw' })}</span>`;
       const badge = c.badge ? `<span class="card__badge" aria-hidden="true">${icon(c.badge, { size: 20, stroke: 2 })}</span>` : '';
       return `<li class="reveal" style="--i:${i}">${renderTarget(target, {
