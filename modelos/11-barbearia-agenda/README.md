@@ -58,7 +58,7 @@ A maquete usa o studio de demonstração **`ferraz-barber`**, instalado com
 [`sistemas/agendamento/supabase/demo-barbearia.sql`](../../sistemas/agendamento/supabase/demo-barbearia.sql)
 (14 serviços com os mesmos nomes do site; terça a sexta 9h às 20h e sábado 8h às 18h, com pausa das 12h às 13h;
 sem sinal).
-Enquanto ele não estiver no banco, a página mostra "Não foi possível carregar a agenda agora".
+Ele já está instalado no banco de produção. Se faltar, a página mostra "Não foi possível carregar a agenda agora".
 
 **Cliente real:** copie a pasta para `clientes/<cliente>`, cadastre o studio dele no banco (README do sistema)
 com os serviços com os mesmos nomes do site e troque `sistema.studio` pelo slug dele.
@@ -72,5 +72,8 @@ Apague o bloco `sistema`. Os horários saem de `booking` e os ocupados vêm da a
 
 ## Publicar na Vercel
 
-Ainda não publicado. Precisa de um projeto novo na Vercel (sugestão: `biosite-11-barbearia-agenda`, Root
-Directory `modelos/11-barbearia-agenda`) e do studio `ferraz-barber` instalado no banco.
+Projeto `biosite-11-barbearia-agenda` · Root Directory `modelos/11-barbearia-agenda` ·
+Produção: https://biosite-11-barbearia-agenda.vercel.app
+
+Publique só quando a pasta mudar, a partir da raiz do repositório (depois do `git push`):
+`node scripts/publicar.mjs biosite-11-barbearia-agenda`.
