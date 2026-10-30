@@ -18,6 +18,8 @@ const I = {
   financeiro: ['M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M6.5 9v.01', 'M17.5 15v.01'],
   despesas: ['M7 3h10v18l-2.5-1.5L12 21l-2.5-1.5L7 21z', 'M10 8h4', 'M10 12h4'],
   estoque: ['M3 8l9-5 9 5v8l-9 5-9-5z', 'M3 8l9 5 9-5', 'M12 13v8'],
+  estrela: ['M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z'],
+  bolo: ['M4 21h16', 'M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7', 'M5 16c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0', 'M12 12V8', 'M12 5.5c.8-.6.8-1.6 0-2.5-.8.9-.8 1.9 0 2.5z'],
   seta: ['M9 6l6 6-6 6'],
   recolher: ['M15 6l-6 6 6 6', 'M20 4v16'],
 };
@@ -37,7 +39,18 @@ const ITENS = [
     ],
   },
   { href: '/pedidos', label: 'Aguardando sinal', icone: I.relogio, contador: true },
-  { href: '/clientes', label: 'Clientes', icone: I.clientes },
+  {
+    id: 'clientes',
+    href: '/clientes',
+    label: 'Clientes',
+    icone: I.clientes,
+    dentro: ['/clientes'],
+    filhos: [
+      { href: '/clientes', label: 'Todas', icone: I.clientes, repete: true, exato: true },
+      { href: '/clientes/melhores', label: 'Melhores clientes', icone: I.estrela },
+      { href: '/clientes/aniversarios', label: 'Aniversariantes', icone: I.bolo },
+    ],
+  },
   {
     id: 'financeiro',
     href: '/financeiro',

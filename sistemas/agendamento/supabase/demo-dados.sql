@@ -34,8 +34,10 @@ begin
   delete from public.clients where studio_id = sid and notes = 'demo';
 
   for i in 1 .. array_length(nomes, 1) loop
-    insert into public.clients (studio_id, phone, name, notes, created_at)
-    values (sid, '719000000' || lpad(i::text, 2, '0'), nomes[i], 'demo', now() - (random() * 55 || ' days')::interval)
+    -- Aniversários: as 4 primeiras fazem aniversário neste mês (para a tela de aniversariantes).
+    insert into public.clients (studio_id, phone, name, notes, created_at, birth_day, birth_month)
+    values (sid, '719000000' || lpad(i::text, 2, '0'), nomes[i], 'demo', now() - (random() * 55 || ' days')::interval,
+            ((i * 11) % 28) + 1, case when i <= 4 then extract(month from hoje)::int else ((i * 7) % 12) + 1 end)
     on conflict (studio_id, phone) do nothing;
   end loop;
 

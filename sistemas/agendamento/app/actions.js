@@ -205,3 +205,14 @@ export async function apagarProduto(fd) {
   if (error) voltar(fd, 'erro', amigavel(error));
   voltar(fd, 'ok', 'Produto apagado.');
 }
+
+export async function salvarAniversario(fd) {
+  const { supabase } = await studioAtual();
+  const dia = Number(txt(fd, 'dia')) || null;
+  const mes = Number(txt(fd, 'mes')) || null;
+  if (Boolean(dia) !== Boolean(mes)) voltar(fd, 'erro', 'Escolha o dia e o mês do aniversário.');
+  const { error } = await supabase.from('clients').update({ birth_day: dia, birth_month: mes }).eq('id', txt(fd, 'id'));
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', /aniversario/.test(error.message) ? 'Essa data não existe. Confira o dia e o mês.' : amigavel(error));
+  voltar(fd, 'ok', dia ? 'Aniversário salvo.' : 'Aniversário apagado.');
+}

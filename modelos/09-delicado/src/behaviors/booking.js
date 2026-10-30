@@ -339,14 +339,21 @@ export function initBooking(root, { toast }) {
     // Abre a aba já no clique (o navegador bloqueia janelas abertas depois de uma espera).
     const aba = window.open('', '_blank');
     try {
-      const r = await reservar(sis, { uuid: state.service.uuid, startsAt: slot.startsAt, name: state.known ? '' : state.name, phone: phoneMask(state.phone) });
+      const r = await reservar(sis, {
+        uuid: state.service.uuid,
+        startsAt: slot.startsAt,
+        name: state.known ? '' : state.name,
+        phone: phoneMask(state.phone),
+        birthDay: state.known ? null : state.birthDay,
+        birthMonth: state.known ? null : state.birthMonth,
+      });
       if (!r.ok && r.needName) {
         aba?.close();
         toast.show('Precisamos do seu nome e sobrenome para o cadastro.');
         state.known = false;
         conhecida = null;
         consultado = state.phone;
-        nameField.hidden = false;
+        mostrarCadastro(true);
         show('dados');
         return;
       }
@@ -429,6 +436,11 @@ export function initBooking(root, { toast }) {
 
   // Com o sistema: cliente cadastrada é reconhecida pelo WhatsApp; cliente nova informa o nome.
   const nameField = $('[data-name-field]');
+  const birthField = $('[data-birth-field]'); // aniversário (só com o sistema, só cliente nova)
+  const mostrarCadastro = (sim) => {
+    nameField.hidden = !sim;
+    if (birthField) birthField.hidden = !sim;
+  };
   const welcome = $('[data-welcome]');
   let conhecida = null; // { phone, firstName } quando o número já tem cadastro
   let consultado = ''; // último número consultado
@@ -438,7 +450,7 @@ export function initBooking(root, { toast }) {
     if (sis && digits(e.target.value) !== consultado) {
       conhecida = null;
       welcome.hidden = true;
-      if (consultado) nameField.hidden = true;
+      if (consultado) mostrarCadastro(false);
     }
   });
 
@@ -476,7 +488,7 @@ export function initBooking(root, { toast }) {
       if (conhecida) {
         welcome.hidden = false;
         welcome.textContent = `Que bom te ver de novo, ${conhecida.firstName}! 💜`;
-        nameField.hidden = true;
+        mostrarCadastro(false);
         erro('');
         state.name = conhecida.firstName;
         state.phone = phone;
@@ -484,15 +496,23 @@ export function initBooking(root, { toast }) {
         return show('revisao');
       }
       if (nameField.hidden) {
-        nameField.hidden = false;
+        mostrarCadastro(true);
         welcome.hidden = false;
-        welcome.textContent = 'Primeira vez por aqui? Digite seu nome e sobrenome para fazer seu cadastro.';
+        welcome.textContent = 'Primeira vez por aqui? Digite seu nome, sobrenome e aniversário para fazer seu cadastro.';
         erro('');
         return form.elements.nome.focus();
       }
     }
 
     if (erro(!/^\S{2,}(\s+\S+)+$/.test(name) ? 'Digite seu nome e sobrenome.' : '', form.elements.nome)) return;
+    if (sis && birthField) {
+      const dia = Number(form.elements.niver_dia.value);
+      const mes = Number(form.elements.niver_mes.value);
+      const ultimo = new Date(Date.UTC(2000, mes, 0)).getUTCDate(); // 2000: fevereiro com 29
+      if (erro(!dia || !mes ? 'Escolha o dia e o mês do seu aniversário.' : dia > ultimo ? 'Confira a data do seu aniversário.' : '', form.elements.niver_dia)) return;
+      state.birthDay = dia;
+      state.birthMonth = mes;
+    }
     state.name = name;
     state.phone = phone;
     state.known = false;

@@ -417,6 +417,18 @@
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
+/* Aniversário: dia e mês lado a lado */
+.field__dupla {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 8px;
+}
+
+.field__dica {
+  font-size: 12.5px;
+  color: var(--muted, #8a7279);
+}
+
 .field__error {
   font-size: 13px;
   font-weight: 500;

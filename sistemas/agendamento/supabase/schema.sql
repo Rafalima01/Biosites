@@ -314,10 +314,22 @@ as $$
   left join clients c on c.studio_id = s.id and c.phone = norm_phone(p_phone)
 $$;
 
+-- Aniversário da cliente (dia e mês, sem ano): para mensagens e promoções no aniversário.
+alter table public.clients add column if not exists birth_day smallint;
+alter table public.clients add column if not exists birth_month smallint;
+alter table public.clients drop constraint if exists clients_aniversario_check;
+alter table public.clients add constraint clients_aniversario_check check (
+  (birth_day is null and birth_month is null)
+  or (birth_month between 1 and 12 and birth_day between 1 and
+      extract(day from make_date(2000, birth_month, 1) + interval '1 month - 1 day')::int)
+);
+
 -- Agendamento feito pela cliente no site (único jeito do público gravar).
 -- Cliente já cadastrada: o nome vem do cadastro (p_name é ignorado). Cliente nova: nome obrigatório
--- e ela fica cadastrada no studio.
-create or replace function public.book(p_slug text, p_service uuid, p_starts timestamptz, p_name text, p_phone text, p_notes text default '')
+-- e ela fica cadastrada no studio, com o aniversário quando informado (dia e mês).
+drop function if exists public.book(text, uuid, timestamptz, text, text, text);
+create or replace function public.book(p_slug text, p_service uuid, p_starts timestamptz, p_name text, p_phone text, p_notes text default '',
+                                       p_birth_day int default null, p_birth_month int default null)
 returns jsonb
 language plpgsql volatile security definer set search_path = public
 as $$
@@ -343,6 +355,12 @@ begin
   if cl.id is null and trim(coalesce(p_name, '')) !~ '^\S{2,}(\s+\S+)+$' then
     return jsonb_build_object('ok', false, 'reason', 'Informe seu nome e sobrenome.', 'needName', true);
   end if;
+  if cl.id is null and p_birth_month is not null and (
+    p_birth_month not between 1 and 12 or p_birth_day is null or p_birth_day < 1
+    or p_birth_day > extract(day from make_date(2000, p_birth_month, 1) + interval '1 month - 1 day')::int
+  ) then
+    return jsonb_build_object('ok', false, 'reason', 'Confira a data do seu aniversário.');
+  end if;
   -- Evita abuso: no máximo 2 horários aguardando sinal por telefone.
   if (select count(*) from appointments
       where studio_id = st.id and norm_phone(client_phone) = fone
@@ -361,7 +379,9 @@ begin
   hold := setting_int(st.settings, 'holdMinutes', 120);
 
   if cl.id is null then
-    insert into clients (studio_id, phone, name) values (st.id, fone, regexp_replace(trim(p_name), '\s+', ' ', 'g'))
+    insert into clients (studio_id, phone, name, birth_day, birth_month)
+    values (st.id, fone, regexp_replace(trim(p_name), '\s+', ' ', 'g'),
+            case when p_birth_month is not null then p_birth_day end, p_birth_month)
     returning * into cl;
   end if;
 
@@ -532,7 +552,7 @@ revoke all on function public.add_appointment(uuid, uuid, timestamptz, text, tex
 grant execute on function public.public_studio(text) to anon, authenticated;
 grant execute on function public.day_slots(text, uuid, date) to anon, authenticated;
 grant execute on function public.days_summary(text, uuid, date, date) to anon, authenticated;
-grant execute on function public.book(text, uuid, timestamptz, text, text, text) to anon, authenticated;
+grant execute on function public.book(text, uuid, timestamptz, text, text, text, int, int) to anon, authenticated;
 grant execute on function public.get_appointment(text) to anon, authenticated;
 grant execute on function public.find_client(text, text) to anon, authenticated;
 grant execute on function public.ping() to anon, authenticated;

@@ -26,6 +26,24 @@ export const bookingData = (site) => ({
   ),
 });
 
+const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+/** Aniversário da cliente nova (dia e mês, sem ano), para o studio mandar um mimo no dia. */
+const Aniversario = () => `<div class="field" data-birth-field hidden>
+        <span class="field__label" id="niver-rotulo">Data de aniversário</span>
+        <div class="field__dupla" role="group" aria-labelledby="niver-rotulo">
+          <select class="field__input" name="niver_dia" aria-label="Dia do aniversário">
+            <option value="">Dia</option>
+            ${Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+          </select>
+          <select class="field__input" name="niver_mes" aria-label="Mês do aniversário">
+            <option value="">Mês</option>
+            ${MESES.map((m, i) => `<option value="${i + 1}">${m}</option>`).join('')}
+          </select>
+        </div>
+        <span class="field__dica">Para você ganhar um mimo no seu dia 🎁</span>
+      </div>`;
+
 const backBtn = (to) => `<button type="button" class="bk-btn bk-btn--ghost" data-goto="${to}">${icon('arrowLeft', { size: 16 })}<span>Voltar</span></button>`;
 
 /** Página /agendar/: as etapas ficam escondidas e o navegador mostra uma por vez. */
@@ -104,6 +122,7 @@ export function Booking(site) {
         <span class="field__label">Nome e sobrenome</span>
         <input class="field__input" name="nome" autocomplete="name">
       </label>
+      ${site.sistema?.url ? Aniversario() : ''}
       <p class="field__error" data-error role="alert" hidden></p>
       <div class="bk-actions">
         ${backBtn('data')}

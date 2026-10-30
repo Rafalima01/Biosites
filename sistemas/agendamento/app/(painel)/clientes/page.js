@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { getPainel } from '@/lib/supabase/server';
+import { salvarAniversario } from '../../actions';
+import { Retorno } from '@/components/Atendimento';
+import { MESES, aniversario, carregarClientes, fone } from '@/lib/clientes';
 import { diaCurto, diaDe, hora, reais, whatsapp } from '@/lib/datas';
 
-const fone = (d) => (d?.length === 11 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}` : d?.length === 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : d || '');
 const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 // Clientes do studio (cadastradas pelo WhatsApp no site ou nos encaixes), com histórico resumido.
@@ -12,32 +14,18 @@ export default async function ClientesPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
   const tz = studio.timezone;
-  const { data } = await supabase
-    .from('clients')
-    .select('id, name, phone, created_at, appointments(starts_at, status, price, service_name)')
-    .eq('studio_id', studio.id)
-    .order('name');
-
-  const agora = Date.now();
+  const todas = await carregarClientes(supabase, studio.id);
+  const mesAtual = new Date().getMonth() + 1;
   const busca = norm(sp?.q).trim();
-  const lista = (data || [])
-    .map((c) => {
-      const ags = c.appointments || [];
-      const feitos = ags.filter((a) => a.status === 'done' || (a.status === 'confirmed' && new Date(a.starts_at).getTime() < agora));
-      const proximo = ags
-        .filter((a) => ['confirmed', 'pending'].includes(a.status) && new Date(a.starts_at).getTime() >= agora)
-        .sort((a, b) => a.starts_at.localeCompare(b.starts_at))[0];
-      const ultimo = feitos.sort((a, b) => b.starts_at.localeCompare(a.starts_at))[0];
-      return { ...c, atendimentos: feitos.length, gasto: feitos.reduce((s, a) => s + Number(a.price), 0), proximo, ultimo, faltas: ags.filter((a) => a.status === 'no_show').length };
-    })
-    .filter((c) => !busca || norm(c.name).includes(busca) || c.phone.includes(busca.replace(/\D/g, '') || '§'));
+  const lista = todas.filter((c) => !busca || norm(c.name).includes(busca) || c.phone.includes(busca.replace(/\D/g, '') || '§'));
 
   return (
     <>
       <h1 className="titulo">Clientes</h1>
       <p className="muted">
-        {(data || []).length} {(data || []).length === 1 ? 'cliente cadastrada' : 'clientes cadastradas'}. Quem agenda pelo site entra aqui pelo WhatsApp e, na próxima vez, é reconhecida sem digitar o nome.
+        {todas.length} {todas.length === 1 ? 'cliente cadastrada' : 'clientes cadastradas'}. Quem agenda pelo site entra aqui pelo WhatsApp e, na próxima vez, é reconhecida sem digitar o nome.
       </p>
+      <Retorno sp={sp} />
       <form className="busca" action="/clientes" method="get">
         <input name="q" defaultValue={sp?.q || ''} placeholder="Buscar por nome ou WhatsApp" aria-label="Buscar cliente" />
         <button className="btn btn--mini" type="submit">Buscar</button>
@@ -56,6 +44,9 @@ export default async function ClientesPage({ searchParams }) {
                 {c.gasto ? <span>{reais(c.gasto)}</span> : null}
                 {c.faltas ? <span className="cliente__falta">{c.faltas} {c.faltas === 1 ? 'falta' : 'faltas'}</span> : null}
                 {c.ultimo ? <span>Último: {diaCurto(c.ultimo.starts_at, tz)}</span> : null}
+                {aniversario(c) ? (
+                  <span className={c.birth_month === mesAtual ? 'cliente__niver cliente__niver--mes' : 'cliente__niver'}>🎂 {aniversario(c)}</span>
+                ) : null}
               </p>
               {c.proximo ? (
                 <Link className="link" href={`/agenda?dia=${diaDe(c.proximo.starts_at, tz)}`}>
@@ -63,6 +54,22 @@ export default async function ClientesPage({ searchParams }) {
                   {c.proximo.status === 'pending' ? ' (aguardando sinal)' : ''}
                 </Link>
               ) : null}
+              <details className="cliente__editar">
+                <summary>{aniversario(c) ? 'Alterar aniversário' : 'Anotar aniversário'}</summary>
+                <form action={salvarAniversario} className="cliente__niver-form">
+                  <input type="hidden" name="id" value={c.id} />
+                  <input type="hidden" name="voltar" value={busca ? `/clientes?q=${encodeURIComponent(sp.q)}` : '/clientes'} />
+                  <select name="dia" defaultValue={c.birth_day || ''} aria-label="Dia do aniversário">
+                    <option value="">Dia</option>
+                    {Array.from({ length: 31 }, (_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}
+                  </select>
+                  <select name="mes" defaultValue={c.birth_month || ''} aria-label="Mês do aniversário">
+                    <option value="">Mês</option>
+                    {MESES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
+                  </select>
+                  <button className="btn btn--mini btn--primario" type="submit">Salvar</button>
+                </form>
+              </details>
             </li>
           ))}
         </ul>

@@ -104,6 +104,17 @@ ok(!r.ok, 'exige WhatsApp válido');
 r = (await one(`select book('studio-livia', $1, $2, 'Carla Dias', '(71) 97777-0003') as j`, [DESIGN, new Date(new Date(slot10).getTime() + 17 * 60000).toISOString()])).j;
 ok(!r.ok, 'não aceita horário "quebrado" fora da grade (10:17)');
 
+// Aniversário da cliente nova (dia e mês)
+const s16 = (await one(`select starts_at from day_slots('studio-livia', $1, $2::date) where slot = '16:00'`, [DESIGN, seg])).starts_at;
+r = (await one(`select book('studio-livia', $1, $2, 'Duda Rocha', '(71) 95555-0005', '', 31, 2) as j`, [DESIGN, s16])).j;
+ok(!r.ok && /aniversário/.test(r.reason), 'aniversário inválido (31/02) é recusado');
+r = (await one(`select book('studio-livia', $1, $2, 'Duda Rocha', '(71) 95555-0005', '', 12, 3) as j`, [DESIGN, s16])).j;
+ok(r.ok, 'cliente nova agenda informando o aniversário');
+await as(null);
+const duda = await one(`select birth_day, birth_month from clients where phone = '71955550005'`);
+ok(duda.birth_day === 12 && duda.birth_month === 3, 'aniversário fica salvo no cadastro (12/03)');
+await as('anon');
+
 const g = (await one(`select get_appointment($1) as j`, [code.toLowerCase()])).j;
 ok(g.status === 'pending' && g.clientName === 'Ana' && g.phone === undefined, 'consulta pelo código mostra só o primeiro nome, sem telefone');
 ok((await one(`select count(*)::int as n from appointments`)).n === 0, 'visitante NÃO lê a tabela de agendamentos');
@@ -184,7 +195,7 @@ ok((await one('select count(*)::int as n from clients')).n === 0, 'site não lê
 await as('authenticated', 'livia@ex.com');
 const karla = await all(`select c.name, c.phone, count(a.id)::int as ags from clients c join appointments a on a.client_id = c.id where c.phone = '71970001111' group by c.id`);
 ok(karla.length === 1 && karla[0].name === 'Karla Nunes' && karla[0].ags === 2, 'dona vê a cliente com os 2 agendamentos ligados');
-ok((await one('select count(*)::int as n from clients where studio_id = $1', [LIVIA])).n === 3, 'dona vê as clientes do studio (Ana, Bia e Karla)');
+ok((await one('select count(*)::int as n from clients where studio_id = $1', [LIVIA])).n === 4, 'dona vê as clientes do studio (Ana, Duda, Bia e Karla)');
 await as(null);
 await db.query(`insert into appointments (code, studio_id, service_name, starts_at, ends_at, client_name, client_phone, price, status, source) values ('ANTIGO1', $1, 'Design', now() + interval '9 days', now() + interval '9 days 1 hour', 'Lara Antiga', '(71) 96000-2222', 35, 'confirmed', 'painel')`, [LIVIA]);
 await db.exec(file('supabase/schema.sql'));

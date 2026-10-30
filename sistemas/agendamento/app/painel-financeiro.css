@@ -46,6 +46,52 @@
 
 .prazo--marcar { color: var(--rose-deep); }
 
+/* Clientes: aniversário no cartão e o formulário para anotar */
+.cliente__niver { color: var(--muted); }
+.cliente__niver--mes { color: var(--rose-deep); font-weight: 700; }
+.cliente__editar summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--rose-deep); list-style: none; }
+.cliente__editar summary::-webkit-details-marker { display: none; }
+.cliente__niver-form { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cliente__niver-form select { padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+
+/* Abas (ordenar) */
+.abas { display: inline-flex; gap: 4px; padding: 4px; border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); justify-self: start; }
+.abas a { padding: 8px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 600; text-decoration: none; color: var(--muted); }
+.abas a.is-ativo { background: var(--rose-tint); color: var(--rose-deep); }
+
+/* Melhores clientes */
+.melhores { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.melhor { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.melhor__pos { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--rose-tint); color: var(--rose-deep); font-size: 13px; font-weight: 700; }
+.melhor__pos--1 { background: linear-gradient(135deg, #e9c46a, #c99a2e); color: #fff; }
+.melhor__pos--2 { background: linear-gradient(135deg, #cfd3d8, #9aa1a9); color: #fff; }
+.melhor__pos--3 { background: linear-gradient(135deg, #e0a679, #b8743f); color: #fff; }
+.melhor__corpo { display: grid; gap: 6px; min-width: 0; }
+.melhor__topo { display: flex; justify-content: space-between; gap: 10px; }
+.melhor__nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.melhor__valor { color: var(--rose-deep); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Aniversariantes */
+.niver-msg { display: grid; gap: 8px; }
+.niver-msg__texto { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font: inherit; font-size: 14px; color: var(--ink); resize: vertical; }
+.niver-msg__texto:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 3px rgba(196, 106, 133, 0.18); }
+.niver-msg__padrao { justify-self: start; padding: 0; border: 0; background: none; cursor: pointer; }
+.niver { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); border-left: 4px solid var(--rose); }
+.niver--hoje { background: linear-gradient(140deg, #ffffff 0%, var(--rose-tint) 100%); }
+.niver--passou { border-left-color: #c9bfc3; opacity: 0.8; }
+.niver__dia { display: grid; gap: 1px; text-align: center; }
+.niver__dia strong { font-family: var(--serif); font-size: 24px; font-weight: 500; color: var(--rose-deep); line-height: 1; }
+.niver__dia small { font-size: 11px; color: var(--muted); }
+.niver__quem { display: grid; gap: 1px; min-width: 0; }
+.niver__quem strong { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.niver__quem small { font-size: 12px; color: var(--muted); }
+
+@media (min-width: 1024px) {
+  .fin--niver .niver-msg { grid-column: span 5; position: sticky; top: 20px; }
+  .fin--niver > .lista, .fin--niver > .vazio { grid-column: span 7; }
+  .melhores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* Conta na hora no cadastro/reposição do estoque */
 .calculo { padding: 10px 12px; border-radius: 12px; background: var(--rose-tint); font-size: 13.5px; color: var(--rose-deep); }
 .calculo strong { font-variant-numeric: tabular-nums; }

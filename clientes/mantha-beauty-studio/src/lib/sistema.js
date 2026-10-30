@@ -43,6 +43,17 @@ export async function horariosDoDia(sis, uuid, dia) {
   return linhas.map((l) => ({ time: l.slot, free: l.free, startsAt: l.starts_at }));
 }
 
-/** Grava o agendamento (aguardando sinal). Devolve { ok, code, deposit, expiresAt } ou { ok: false, reason }. */
-export const reservar = (sis, { uuid, startsAt, name, phone }) =>
-  rpc(sis, 'book', { p_slug: sis.studio, p_service: uuid, p_starts: startsAt, p_name: name, p_phone: phone, p_notes: '' });
+/**
+ * Grava o agendamento (aguardando sinal). Devolve { ok, code, deposit, expiresAt } ou { ok: false, reason }.
+ * Cliente nova manda também o aniversário (dia e mês).
+ */
+export const reservar = (sis, { uuid, startsAt, name, phone, birthDay, birthMonth }) =>
+  rpc(sis, 'book', {
+    p_slug: sis.studio,
+    p_service: uuid,
+    p_starts: startsAt,
+    p_name: name,
+    p_phone: phone,
+    p_notes: '',
+    ...(birthMonth ? { p_birth_day: birthDay, p_birth_month: birthMonth } : {}),
+  });
