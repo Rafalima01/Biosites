@@ -3,8 +3,10 @@ import { resolveAction, resolveChannel, renderTarget } from '../lib/links.js';
 import { icon } from './icons.js';
 import { Picture } from './Picture.js';
 
-/** Elemento 3D decorativo (PNG sem fundo em /media). */
-const Art = (nome, classe) => `<img class="art ${classe}" src="/media/${nome}.png" alt="" width="256" height="256" loading="lazy" decoding="async">`;
+/** Elemento 3D decorativo (imagem sem fundo em /media; sem extensão = .png de 256 px). */
+const Art = (nome, classe, [w, h] = [256, 256]) =>
+  `<img class="art ${classe}" src="/media/${nome.includes('.') ? nome : `${nome}.png`}" alt="" width="${w}" height="${h}" loading="lazy" decoding="async">`;
+const Margarida = (classe, variante = 1) => Art(variante === 1 ? 'margarida.webp' : 'margarida-2.webp', `art--margarida ${classe}`, variante === 1 ? [260, 287] : [260, 294]);
 
 /** Card de abertura (bege): foto, Ψ grande ao fundo, nome com CRP, título e botão de agendar. */
 export function Intro(site) {
@@ -28,7 +30,7 @@ export function Intro(site) {
   </header>`;
 }
 
-/** Card "Saúde Mental" (bege): frase enorme com o cérebro 3D por cima e margaridas nos cantos. */
+/** Card "Saúde Mental" (bege): frase enorme com o cérebro realista na frente e margaridas saindo do card. */
 export function Therapies(site) {
   const { therapies: t } = site;
   const target = resolveAction(site, t.action);
@@ -36,12 +38,11 @@ export function Therapies(site) {
     className: 'card card--terapias reveal',
     label: t.title,
     content: `<span class="terapias__frase" aria-hidden="true"><span>${esc(t.big[0])}</span><span>${esc(t.big[1])}</span></span>
-      ${Art('cerebro', 'art--cerebro')}
-      ${Art('flor', 'art--flor1')}${Art('flor', 'art--flor2')}${Art('flor', 'art--flor3')}
+      ${Art('cerebro-real.webp', 'art--cerebro', [440, 436])}
+      ${Margarida('art--margarida1')}${Margarida('art--margarida2', 2)}${Margarida('art--margarida3', 2)}
       <span class="card__texto">
         <span class="card__titulo">${esc(t.title)}</span>
         <span class="card__apoio">${rich(t.text)}</span>
-        <span class="card__ir">Ver atendimentos ${icon('chevronRight', { size: 16, stroke: 2 })}</span>
       </span>`,
   });
 }
@@ -148,7 +149,7 @@ export function Cta(site) {
   const { cta } = site;
   const target = resolveAction(site, cta.action);
   return `<section class="cta reveal" aria-labelledby="cta-titulo">
-    ${Art('flor', 'art--flor-cta')}
+    ${Margarida('art--flor-cta')}
     <h2 class="cta__titulo" id="cta-titulo">${esc(cta.title)}</h2>
     <p class="cta__texto">${esc(cta.text)}</p>
     ${renderTarget(target, { className: 'botao botao--escuro botao--grande', label: cta.label, content: `${icon('whatsapp', { size: 20 })}<span>${esc(cta.label)}</span>` })}

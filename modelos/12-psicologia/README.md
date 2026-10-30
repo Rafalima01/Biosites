@@ -7,8 +7,9 @@ Demonstração: **Helena Duarte · Psicóloga · CRP 00/00000**, São Paulo (mar
 
 **Composição:** card de abertura bege com a foto (a borda direita some no bege), Ψ grande e clarinho ao
 fundo, Ψ + nome + "Psicóloga · CRP", título "Agendamento Online" e botão marrom "Agende sua Consulta",
-com balões 3D de coração na divisa; card "Saúde Mental" com a frase enorme em marrom por cima do
-cérebro 3D, margaridas nos cantos e "Terapias & Abordagens" (abre `/servicos/`); card azul do Instagram
+com balões 3D de coração na divisa; card "Saúde Mental" com a frase enorme em marrom, o cérebro
+realista na frente das letras, três margaridas realistas saindo pelas bordas do card e "Terapias &
+Abordagens" (abre `/servicos/`; medidas em `cqw`, proporcionais à largura do card); card azul do Instagram
 com faixa bege e cérebro 3D, selo "Saúde mental em primeiro lugar" com carinha, título arredondado e
 texto em papel rasgado; card azul "Onde me encontrar" com cérebro em traço ao fundo, polaroid do
 consultório presa por tachinha, nota "Atendo até às 19h" em papel rasgado e carinhas 3D.
@@ -24,10 +25,18 @@ No celular é uma coluna só. No desktop o início vira duas colunas: os cards �
 
 Fontes: Poppins (texto, nome e frase grande) e Fredoka (títulos arredondados dos cards azuis). Fotos do
 Unsplash (licença gratuita), recortadas e entregues em webp pelo servidor de imagens do Unsplash, com
-`srcset`. Elementos 3D: [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) da Microsoft
-(licença MIT), em `public/media/`; o cérebro e a margarida recebem filtros de cor no CSS
-(`--filtro-cerebro` e `--filtro-flor` em `src/styles/tokens.css`) para combinar com o bege.
-O cérebro em traço do card de localização é `public/cerebro-traco.svg`.
+`srcset`. Elementos 3D:
+
+- **Cérebro e margaridas do card "Saúde Mental"** (`public/media/cerebro-real.webp`, `margarida.webp`
+  e `margarida-2.webp`): renderizados no Blender por [`scripts/blender/cerebro.py`](../../scripts/blender/cerebro.py)
+  e [`scripts/blender/margarida.py`](../../scripts/blender/margarida.py). A margarida é modelada do zero;
+  o cérebro vem de um modelo real de ressonância, "3D model of the Brain", de Nevit Dilmen
+  ([NIH 3D, 3DPX-003765](https://3d.nih.gov/entries/3DPX-003765)), licença **CC BY-SA 4.0**: a imagem
+  pode ser usada comercialmente, desde que o crédito fique no site (`footer.credits`, mostrado no rodapé)
+  e a imagem continue com a mesma licença.
+- **Balões, coração, carinhas, tachinha e o cérebro do card do Instagram**: [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)
+  da Microsoft (licença MIT); o cérebro recebe um filtro de cor no CSS (`--filtro-cerebro` em `src/styles/tokens.css`).
+- O cérebro em traço do card de localização é `public/cerebro-traco.svg`.
 
 ## Executar
 

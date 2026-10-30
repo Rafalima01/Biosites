@@ -65,7 +65,7 @@ export default {
   therapies: {
     big: ['Saúde', 'Mental'],
     title: 'Terapias & Abordagens',
-    text: 'Conheça como posso cuidar do seu **bem-estar emocional**.',
+    text: 'Explore as diversas abordagens **terapêuticas** para promover seu **bem-estar emocional.**',
     action: { type: 'page', href: '/servicos/' },
   },
 
@@ -176,5 +176,7 @@ export default {
 
   footer: {
     demoNote: 'Modelo demonstrativo: nome, CRP, contatos, endereço e fotos são ilustrativos.',
+    // Crédito exigido pela licença do cérebro 3D (CC BY-SA 4.0); mantenha enquanto usar a imagem.
+    credits: 'Cérebro 3D a partir do modelo de Nevit Dilmen (NIH 3D), licença CC BY-SA 4.0.',
   },
 };

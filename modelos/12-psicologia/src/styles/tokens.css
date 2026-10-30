@@ -42,7 +42,6 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur: 260ms;
 
-  /* Elementos 3D: cérebro em tom de pele e margarida creme (os originais são rosa forte e lilás) */
+  /* Cérebro 3D do card do Instagram em tom de pele (o original é rosa forte) */
   --filtro-cerebro: saturate(0.55) hue-rotate(12deg) brightness(1.04);
-  --filtro-flor: saturate(0.25) sepia(0.25) brightness(1.08);
 }

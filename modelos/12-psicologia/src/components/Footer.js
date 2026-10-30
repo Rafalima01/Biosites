@@ -24,5 +24,6 @@ export function Footer(site) {
     </div>
     <p class="rodape__copy">© <span data-year>${new Date().getFullYear()}</span> ${esc(brand.name)} · ${esc(brand.role)} · ${esc(brand.crp)}. Todos os direitos reservados.</p>
     ${site.demo && site.footer.demoNote ? `<p class="rodape__demo">${esc(site.footer.demoNote)}</p>` : ''}
+    ${site.footer.credits ? `<p class="rodape__creditos">${esc(site.footer.credits)}</p>` : ''}
   </footer>`;
 }

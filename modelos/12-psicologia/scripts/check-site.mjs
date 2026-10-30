@@ -22,7 +22,7 @@ for (const [nome, bloco] of Object.entries({ intro: site.intro, therapies: site.
 }
 // Elementos 3D usados nos cards
 const home = renderPage(site, 'home').body;
-for (const [, nome] of home.matchAll(/src="\/media\/([a-z-]+)\.png"/g)) check(existsSync(new URL(`../public/media/${nome}.png`, import.meta.url)), `Imagem 3D não encontrada: public/media/${nome}.png`);
+for (const [, nome] of home.matchAll(/src="\/media\/([a-z0-9-]+\.(?:png|webp))"/g)) check(existsSync(new URL(`../public/media/${nome}`, import.meta.url)), `Imagem 3D não encontrada: public/media/${nome}`);
 for (const g of site.services) for (const s of g.items) check(s.minutes > 0, `Atendimento sem duração: ${s.name}`);
 // Sem preço como propaganda: atendimentos não têm campo de valor
 for (const g of site.services) for (const s of g.items) check(s.price == null, `Não divulgue valores na página (CFP): ${s.name}`);

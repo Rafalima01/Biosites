@@ -78,3 +78,9 @@
 .rodape__demo {
   font-style: italic;
 }
+
+.rodape__creditos {
+  max-width: 420px;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
