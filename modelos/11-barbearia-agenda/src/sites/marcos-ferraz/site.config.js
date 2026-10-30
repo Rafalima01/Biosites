@@ -249,7 +249,7 @@ export default {
       },
       title: 'Agendar',
       titleAccent: 'horário',
-      subtitle: 'Escolha o dia e o horário livres. O horário fica garantido com o sinal de 30% pelo Pix.',
+      subtitle: 'Escolha o serviço, o dia e o horário livres.',
     },
   },
 

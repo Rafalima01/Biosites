@@ -22,6 +22,7 @@ const I = {
   bolo: ['M4 21h16', 'M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7', 'M5 16c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0', 'M12 12V8', 'M12 5.5c.8-.6.8-1.6 0-2.5-.8.9-.8 1.9 0 2.5z'],
   seta: ['M9 6l6 6-6 6'],
   recolher: ['M15 6l-6 6 6 6', 'M20 4v16'],
+  engrenagem: ['M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z'],
 };
 
 /** Menu do painel. Agenda e Financeiro são grupos com subopções. */
@@ -38,7 +39,7 @@ const ITENS = [
       { href: '/bloqueios', label: 'Bloqueios', icone: I.bloqueio },
     ],
   },
-  { href: '/pedidos', label: 'Aguardando sinal', icone: I.relogio, contador: true },
+  { href: '/pedidos', label: 'Aguardando sinal', icone: I.relogio, contador: true, soComSinal: true },
   {
     id: 'clientes',
     href: '/clientes',
@@ -63,6 +64,7 @@ const ITENS = [
       { href: '/financeiro/estoque', label: 'Produtos e estoque', icone: I.estoque },
     ],
   },
+  { href: '/configuracoes', label: 'Configurações', icone: I.engrenagem },
 ];
 
 const fechar = () => document.documentElement.classList.remove('menu-aberto');
@@ -121,8 +123,11 @@ function Grupo({ grupo, path, pendentes }) {
   );
 }
 
-/** Abas do menu lateral. `pendentes`: quantos agendamentos aguardam o sinal (número ao lado). */
-export function Menu({ pendentes = 0 }) {
+/**
+ * Abas do menu lateral. `pendentes`: quantos agendamentos aguardam o sinal (número ao lado).
+ * `exigeSinal`: studio sem sinal esconde "Aguardando sinal" (a não ser que ainda haja algum pendente).
+ */
+export function Menu({ pendentes = 0, exigeSinal = true }) {
   const path = usePathname();
   // No celular o menu é uma gaveta: fecha ao trocar de página e com a tecla Esc.
   useEffect(fechar, [path]);
@@ -134,7 +139,7 @@ export function Menu({ pendentes = 0 }) {
 
   return (
     <nav className="menu" aria-label="Painel">
-      {ITENS.map((item) =>
+      {ITENS.filter((item) => !item.soComSinal || exigeSinal || pendentes).map((item) =>
         item.filhos ? (
           <Grupo key={item.id} grupo={item} path={path} pendentes={pendentes} />
         ) : (

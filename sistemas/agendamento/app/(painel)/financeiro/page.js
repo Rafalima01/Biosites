@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getPainel } from '@/lib/supabase/server';
+import { sinalDoStudio } from '@/lib/configuracoes';
 import { MesNav } from '@/components/MesNav';
 import { resumoFinanceiro } from '@/lib/financas';
 import { hoje, mesDe, mesValido, noFuso, reais, somaMeses } from '@/lib/datas';
@@ -13,6 +14,7 @@ const pct = (n) => `${Math.round(n * 100)}%`;
 export default async function FinanceiroPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
+  const exigeSinal = sinalDoStudio(studio).exige;
   const tz = studio.timezone;
   const hojeDia = hoje(tz);
   const mes = mesValido(sp?.mes) ? sp.mes : mesDe(hojeDia);
@@ -70,15 +72,17 @@ export default async function FinanceiroPage({ searchParams }) {
       <section className="card fin__entradas" aria-labelledby="e-titulo">
         <h2 className="subtitulo" id="e-titulo">Entradas do mês</h2>
         <dl className="fin__linhas">
-          <div><dt>Sinais recebidos</dt><dd>{reais(fin.sinais)}</dd></div>
-          <div><dt>Restante dos realizados ({fin.qtdRealizados})</dt><dd>{reais(fin.restantes)}</dd></div>
+          {exigeSinal || fin.sinais ? <div><dt>Sinais recebidos</dt><dd>{reais(fin.sinais)}</dd></div> : null}
+          <div><dt>{exigeSinal || fin.sinais ? 'Restante dos realizados' : 'Atendimentos realizados'} ({fin.qtdRealizados})</dt><dd>{reais(fin.restantes)}</dd></div>
           <div className="fin__linha--total"><dt>Recebido</dt><dd>{reais(fin.recebido)}</dd></div>
           <div><dt>A receber dos confirmados ({fin.qtdConfirmados})</dt><dd>{reais(fin.aReceber)}</dd></div>
           {fin.retidos ? <div><dt>Sinais retidos (faltas e cancelamentos)</dt><dd>{reais(fin.retidos)}</dd></div> : null}
           <div><dt>Ticket médio dos realizados</dt><dd>{reais(fin.ticket)}</dd></div>
         </dl>
         <p className="muted fin__regra">
-          Ao confirmar o sinal, entra o sinal. O restante entra quando você marca o atendimento como “Realizado”.
+          {exigeSinal
+            ? 'Ao confirmar o sinal, entra o sinal. O restante entra quando você marca o atendimento como “Realizado”.'
+            : 'O valor do atendimento entra quando você marca como “Realizado”. Faltas não entram no caixa.'}
           {fin.qtdParaMarcar ? ` ${fin.qtdParaMarcar} ${fin.qtdParaMarcar === 1 ? 'atendimento já passou' : 'atendimentos já passaram'} e ainda não ${fin.qtdParaMarcar === 1 ? 'foi marcado' : 'foram marcados'}.` : ''}
         </p>
       </section>

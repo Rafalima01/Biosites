@@ -285,6 +285,36 @@ await as('anon');
 ok(await throws(() => db.query('select stock_adjust($1, 1)', [GEL])), 'site não mexe no estoque');
 await as('authenticated', 'agencia@ex.com');
 
+// ---------------- studio sem sinal (barbearia) ----------------
+await as(null);
+await db.exec(file('supabase/demo-barbearia.sql'));
+const BARBER = 'a0000000-0000-4000-8000-000000000011';
+const CORTE = 'b0000000-0000-4000-8000-000000000101'; // 40 min
+await as('anon');
+const barber = (await one(`select public_studio('ferraz-barber') as j`)).j;
+ok(barber.services.length === 14 && Number(barber.depositPercent) === 0, 'barbearia de demonstração: 14 serviços e sem sinal');
+const ter = (await one(`
+  select (d + ((9 - extract(isodow from d)::int) % 7))::date::text as t
+  from (select ((now() at time zone 'America/Sao_Paulo')::date + 7) as d) x`)).t;
+const corte9 = (await one(`select starts_at from day_slots('ferraz-barber', $1, $2::date) where slot = '09:00'`, [CORTE, ter])).starts_at;
+r = (await one(`select book('ferraz-barber', $1, $2, 'Caio Mendes', '(21) 99999-0011') as j`, [CORTE, corte9])).j;
+ok(r.ok && r.status === 'confirmed' && Number(r.deposit) === 0 && r.expiresAt === null, 'sem sinal: agendamento entra confirmado, sem sinal e sem prazo');
+ok(!(await one(`select free from day_slots('ferraz-barber', $1, $2::date) where slot = '09:00'`, [CORTE, ter])).free, 'sem sinal: o horário já fica ocupado');
+r = (await one(`select book('studio-livia', $1, $2, 'Eva Prado', '(71) 94444-0006') as j`, [DESIGN, s16])).j;
+ok(!r.ok || r.status === 'pending', 'studio com sinal continua aguardando sinal (não é afetado pela barbearia)');
+const livia = (await one(`select public_studio('studio-livia') as j`)).j;
+ok(Number(livia.depositPercent) === 30, 'studio com sinal mantém os 30%');
+// Configurações: a dona muda o sinal do próprio studio, mas não o de outro
+await as(null);
+await db.query(`insert into studio_members (studio_id, email) values ($1, 'marcos@ex.com') on conflict do nothing`, [BARBER]);
+await as('authenticated', 'marcos@ex.com');
+await db.query(`update studios set settings = settings || '{"depositPercent": 50}'::jsonb where id = $1`, [BARBER]);
+await db.query(`update studios set settings = settings || '{"depositPercent": 0}'::jsonb where id = $1`, [LIVIA]);
+await as(null);
+ok(Number((await one(`select settings->>'depositPercent' as p from studios where id = $1`, [BARBER])).p) === 50, 'dono liga o sinal do próprio studio');
+ok(Number((await one(`select settings->>'depositPercent' as p from studios where id = $1`, [LIVIA])).p) === 30, 'dono de outro studio NÃO muda o sinal da Lívia');
+await as('authenticated', 'agencia@ex.com');
+
 // ---------------- convites de cadastro ----------------
 ok(await throws(() => db.query(`select novo_convite('outro-studio')`)), 'nem a agência pelo login gera convite (só no SQL Editor)');
 await as(null);

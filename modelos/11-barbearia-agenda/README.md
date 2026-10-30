@@ -39,18 +39,25 @@ Tudo fica em `src/sites/marcos-ferraz/site.config.js` (mesmos campos do 10), mai
 ## Agendamento online (`/agendar/`)
 
 Etapas: **serviço → data e horário livres → WhatsApp (cliente já cadastrado é reconhecido; cliente novo
-digita nome e aniversário) → revisão → sinal de 30% pelo Pix**, com QR Code e "copia e cola" gerados no
-próprio site e a política com "Li e concordo" obrigatório.
+digita nome e aniversário) → revisão → confirmar**.
+
+**Sinal:** quem decide é o studio, no painel do sistema (**Configurações → Exigir sinal**); o site lê na hora.
+- **Sem sinal** (padrão da barbearia de demonstração): a revisão já confirma o horário no sistema, sem Pix,
+  e a etapa "Sinal" some da barra de etapas.
+- **Com sinal**: aparece a etapa do Pix com a porcentagem do painel, QR Code e "copia e cola" gerados no
+  próprio site e a política com "Li e concordo" obrigatório (igual ao Modelo 09).
 
 ### Com o Sistema de Agendamento (padrão da maquete)
 
 Com `sistema` preenchido, os horários livres vêm do sistema (expediente, bloqueios e agendamentos do painel)
-e o agendamento é **gravado** ("Aguardando sinal" no painel) antes de abrir o WhatsApp com o código.
+e o agendamento é **gravado**: sem sinal, já entra confirmado na agenda do painel; com sinal, entra em
+"Aguardando sinal" e o site abre o WhatsApp com o código para mandar o comprovante.
 Os serviços do site se ligam aos do sistema **pelo nome**; valor e duração passam a ser os do sistema.
 
 A maquete usa o studio de demonstração **`ferraz-barber`**, instalado com
 [`sistemas/agendamento/supabase/demo-barbearia.sql`](../../sistemas/agendamento/supabase/demo-barbearia.sql)
-(14 serviços com os mesmos nomes do site; terça a sexta 9h às 20h e sábado 8h às 18h, com pausa das 12h às 13h).
+(14 serviços com os mesmos nomes do site; terça a sexta 9h às 20h e sábado 8h às 18h, com pausa das 12h às 13h;
+sem sinal).
 Enquanto ele não estiver no banco, a página mostra "Não foi possível carregar a agenda agora".
 
 **Cliente real:** copie a pasta para `clientes/<cliente>`, cadastre o studio dele no banco (README do sistema)

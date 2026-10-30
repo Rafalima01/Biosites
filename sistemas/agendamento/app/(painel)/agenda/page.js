@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getPainel } from '@/lib/supabase/server';
+import { sinalDoStudio } from '@/lib/configuracoes';
 import { encaixar, desbloquear } from '../../actions';
 import { Atendimento, Retorno, statusReal } from '@/components/Atendimento';
 import { Calendario } from '@/components/Calendario';
@@ -14,6 +15,7 @@ export const metadata = { title: 'Agenda · Painel do studio' };
 export default async function AgendaPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
+  const exigeSinal = sinalDoStudio(studio).exige;
   const tz = studio.timezone;
   const hojeDia = hoje(tz);
   const dia = valido(sp?.dia) ? sp.dia : hojeDia;
@@ -68,7 +70,7 @@ export default async function AgendaPage({ searchParams }) {
   return (
     <div className="agenda">
       <div className="agenda__lado">
-        <Calendario dia={dia} hojeDia={hojeDia} marcas={marcas} />
+        <Calendario dia={dia} hojeDia={hojeDia} marcas={marcas} exigeSinal={exigeSinal} />
         <Encaixe servicos={servicos || []} dia={dia} voltar={voltar} />
       </div>
 
@@ -94,7 +96,7 @@ export default async function AgendaPage({ searchParams }) {
 
         <div className="numeros">
           <div><strong>{ativos.length}</strong><span>atendimentos</span></div>
-          <div><strong>{aguardando}</strong><span>aguardando sinal</span></div>
+          {exigeSinal ? <div><strong>{aguardando}</strong><span>aguardando sinal</span></div> : null}
           <div><strong>{reais(previsto)}</strong><span>previsto no dia</span></div>
         </div>
 

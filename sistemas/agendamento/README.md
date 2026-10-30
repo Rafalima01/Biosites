@@ -31,6 +31,10 @@ gerencia tudo num painel no celular. Substitui o Google Agenda.
 - **Encaixar atendimento** combinado pelo WhatsApp (entra confirmado e já ocupa o site);
 - **Aguardando sinal**: o que está segurando horário e o que venceu nos últimos 2 dias;
 - **Bloqueios**: folga, compromisso, dia inteiro ou vários dias.
+- **Configurações**: chave **Exigir sinal** (com o valor do sinal e o prazo para pagar). Desligada
+  (comum em barbearia), o agendamento do site entra confirmado, sem Pix; o painel esconde "Aguardando
+  sinal" e as linhas de sinal, e o financeiro conta o valor inteiro ao marcar "Realizado" (faltas não
+  entram no caixa). Vale por studio: os outros continuam como estão.
 
 **Plano grátis do Supabase** ([`.github/workflows`](../../.github/workflows)):
 - **despertador diário** (`agenda-despertador.yml`) evita que o banco pause após 7 dias sem uso;
@@ -99,6 +103,8 @@ Variáveis do projeto Vercel: `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY
 `settings`: `step` minutos entre horários · `minNotice` antecedência mínima (min) · `daysAhead` até
 quantos dias à frente · `bufferMinutes` intervalo depois de cada atendimento · `depositPercent` sinal
 (0 = confirma direto, sem sinal) · `holdMinutes` quanto tempo o horário fica segurado esperando o Pix.
+O sinal e o prazo também se mudam pelo painel, em **Configurações** (`ultimoSinal` guarda a porcentagem
+em uso quando a dona desliga, para religar igual).
 
 ## Rodar e testar
 

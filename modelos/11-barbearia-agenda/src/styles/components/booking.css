@@ -26,6 +26,10 @@
   list-style: none;
 }
 
+.bk-steps:has(li[hidden]) {
+  grid-template-columns: repeat(4, 1fr); /* studio sem sinal: sem a etapa do Pix */
+}
+
 .bk-steps li {
   display: grid;
   justify-items: center;

@@ -53,7 +53,7 @@ export function initBooking(root, { toast }) {
   const last = addDays(today, rules.daysAhead);
   const state = {
     service: null, date: null, time: null, name: '', phone: '', busy: [], status: 'loading', month: today.slice(0, 7), step: null,
-    summary: {}, slots: {}, code: '', sending: false,
+    summary: {}, slots: {}, code: '', sending: false, semSinal: false,
   };
   const sis = cfg.sistema && cfg.sistema.url ? cfg.sistema : null;
   let studioPronto = null; // carrega os serviços do sistema uma vez
@@ -84,6 +84,13 @@ export function initBooking(root, { toast }) {
     try {
       studioPronto ??= carregarStudio(sis).then((st) => {
         cfg.services = ligarServicos(cfg.services, st.services || []);
+        // O sinal é o configurado no painel do studio (0% = agendamento confirmado, sem Pix).
+        const pct = Number(st.depositPercent);
+        if (Number.isFinite(pct)) {
+          rules.deposit = pct / 100;
+          state.semSinal = pct === 0;
+          aplicarModoSinal();
+        }
         if (state.service) state.service = cfg.services.find((s) => s.id === state.service.id) || state.service;
       });
       await studioPronto;
@@ -204,7 +211,7 @@ export function initBooking(root, { toast }) {
 
   // ---------- Resumo, Pix e mensagem ----------
   const amount = () => deposit(state.service.price, rules.deposit);
-  const percent = Math.round(rules.deposit * 100);
+  const percent = () => Math.round(rules.deposit * 100);
 
   function summaryRows() {
     const s = state.service;
@@ -214,7 +221,7 @@ export function initBooking(root, { toast }) {
       ['Data', cap(longDate(state.date))],
       ['Horário', `${state.time.replace(':', 'h')} · ${duration(s.minutes)}`],
       ['Valor', money(s.price)],
-      [`Sinal (${percent}%)`, moneyCents(amount())],
+      ...(state.semSinal ? [] : [[`Sinal (${percent()}%)`, moneyCents(amount())]]),
       ['Nome', state.name],
       ['WhatsApp', phoneMask(state.phone)],
     ];
@@ -235,7 +242,7 @@ export function initBooking(root, { toast }) {
         .filter(([k]) => k !== 'WhatsApp')
         .map(([k, v]) => `${k}: ${v}`),
       '',
-      'Segue o comprovante do sinal.',
+      state.semSinal ? 'Até lá!' : 'Segue o comprovante do sinal.',
     ].join('\n');
   }
 
@@ -245,7 +252,7 @@ export function initBooking(root, { toast }) {
   function renderPix() {
     pixCode = pixPayload({ key: cfg.pix.key, name: cfg.pix.holder, city: cfg.pix.city, amount: amount() });
     $('[data-deposit]').textContent = moneyCents(amount());
-    $('[data-deposit-note]').textContent = `${percent}% de ${money(state.service.price)} · abatido do valor total`;
+    $('[data-deposit-note]').textContent = `${percent()}% de ${money(state.service.price)} · abatido do valor total`;
     $('[data-qr]').innerHTML = renderSVG(pixCode, { ecc: 'M', border: 2, blackColor: '#3b2a30', whiteColor: '#ffffff' });
     $('[data-qr] svg')?.setAttribute('role', 'img');
     $('[data-qr] svg')?.setAttribute('aria-label', `QR Code do Pix de ${moneyCents(amount())}`);
@@ -258,6 +265,31 @@ export function initBooking(root, { toast }) {
     send.href = agreed ? whatsappUrl() : '#';
     send.setAttribute('aria-disabled', String(!agreed));
     $('[data-send-again]').href = whatsappUrl();
+  }
+
+  /** Ajusta a página ao sinal do studio. Sem sinal: some a etapa do Pix e a revisão já confirma o horário. */
+  function aplicarModoSinal() {
+    if (!state.semSinal) {
+      // Sinal ligado: os textos usam a porcentagem configurada no painel.
+      const nota = steps.revisao.querySelector('.bk-note');
+      if (nota) nota.textContent = `Confira se está tudo certo. Na próxima etapa você envia o sinal de ${percent()}% para garantir o horário.`;
+      steps.sinal.querySelector('.bk-title').textContent = `Sinal de ${percent()}%`;
+      return;
+    }
+    const dot = root.querySelector('[data-dot="sinal"]');
+    if (dot) dot.hidden = true;
+    const confirmar = steps.revisao.querySelector('[data-goto="sinal"]');
+    if (confirmar) {
+      confirmar.removeAttribute('data-goto');
+      confirmar.dataset.confirmar = '';
+      confirmar.innerHTML = '<span>Confirmar agendamento</span>';
+    }
+    const nota = steps.revisao.querySelector('.bk-note');
+    if (nota) nota.textContent = 'Confira se está tudo certo. Ao confirmar, seu horário já fica reservado.';
+    steps.pronto.querySelector('.bk-title').textContent = 'Horário confirmado!';
+    steps.pronto.querySelector('.bk-lead').textContent = `Seu horário está reservado e ${cfg.firstName} já recebeu o aviso. É só chegar no dia!`;
+    const zap = steps.pronto.querySelector('[data-send-again] span');
+    if (zap) zap.textContent = 'Falar no WhatsApp';
   }
 
   // ---------- Etapas ----------
@@ -324,7 +356,7 @@ export function initBooking(root, { toast }) {
   }
 
   // Grava o agendamento no sistema (aguardando sinal) e só então abre o WhatsApp com o código.
-  async function enviarPeloSistema() {
+  async function enviarPeloSistema(botao = $('[data-send]')) {
     if (state.sending) return;
     const slot = (state.slots[state.date] || []).find((s) => s.time === state.time);
     if (!slot) {
@@ -332,12 +364,13 @@ export function initBooking(root, { toast }) {
       return show('data');
     }
     state.sending = true;
-    const send = $('[data-send]');
-    const textoBotao = send.querySelector('span').textContent;
-    send.querySelector('span').textContent = 'Reservando seu horário…';
-    send.setAttribute('aria-disabled', 'true');
+    const rotulo = botao.querySelector('span') || botao;
+    const textoBotao = rotulo.textContent;
+    rotulo.textContent = 'Reservando seu horário…';
+    botao.setAttribute('aria-disabled', 'true');
     // Abre a aba já no clique (o navegador bloqueia janelas abertas depois de uma espera).
-    const aba = window.open('', '_blank');
+    // Sem sinal não há comprovante para mandar: não abre o WhatsApp.
+    const aba = state.semSinal ? null : window.open('', '_blank');
     try {
       const r = await reservar(sis, {
         uuid: state.service.uuid,
@@ -366,16 +399,19 @@ export function initBooking(root, { toast }) {
         return;
       }
       state.code = r.code;
-      const url = whatsappUrl();
-      if (aba) aba.location.href = url;
-      else location.href = url;
+      if (!state.semSinal) {
+        const url = whatsappUrl();
+        if (aba) aba.location.href = url;
+        else location.href = url;
+      }
       show('pronto');
     } catch {
       aba?.close();
       toast.show('Sem conexão com a agenda agora. Tente de novo em instantes.');
     } finally {
       state.sending = false;
-      send.querySelector('span').textContent = textoBotao;
+      rotulo.textContent = textoBotao;
+      botao.removeAttribute('aria-disabled');
       updateSend();
     }
   }
@@ -427,6 +463,11 @@ export function initBooking(root, { toast }) {
       }
       // O link abre o WhatsApp; a página mostra a etapa final.
       setTimeout(() => show('pronto'), 300);
+      return;
+    }
+    if (t.matches('[data-confirmar]')) {
+      event.preventDefault();
+      enviarPeloSistema(t);
       return;
     }
     if (t.dataset.goto) return show(t.dataset.goto);

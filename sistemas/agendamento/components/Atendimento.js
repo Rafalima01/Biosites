@@ -44,7 +44,7 @@ export function Atendimento({ a, tz, studio, voltar, mostrarDia = false, nota = 
         {a.notes ? <p className="item__obs">“{a.notes}”</p> : null}
         {nota ? <p className="prazo">{nota}</p> : null}
         {st === 'confirmed' && new Date(a.ends_at) <= new Date() ? (
-          <p className="prazo prazo--marcar">Já passou: marque “Realizado” para lançar o restante ({reais(Number(a.price) - Number(a.deposit))}).</p>
+          <p className="prazo prazo--marcar">Já passou: marque “Realizado” para lançar {Number(a.deposit) > 0 ? 'o restante' : 'o valor'} ({reais(Number(a.price) - Number(a.deposit))}).</p>
         ) : null}
         <div className="item__acoes">
           <span className={`selo selo--${classe}`}>{rotulo}</span>

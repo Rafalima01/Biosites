@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { getPainel, supabaseServer } from '@/lib/supabase/server';
 import { diaCurto, diaDe, hoje as hojeNoFuso, hora, noFuso, valido } from '@/lib/datas';
 import { CATEGORIAS, UNIDADES, lerValor, temConteudo } from '@/lib/financas';
+import { OPCOES_PRAZO, OPCOES_SINAL, PADRAO_SINAL, sinalDoStudio } from '@/lib/configuracoes';
 
 const txt = (fd, k) => String(fd.get(k) ?? '').trim();
 
@@ -58,6 +59,8 @@ export async function mudarStatus(fd) {
   const { error } = await supabase.rpc('set_appointment_status', { p_id: id, p_status: status });
   revalidatePath('/', 'layout');
   if (error) voltar(fd, 'erro', amigavel(error));
+  // Studio sem sinal: "confirmar" é só reativar ou confirmar o horário.
+  if (status === 'confirmed' && !sinalDoStudio(studio).exige) voltar(fd, 'ok', 'Agendamento confirmado.');
   // Confirmou o sinal fora da agenda (ex.: em "Aguardando sinal"): leva para o dia do atendimento.
   if (status === 'confirmed' && !txt(fd, 'voltar').startsWith('/agenda')) {
     const { data } = await supabase.from('appointments').select('starts_at').eq('id', id).single();
@@ -215,4 +218,24 @@ export async function salvarAniversario(fd) {
   revalidatePath('/', 'layout');
   if (error) voltar(fd, 'erro', /aniversario/.test(error.message) ? 'Essa data não existe. Confira o dia e o mês.' : amigavel(error));
   voltar(fd, 'ok', dia ? 'Aniversário salvo.' : 'Aniversário apagado.');
+}
+
+/** Configurações do studio: sinal ligado (porcentagem e prazo) ou desligado (agendamento entra confirmado). */
+export async function salvarConfiguracoes(fd) {
+  const { supabase, studio } = await studioAtual();
+  const exige = txt(fd, 'exige') === '1';
+  const pct = Number(txt(fd, 'pct'));
+  const prazo = Number(txt(fd, 'prazo'));
+  if (exige && !OPCOES_SINAL.includes(pct)) voltar(fd, 'erro', 'Escolha o valor do sinal.');
+  if (exige && !OPCOES_PRAZO.some((o) => o.min === prazo)) voltar(fd, 'erro', 'Escolha o prazo para pagar.');
+  const atual = studio.settings || {};
+  const antes = sinalDoStudio(studio);
+  // Desligar guarda a porcentagem em uso, para a tela mostrar o mesmo valor se religar.
+  const settings = exige
+    ? { ...atual, depositPercent: pct, holdMinutes: prazo }
+    : { ...atual, depositPercent: 0, ultimoSinal: antes.exige ? antes.pct : Number(atual.ultimoSinal ?? PADRAO_SINAL) };
+  const { error } = await supabase.from('studios').update({ settings }).eq('id', studio.id);
+  revalidatePath('/', 'layout');
+  if (error) voltar(fd, 'erro', amigavel(error));
+  voltar(fd, 'ok', exige ? `Sinal de ${pct}% ligado.` : 'Sinal desligado: os agendamentos do site entram confirmados.');
 }

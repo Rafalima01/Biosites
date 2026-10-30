@@ -9,7 +9,7 @@ const rotuloDia = (dia) =>
  * Calendário do mês: cada dia mostra quantos atendimentos tem (e se algum aguarda o sinal).
  * Tocar no dia abre a agenda dele logo abaixo. `marcas`: { 'AAAA-MM-DD': { total, pendentes, bloqueio } }.
  */
-export function Calendario({ dia, hojeDia, marcas }) {
+export function Calendario({ dia, hojeDia, marcas, exigeSinal = true }) {
   const mes = mesDe(dia);
   const primeiro = `${mes}-01`;
   const inicio = somaDias(primeiro, -diaDaSemana(primeiro));
@@ -56,7 +56,7 @@ export function Calendario({ dia, hojeDia, marcas }) {
       </div>
       <p className="cal__legenda" aria-hidden="true">
         <span><i className="cal__ponto" /> atendimentos</span>
-        <span><i className="cal__ponto cal__ponto--pendente" /> com sinal pendente</span>
+        {exigeSinal ? <span><i className="cal__ponto cal__ponto--pendente" /> com sinal pendente</span> : null}
         <span><i className="cal__ponto cal__ponto--bloqueio" /> bloqueio</span>
       </p>
     </section>

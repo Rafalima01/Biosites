@@ -2,12 +2,14 @@
 -- STUDIO DE DEMONSTRAÇÃO DA BARBEARIA (maquete do Modelo 11 · Marcos Ferraz, fictício)
 -- Cole TUDO no Supabase → SQL Editor → Run. Pode rodar de novo (não duplica nada).
 -- Os nomes dos serviços são os mesmos do site (modelos/11-barbearia-agenda): é pelo nome que se ligam.
+-- Sem sinal (depositPercent 0, comum em barbearia): o agendamento do site entra confirmado.
+-- Para exigir sinal, use Configurações no painel.
 -- =============================================================================
 
 insert into public.studios (id, slug, name, timezone, whatsapp, settings)
 values (
   'a0000000-0000-4000-8000-000000000011', 'ferraz-barber', 'Ferraz Barber Club', 'America/Sao_Paulo', '',
-  '{"step": 30, "minNotice": 60, "daysAhead": 30, "bufferMinutes": 0, "depositPercent": 30, "holdMinutes": 120,
+  '{"step": 30, "minNotice": 60, "daysAhead": 30, "bufferMinutes": 0, "depositPercent": 0, "ultimoSinal": 30, "holdMinutes": 120,
     "pix": {"key": "+5500900000000", "keyLabel": "Celular", "keyDisplay": "(00) 90000-0000", "holder": "Ferraz Barber Club", "city": "Rio de Janeiro"}}'
 )
 on conflict (id) do nothing;

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getPainel } from '@/lib/supabase/server';
 import { STATUS, statusReal } from '@/components/Atendimento';
 import { resumoFinanceiro } from '@/lib/financas';
+import { sinalDoStudio } from '@/lib/configuracoes';
 import {
   diaDaSemana, diaDe, diasNoMes, hoje, hora, mesDe, mesValido, minutos, nomeMes, noFuso, reais, somaMeses, valido,
 } from '@/lib/datas';
@@ -37,6 +38,7 @@ export default async function DashboardPage({ searchParams }) {
 
   const { supabase, studio } = await getPainel();
   const tz = studio.timezone;
+  const exigeSinal = sinalDoStudio(studio).exige;
   const agora = new Date();
   const hojeDia = hoje(tz);
   const mesAtual = mesDe(hojeDia);
@@ -229,7 +231,7 @@ export default async function DashboardPage({ searchParams }) {
           <div className="desemp__item">
             <span>Perdidos</span>
             <strong>{r.cancelados + r.naoPagos}</strong>
-            <small>{qtd(r.cancelados, 'cancelado', 'cancelados')} · {r.naoPagos} sem sinal</small>
+            <small>{qtd(r.cancelados, 'cancelado', 'cancelados')}{exigeSinal ? ` · ${r.naoPagos} sem sinal` : ''}</small>
           </div>
         </div>
       </section>

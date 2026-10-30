@@ -109,7 +109,7 @@ export function Avisos({ studioId, email }) {
           {ligado ? (
             <>
               <p className="avisos__titulo">🔔 Avisos ligados neste celular</p>
-              <p className="muted">Você recebe cada novo agendamento aguardando sinal e um lembrete 30 minutos antes de cada atendimento.</p>
+              <p className="muted">Você recebe cada novo agendamento e um lembrete 30 minutos antes de cada atendimento.</p>
               <button className="btn btn--bloco" type="button" onClick={testar}>Enviar aviso de teste</button>
             </>
           ) : estado === 'instalar' ? (
@@ -134,7 +134,7 @@ export function Avisos({ studioId, email }) {
           ) : (
             <>
               <p className="avisos__titulo">🔔 Receba os agendamentos no celular</p>
-              <p className="muted">Aviso na hora de cada novo agendamento aguardando sinal e um lembrete 30 minutos antes de cada atendimento.</p>
+              <p className="muted">Aviso na hora de cada novo agendamento e um lembrete 30 minutos antes de cada atendimento.</p>
               <button className="btn btn--primario btn--bloco" type="button" onClick={ativar}>Ativar avisos</button>
             </>
           )}

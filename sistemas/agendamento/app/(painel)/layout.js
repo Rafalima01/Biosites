@@ -5,6 +5,7 @@ import { escolherStudio, sair } from '../actions';
 import { BotaoMenu, BotaoRecolher, FecharMenu, FundoMenu, Menu } from '@/components/Menu';
 import { Avisos } from '@/components/Avisos';
 import { MeuSite } from '@/components/MeuSite';
+import { sinalDoStudio } from '@/lib/configuracoes';
 
 export const dynamic = 'force-dynamic';
 
@@ -61,7 +62,7 @@ export default async function PainelLayout({ children }) {
           <FecharMenu />
           <BotaoRecolher recolhido={recolhido} />
         </div>
-        <Menu pendentes={pendentes || 0} />
+        <Menu pendentes={pendentes || 0} exigeSinal={sinalDoStudio(studio).exige} />
         <div className="lateral__pe">
           <span className="lateral__email" title={user.email}>{user.email}</span>
           <form action={sair}>
