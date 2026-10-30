@@ -114,12 +114,12 @@ export function Location(site) {
 }
 
 /**
- * Topo da página /servicos/: foto se dissolvendo na faixa chocolate, com o título em creme por cima.
+ * Topo da página /servicos/: foto que se dissolve no fundo creme, com o título logo abaixo.
  */
 const ServicesCover = (services) => `<header class="capa-servicos">
-    <figure class="capa-servicos__media">${Picture(services.pagePhoto, { className: 'capa-servicos__photo', sizes: '(min-width: 560px) 440px, 100vw', priority: true })}</figure>
+    <figure class="capa-servicos__media">${Picture(services.pagePhoto, { className: 'capa-servicos__photo', sizes: '(min-width: 560px) 460px, 100vw', priority: true })}</figure>
     <div class="capa-servicos__content">
-      <p class="capa-servicos__eyebrow reveal">${esc(services.eyebrow)}</p>
+      <p class="section__eyebrow reveal">${esc(services.eyebrow)}</p>
       <h1 class="capa-servicos__title reveal" id="${esc(services.id)}-title" tabindex="-1" style="--i:1">${esc(services.title)}</h1>
       ${services.intro ? `<p class="capa-servicos__intro reveal" style="--i:2">${esc(services.intro)}</p>` : ''}
     </div>
