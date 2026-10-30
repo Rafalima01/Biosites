@@ -58,11 +58,12 @@ export default {
   },
 
   // Cards grandes do início. `art` põe uma ilustração 3D (PNG sem fundo) no lugar da foto.
-  // Calendário do 3dicons.co (CC0); outros estilos no mesmo pacote: clay (branco), color (vermelho), gradient.
+  // Calendário: 31 imagens (uma por dia) geradas no Blender por scripts/blender/calendario.py;
+  // `{dia}` vira o dia de hoje. Outras cores: rode o script com --base, --folha e --dourado.
   cards: [
     {
       id: 'agendar',
-      art: '/media/calendario-premium.png',
+      art: '/media/calendario/{dia}.png',
       title: 'Agende seu corte',
       text: 'Escolha o melhor horário e garanta sua cadeira sem fila.',
       button: 'Agende seu horário',

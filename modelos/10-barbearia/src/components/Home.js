@@ -17,9 +17,12 @@ export function Hero(site) {
   </header>`;
 }
 
-/** Ilustração 3D do card (ex.: o calendário do 3dicons, licença CC0), saindo pela borda. */
+/**
+ * Ilustração 3D do card, saindo pela borda. Com `{dia}` no caminho (calendário), o HTML traz o dia
+ * da geração do site e o navegador troca para o dia de hoje (main.js, `data-art`).
+ */
 const Art3d = (src) => `<span class="cal3d" aria-hidden="true">
-    <img class="cal3d__img" src="${esc(src)}" alt="" width="320" height="320" decoding="async">
+    <img class="cal3d__img" src="${esc(src.replace('{dia}', new Date().getDate()))}"${src.includes('{dia}') ? ` data-art="${esc(src)}"` : ''} alt="" width="320" height="320" decoding="async">
   </span>`;
 
 /** Cards grandes: texto e botão em pílula de um lado, foto (ou a folhinha) do outro. */

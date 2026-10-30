@@ -16,7 +16,9 @@ check(new Set(cardIds).size === cardIds.length, 'IDs de cards duplicados');
 const sectionIds = new Set([site.about.id, site.gallery.id, site.space.id, 'cards']);
 for (const c of site.cards) {
   check(c.art || c.photo, `Card "${c.id}" sem foto nem arte`);
-  if (c.art) check(existsSync(new URL(`../public${c.art}`, import.meta.url)), `Ilustração não encontrada: public${c.art}`);
+  // Com `{dia}`, confere as 31 imagens do calendário
+  const arts = !c.art ? [] : c.art.includes('{dia}') ? Array.from({ length: 31 }, (_, d) => c.art.replace('{dia}', d + 1)) : [c.art];
+  for (const a of arts) check(existsSync(new URL(`../public${a}`, import.meta.url)), `Ilustração não encontrada: public${a}`);
   if (c.action.type === 'section') check(sectionIds.has(c.action.target), `Card "${c.id}" aponta para seção inexistente "${c.action.target}"`);
   if (c.action.type === 'page') check(existsSync(new URL(`..${c.action.href}index.html`, import.meta.url)), `Página não encontrada: ${c.action.href}index.html`);
 }

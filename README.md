@@ -17,7 +17,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 07 | **Hospedagem** | [`modelos/07-hospedagem`](modelos/07-hospedagem) | Maré Mansa · Casas de temporada (marca fictícia) | Reserva direta para casas de temporada: casas com fotos e valores, pacotes de datas especiais, agenda interativa com preço por dia e reserva pronta no WhatsApp, sem taxa de plataforma. Areia, oceano e coral. |
 | 08 | **Glam** | [`modelos/08-glam`](modelos/08-glam) | Rosé Nail Studio · Nail designer (marca fictícia) | Cara de app: cartões de vidro fosco sobre foto, letreiro em neon, serviço em destaque e galeria de inspirações com filtros, curtir e escolher; as escolhidas vão na mensagem do WhatsApp. Rosa com Poiret One e Poppins. |
 | 09 | **Delicado** | [`modelos/09-delicado`](modelos/09-delicado) | Lívia Martins · Studio Lívia Beauty (marca fictícia) | Rosa claro com assinatura manuscrita: foto com nome em duas cores, cards com ícone em bloco rosa, sobre mim, "como posso te ajudar", faixa de agendamento, trabalhos, dúvidas frequentes, página de serviços e agendamento online ligado ao Sistema de Agendamento (studio de demonstração: horários livres, sinal de 30% por Pix, agendamento gravado no painel e envio pelo WhatsApp). Playfair Display, Allura e Montserrat. |
-| 10 | **Barbearia** | [`modelos/10-barbearia`](modelos/10-barbearia) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | Foto do barbeiro com tom quente e linha laranja, fundo cobre com ferramentas em traço preto, nome em serifa + manuscrita e cards grafite com borda laranja e botão em pílula (calendário 3D em grafite e dourado, estilo, serviços com selo, espaço), sobre, cortes da semana, o espaço com horários e página de serviços. Sem sistema: tudo agenda pelo WhatsApp com o nome do serviço. DM Serif Display, Great Vibes e Poppins. |
+| 10 | **Barbearia** | [`modelos/10-barbearia`](modelos/10-barbearia) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | Foto do barbeiro com tom quente e linha laranja, fundo cobre com ferramentas em traço preto, nome em serifa + manuscrita e cards grafite com borda laranja e botão em pílula (calendário 3D em grafite e dourado com o dia de hoje, estilo, serviços com selo, espaço), sobre, cortes da semana, o espaço com horários e página de serviços. Sem sistema: tudo agenda pelo WhatsApp com o nome do serviço. DM Serif Display, Great Vibes e Poppins. |
 
 ## Sistemas
 
@@ -27,6 +27,12 @@ Produtos com banco de dados e painel, além da vitrine.
 | --- | --- | --- |
 | **Hospedagem · reserva direta** | [`sistemas/hospedagem`](sistemas/hospedagem) | Site + reservas com Pix para casas de temporada: agenda com disponibilidade real, reserva fechada no site, QR Code Pix do sinal e painel do anfitrião (reservas, agenda, casas e fotos, promoções, pacotes, personalização). Next.js + Supabase, uma cópia por cliente. |
 | **Agendamento · studios de beleza** | [`sistemas/agendamento`](sistemas/agendamento) | Agenda própria no lugar do Google Agenda: horários livres pelo expediente, sinal por Pix com horário segurado e painel da dona no celular (agenda do dia, confirmar sinal, encaixe, bloqueios). Um banco Supabase para todos os studios. Etapa 1 no ar (Supabase instalado, Samantha cadastrada); falta ligar o site dela. |
+
+## Ferramentas
+
+| Ferramenta | Pasta | Descrição |
+| --- | --- | --- |
+| **Calendário 3D (Blender)** | [`scripts/blender/calendario.py`](scripts/blender/calendario.py) | Gera o calendário 3D em PNG sem fundo, com qualquer número e as cores da marca (grafite e dourado por padrão). Precisa do Blender instalado; uso no topo do arquivo. |
 
 ## Clientes
 

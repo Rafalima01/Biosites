@@ -8,7 +8,7 @@ Demonstração: **Marcos Ferraz · Ferraz Barber Club**, Rio de Janeiro (marca f
 **Composição:** foto do barbeiro que se dissolve no fundo, rótulo espaçado ("BARBEIRO · RJ"), nome em
 serifa clássica + sobrenome em manuscrita dourada e setinha dupla; quatro cards grandes (texto e botão
 em pílula laranja de um lado, foto do outro, alternando): "Agende seu corte" com calendário 3D
-(grafite e dourado) saindo pela borda, "Estilo e tendências", "Serviços e valores" com selo laranja e "Conheça o espaço";
+(grafite e dourado) com o dia de hoje, saindo pela borda, "Estilo e tendências", "Serviços e valores" com selo laranja e "Conheça o espaço";
 "Sobre o Marcos" com três destaques; cortes da semana; o espaço (foto, comodidades, horários,
 endereço e mapa); chamada final para o WhatsApp; rodapé com o nome em manuscrita e os canais.
 Página `/servicos/` com as categorias (cabelo, barba, combos, química e tratamento): tocar no serviço
@@ -19,10 +19,10 @@ e as seções à direita.
 
 Fontes: DM Serif Display (nome e títulos das seções), Great Vibes (sobrenome manuscrito) e Poppins
 (títulos dos cards, rótulos e texto). Fotos do Unsplash (licença gratuita), recortadas e entregues em webp pelo
-servidor de imagens do Unsplash, com `srcset`. Calendário 3D: `public/media/calendario-premium.png`, do [3dicons](https://3dicons.co) (licença CC0,
-uso livre inclusive comercial, sem crédito obrigatório), estilo "premium" no ângulo "dynamic". O mesmo
-pacote tem os estilos clay (branco), color (vermelho) e gradient, e outros ícones 3D no site. Para trocar,
-ponha o PNG sem fundo em `public/media/` e aponte `art` do card para ele. O número (25) vem no desenho.
+servidor de imagens do Unsplash, com `srcset`. Calendário 3D: 31 imagens em `public/media/calendario/` (uma por dia, `1.png` a `31.png`), feitas no
+Blender por [`scripts/blender/calendario.py`](../../scripts/blender/calendario.py) no estilo grafite e dourado;
+o card mostra o dia de hoje (`art: '/media/calendario/{dia}.png'`). Para outras cores, rode o script com
+`--base`, `--folha` e `--dourado` (instruções no topo do arquivo).
 
 O topo termina numa linha laranja; logo abaixo, a seção dos cards começa com um fade escuro que
 clareia para o cobre (`.cards::before`).

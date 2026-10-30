@@ -6,6 +6,9 @@ import { initSmoothScroll } from './behaviors/scroll.js';
 const yearEl = document.querySelector('[data-year]');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+// Calendário 3D do card "Agende seu corte": sempre o dia de hoje.
+for (const img of document.querySelectorAll('[data-art]')) img.src = img.dataset.art.replace('{dia}', new Date().getDate());
+
 const toast = initToast(document.querySelector('.toast'));
 
 // Destinos ainda não configurados: avisam em vez de abrir um link inventado.
