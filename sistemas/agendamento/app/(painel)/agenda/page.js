@@ -8,6 +8,8 @@ import {
 } from '@/lib/datas';
 
 // Agenda: calendário do mês (quantos atendimentos por dia) e o dia escolhido dividido por horário.
+export const metadata = { title: 'Agenda · Painel do studio' };
+
 export default async function AgendaPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
@@ -63,9 +65,13 @@ export default async function AgendaPage({ searchParams }) {
   const agora = ehHoje ? minutos(hora(new Date().toISOString(), tz)) : null;
 
   return (
-    <>
-      <Calendario dia={dia} hojeDia={hojeDia} marcas={marcas} />
+    <div className="agenda">
+      <div className="agenda__lado">
+        <Calendario dia={dia} hojeDia={hojeDia} marcas={marcas} />
+        <Encaixe servicos={servicos || []} dia={dia} voltar={voltar} />
+      </div>
 
+      <div className="agenda__dia">
       <Retorno sp={sp} />
 
       <section className="dia-sel" aria-labelledby="dia-titulo">
@@ -118,26 +124,33 @@ export default async function AgendaPage({ searchParams }) {
         </section>
       ) : null}
 
-      <details className="card encaixe">
-        <summary>+ Encaixar atendimento</summary>
-        <p className="muted">Para horários combinados pelo WhatsApp. Entra confirmado e já ocupa a agenda do site.</p>
-        <form action={encaixar} className="form">
-          <input type="hidden" name="voltar" value={voltar} />
-          <input type="hidden" name="dia" value={dia} />
-          <label className="campo">Serviço
-            <select name="servico" required>
-              {(servicos || []).map((s) => (
-                <option key={s.id} value={s.id}>{s.name} · {s.minutes} min · {reais(s.price)}</option>
-              ))}
-            </select>
-          </label>
-          <label className="campo">Horário<input type="time" name="hora" required step="300" /></label>
-          <label className="campo">Nome da cliente<input name="nome" required minLength={2} /></label>
-          <label className="campo">WhatsApp (opcional)<input name="telefone" inputMode="tel" /></label>
-          <label className="campo">Observação (opcional)<input name="obs" maxLength={500} /></label>
-          <button className="btn btn--primario btn--bloco" type="submit">Encaixar</button>
-        </form>
-      </details>
-    </>
+      </div>
+    </div>
+  );
+}
+
+/** Encaixe rápido de um atendimento combinado pelo WhatsApp. */
+function Encaixe({ servicos, dia, voltar }) {
+  return (
+    <details className="card encaixe">
+      <summary>+ Encaixar atendimento</summary>
+      <p className="muted">Para horários combinados pelo WhatsApp. Entra confirmado e já ocupa a agenda do site.</p>
+      <form action={encaixar} className="form">
+        <input type="hidden" name="voltar" value={voltar} />
+        <input type="hidden" name="dia" value={dia} />
+        <label className="campo">Serviço
+          <select name="servico" required>
+            {servicos.map((s) => (
+              <option key={s.id} value={s.id}>{s.name} · {s.minutes} min · {reais(s.price)}</option>
+            ))}
+          </select>
+        </label>
+        <label className="campo">Horário<input type="time" name="hora" required step="300" /></label>
+        <label className="campo">Nome da cliente<input name="nome" required minLength={2} /></label>
+        <label className="campo">WhatsApp (opcional)<input name="telefone" inputMode="tel" /></label>
+        <label className="campo">Observação (opcional)<input name="obs" maxLength={500} /></label>
+        <button className="btn btn--primario btn--bloco" type="submit">Encaixar</button>
+      </form>
+    </details>
   );
 }

@@ -5,6 +5,8 @@ const fone = (d) => (d?.length === 11 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d
 const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 // Clientes do studio (cadastradas pelo WhatsApp no site ou nos encaixes), com histórico resumido.
+export const metadata = { title: 'Clientes · Painel do studio' };
+
 export default async function ClientesPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
@@ -40,7 +42,7 @@ export default async function ClientesPage({ searchParams }) {
         <button className="btn btn--mini" type="submit">Buscar</button>
       </form>
       {lista.length ? (
-        <ul className="lista lista--compacta">
+        <ul className="lista lista--compacta lista--grade">
           {lista.map((c) => (
             <li key={c.id} className="cliente">
               <div className="cliente__topo">

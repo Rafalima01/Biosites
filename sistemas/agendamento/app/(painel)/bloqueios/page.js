@@ -4,6 +4,8 @@ import { Retorno } from '@/components/Atendimento';
 import { diaCurto, hoje, hora } from '@/lib/datas';
 
 // Folgas, compromissos e horários fechados: o que estiver bloqueado some da agenda do site.
+export const metadata = { title: 'Bloqueios · Painel do studio' };
+
 export default async function BloqueiosPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
@@ -16,6 +18,7 @@ export default async function BloqueiosPage({ searchParams }) {
       <p className="muted">Bloqueie folgas, compromissos ou qualquer horário em que você não vai atender. Ele some na hora da agenda do site.</p>
       <Retorno sp={sp} />
 
+      <div className="duas-col">
       <form action={bloquear} className="card form">
         <input type="hidden" name="voltar" value="/bloqueios" />
         <label className="campo">Dia<input type="date" name="dia" required defaultValue={hoje(tz)} /></label>
@@ -29,6 +32,7 @@ export default async function BloqueiosPage({ searchParams }) {
         <button className="btn btn--primario btn--bloco" type="submit">Bloquear</button>
       </form>
 
+      <div className="duas-col__lista">
       <h2 className="subtitulo">Próximos bloqueios</h2>
       {(data || []).length ? (
         <ul className="lista">
@@ -50,6 +54,8 @@ export default async function BloqueiosPage({ searchParams }) {
       ) : (
         <p className="vazio">Nenhum bloqueio marcado.</p>
       )}
+      </div>
+      </div>
     </>
   );
 }

@@ -3,6 +3,8 @@ import { Atendimento, Retorno } from '@/components/Atendimento';
 import { hora } from '@/lib/datas';
 
 // Agendamentos do site aguardando o sinal (os que ainda seguram o horário e os que venceram há pouco).
+export const metadata = { title: 'Aguardando sinal · Painel do studio' };
+
 export default async function PedidosPage({ searchParams }) {
   const sp = await searchParams;
   const { supabase, studio } = await getPainel();
@@ -25,7 +27,7 @@ export default async function PedidosPage({ searchParams }) {
       <p className="muted">Quando o Pix cair, toque em <strong>Confirmar sinal</strong>. Sem confirmação, o horário volta a ficar livre no site ao fim do prazo.</p>
       <Retorno sp={sp} />
       {segurando.length ? (
-        <ul className="lista">
+        <ul className="lista lista--grade">
           {segurando.map((a) => (
             <Atendimento key={a.id} a={a} tz={studio.timezone} studio={studio.name} voltar="/pedidos" mostrarDia nota={`Segura o horário até ${hora(a.expires_at, studio.timezone)}`} />
           ))}
@@ -37,7 +39,7 @@ export default async function PedidosPage({ searchParams }) {
         <>
           <h2 className="subtitulo">Prazo vencido (últimos 2 dias)</h2>
           <p className="muted">O horário já foi liberado no site. Se a cliente pagou depois, confirme: o sistema só aceita se o horário continuar livre.</p>
-          <ul className="lista">
+          <ul className="lista lista--grade">
             {vencidos.map((a) => (
               <Atendimento key={a.id} a={a} tz={studio.timezone} studio={studio.name} voltar="/pedidos" mostrarDia />
             ))}

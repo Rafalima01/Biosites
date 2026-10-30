@@ -1,0 +1,79 @@
+/*
+ * Telas maiores. O painel é pensado primeiro para o celular (painel.css); aqui ele se abre:
+ * tablet (≥ 768px) mais largo, computador (≥ 1024px) em grade, monitor grande (≥ 1440px) com
+ * largura máxima confortável. Celulares bem estreitos (≤ 360px) ganham respiros menores.
+ */
+
+/* Agenda no celular: calendário, o dia escolhido e, por último, o encaixe. */
+.agenda { display: flex; flex-direction: column; gap: 14px; }
+.agenda__lado { display: contents; }
+.agenda__dia { order: 2; display: grid; gap: 14px; min-width: 0; }
+.agenda .cal { order: 1; }
+.agenda .encaixe { order: 3; }
+
+.dash { display: grid; gap: 14px; }
+.duas-col, .duas-col__lista { display: grid; gap: 14px; align-content: start; }
+
+/* Celular bem estreito */
+@media (max-width: 360px) {
+  .painel { padding-inline: 10px; }
+  .cal { padding-inline: 8px; }
+  .cal__grade { gap: 2px; }
+  .cal__dia { min-height: 46px; }
+  .numeros strong { font-size: 15px; }
+  .destaque__valor { font-size: 34px; }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .painel { max-width: 760px; padding-inline: 24px; }
+  .titulo { font-size: 30px; }
+  .muted { max-width: 70ch; }
+}
+
+/* Computador */
+@media (min-width: 1024px) {
+  .painel { max-width: 1180px; padding-inline: 32px; }
+  .topo { padding-top: 22px; }
+  .menu { padding-bottom: 16px; }
+  .conteudo { gap: 18px; }
+
+  /* Dashboard: faturado ao lado dos números, gráfico com "Hoje" ao lado, desempenho e serviços lado a lado */
+  .dash { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 18px; align-items: start; }
+  .dash > * { grid-column: 1 / -1; }
+  .dash__topo { grid-column: 1 / span 6; justify-self: start; min-width: 420px; }
+  .dash__alerta { grid-column: 7 / -1; align-self: center; }
+  .dash__destaque { grid-column: span 5; align-self: stretch; align-content: center; padding: 26px; }
+  .dash__destaque .destaque__valor { font-size: 52px; }
+  .dash__kpis { grid-column: span 7; grid-template-columns: repeat(2, 1fr); }
+  .dash__grafico { grid-column: span 8; }
+  .dash__grafico .barras { height: 220px; }
+  .dash__hoje { grid-column: span 4; }
+  .dash__desemp { grid-column: span 7; }
+  .dash__desemp .desemp { grid-template-columns: repeat(2, 1fr); }
+  .dash__rank { grid-column: span 5; }
+
+  /* Agenda: calendário fixo à esquerda (com o encaixe embaixo), o dia por horário à direita */
+  .agenda { display: grid; grid-template-columns: minmax(360px, 400px) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .agenda__lado { display: grid; gap: 14px; position: sticky; top: 72px; }
+  .agenda__dia { order: 0; }
+  .agenda .cal, .agenda .encaixe { order: 0; }
+  .cal__dia { min-height: 52px; }
+
+  /* Listas em duas colunas (aguardando sinal, clientes) */
+  .lista--grade { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+
+  /* Bloqueios: formulário ao lado da lista */
+  .duas-col { grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .duas-col > .form { position: sticky; top: 72px; }
+  .duas-col__lista .subtitulo { margin-top: 0; }
+
+  .busca { max-width: 560px; }
+}
+
+/* Monitor grande */
+@media (min-width: 1440px) {
+  .painel { max-width: 1320px; }
+  .agenda { grid-template-columns: 420px minmax(0, 1fr); }
+  .lista--grade.lista--compacta { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

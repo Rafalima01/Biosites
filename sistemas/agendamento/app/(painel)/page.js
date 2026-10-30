@@ -106,8 +106,8 @@ export default async function DashboardPage({ searchParams }) {
   const hojeLista = (deHoje || []).filter((a) => statusReal(a) !== 'expired');
 
   return (
-    <>
-      <div className="dia">
+    <div className="dash">
+      <div className="dia dash__topo">
         <a className="btn btn--mini" href={`/?mes=${anterior}`} aria-label="Mês anterior">‹</a>
         <div className="dia__nome">
           <p className="kicker">Resumo do mês</p>
@@ -118,13 +118,13 @@ export default async function DashboardPage({ searchParams }) {
       </div>
 
       {pendentes ? (
-        <a className="alerta" href="/pedidos">
+        <a className="alerta dash__alerta" href="/pedidos">
           <strong>{qtd(pendentes, 'agendamento aguardando sinal', 'agendamentos aguardando sinal')}</strong>
           <span>Confira os comprovantes →</span>
         </a>
       ) : null}
 
-      <section className="card destaque" aria-labelledby="faturado">
+      <section className="card destaque dash__destaque" aria-labelledby="faturado">
         <p className="destaque__rotulo" id="faturado">Faturado {ehAtual ? 'até hoje' : 'no mês'}</p>
         <p className="destaque__valor">{reais(r.faturado)}</p>
         <p className="destaque__nota">
@@ -139,14 +139,14 @@ export default async function DashboardPage({ searchParams }) {
         </p>
       </section>
 
-      <div className="kpis">
+      <div className="kpis dash__kpis">
         <div className="kpi"><span>Agendado</span><strong>{reais(r.previsto)}</strong><small>{qtd(r.agendados.length, 'atendimento por vir', 'atendimentos por vir')}</small></div>
         <div className="kpi"><span>Sinais recebidos</span><strong>{reais(r.sinais)}</strong><small>no mês</small></div>
         <div className="kpi"><span>Ticket médio</span><strong>{reais(r.ticket)}</strong><small>por atendimento</small></div>
         <div className="kpi"><span>Clientes</span><strong>{r.clientes}</strong><small>{qtd(novas || 0, 'nova', 'novas')} no mês</small></div>
       </div>
 
-      <section className="card grafico" aria-labelledby="g-titulo">
+      <section className="card grafico dash__grafico" aria-labelledby="g-titulo">
         <div className="grafico__topo">
           <h2 className="subtitulo" id="g-titulo">Faturamento por dia</h2>
           <p className="grafico__legenda">
@@ -192,7 +192,7 @@ export default async function DashboardPage({ searchParams }) {
         )}
       </section>
 
-      <section className="card" aria-labelledby="d-titulo">
+      <section className="card dash__desemp" aria-labelledby="d-titulo">
         <h2 className="subtitulo" id="d-titulo">Desempenho</h2>
         <div className="desemp">
           <div className="desemp__item">
@@ -220,7 +220,7 @@ export default async function DashboardPage({ searchParams }) {
       </section>
 
       {top.length ? (
-        <section className="card" aria-labelledby="s-titulo">
+        <section className="card dash__rank" aria-labelledby="s-titulo">
           <h2 className="subtitulo" id="s-titulo">Serviços que mais rendem</h2>
           <ul className="ranking">
             {top.map((s) => (
@@ -237,7 +237,7 @@ export default async function DashboardPage({ searchParams }) {
         </section>
       ) : null}
 
-      <section className="proximos" aria-labelledby="h-titulo">
+      <section className="proximos dash__hoje" aria-labelledby="h-titulo">
         <div className="secao__topo">
           <h2 className="subtitulo" id="h-titulo">Hoje</h2>
           <a className="link" href="/agenda">Abrir agenda →</a>
@@ -261,6 +261,6 @@ export default async function DashboardPage({ searchParams }) {
           <p className="vazio">Nenhum atendimento hoje.</p>
         )}
       </section>
-    </>
+    </div>
   );
 }
