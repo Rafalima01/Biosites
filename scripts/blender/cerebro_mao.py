@@ -1,4 +1,4 @@
-# Cérebro realista de lado, apoiado na palma de uma mão, para o card do Instagram do Modelo 12.
+# Cérebro realista de lado, flutuando sobre a palma de uma mão, para o card do Instagram do Modelo 12.
 # Renderiza um PNG sem fundo. Modelos usados:
 #   - Cérebro: "3D model of the Brain", Nevit Dilmen, M.D. — NIH 3D, 3DPX-003765, licença CC BY-SA 4.0
 #     https://3d.nih.gov/entries/3DPX-003765 (GLB "3DModel of Brain NevitDilmen_NIH3D.glb").
@@ -11,6 +11,7 @@
 #       --cerebro cerebro.glb --mao right.glb --tamanho 1200 --saida cerebro-mao.png
 #
 # Opções: --cor-cerebro e --cor-pele (hex), --corte (mm: o tronco abaixo disso é removido),
+#         --flutua (distância entre a palma e o cérebro, que fica flutuando sobre a mão),
 #         --giro (graus do cérebro em torno do eixo vertical), --amostras.
 import argparse
 import math
@@ -27,7 +28,8 @@ args.add_argument('--saida', default='cerebro-mao.png')
 args.add_argument('--tamanho', type=int, default=1200)
 args.add_argument('--cor-cerebro', default='#e39886')
 args.add_argument('--cor-pele', default='#f0bfa6')
-args.add_argument('--corte', type=float, default=-55)
+args.add_argument('--corte', type=float, default=-88)
+args.add_argument('--flutua', type=float, default=2.1)
 args.add_argument('--giro', type=float, default=90)
 args.add_argument('--amostras', type=int, default=128)
 opt = args.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
@@ -63,10 +65,11 @@ for o in list(sc.objects):
         bpy.data.objects.remove(o)
 arm = next(o for o in sc.objects if o.type == 'ARMATURE')
 mao = next(o for o in sc.objects if o.type == 'MESH')
-# No arquivo: dedos para -Z, palma voltada para +X, polegar para +Y
-base = Matrix(((0, 0, -1, 0), (0, 1, 0, 0), (1, 0, 0, 0), (0, 0, 0, 1)))
-inclina = Matrix.Rotation(math.radians(-24), 4, 'Y') @ Matrix.Rotation(math.radians(30), 4, 'X')
-arm.matrix_world = inclina @ base @ Matrix.Scale(22, 4)
+# No arquivo: dedos para -Z, palma voltada para -X (o dorso para +X), polegar para +Y.
+# Fica: dedos para a direita, palma para cima, polegar para o lado da câmera.
+base = Matrix(((0, 0, -1, 0), (0, -1, 0, 0), (-1, 0, 0, 0), (0, 0, 0, 1)))
+inclina = Matrix.Rotation(math.radians(-18), 4, 'Y') @ Matrix.Rotation(math.radians(38), 4, 'X')  # palma à mostra
+arm.matrix_world = inclina @ base @ Matrix.Scale(30, 4)
 bpy.context.view_layer.update()
 
 # Pose (no espaço do arquivo): dedos juntos (giro em torno de X, a normal da palma) e levemente
@@ -85,10 +88,10 @@ def girar(nome, graus, eixo):
 
 for dedo, graus in (('index', -6), ('ring', 5), ('pinky', 11)):
     girar(f'{dedo}-finger-phalanx-proximal', graus, Vector((1, 0, 0)))
-curva = {'phalanx-proximal': 10, 'phalanx-intermediate': 12, 'phalanx-distal': 8}
+curva = {'phalanx-proximal': 12, 'phalanx-intermediate': 15, 'phalanx-distal': 10}
 for dedo in ('index-finger', 'middle-finger', 'ring-finger', 'pinky-finger'):
     for parte, graus in curva.items():
-        girar(f'{dedo}-{parte}', -graus, Vector((0, 1, 0)))
+        girar(f'{dedo}-{parte}', graus, Vector((0, 1, 0)))  # pontas para -X: em direção à palma
 girar('thumb-metacarpal', 12, Vector((0, 0, 1)))
 bpy.ops.object.mode_set(mode='OBJECT')
 sub = mao.modifiers.new('suave', 'SUBSURF')
@@ -103,9 +106,9 @@ nos = [arm.matrix_world @ ossos[f'{d}-finger-phalanx-proximal'].head for d in ('
 pulso = arm.matrix_world @ ossos['wrist'].head
 juntas = sum(nos, Vector()) / 4
 pontas = sum((arm.matrix_world @ ossos[f'{d}-finger-tip'].head for d in ('index', 'middle', 'ring', 'pinky')), Vector()) / 4
-normal =((inclina @ base).to_3x3() @ Vector((1, 0, 0))).normalized()
+normal = ((inclina @ base).to_3x3() @ Vector((-1, 0, 0))).normalized()
 
-# ---------- Cérebro de lado, com um pedaço do tronco apoiado na palma ----------
+# ---------- Cérebro de lado, flutuando sobre a palma ----------
 bpy.ops.import_scene.gltf(filepath=opt.cerebro)
 cerebro = next(o for o in sc.objects if o.type == 'MESH' and o != mao)
 cerebro.data.transform(cerebro.matrix_world)
@@ -121,7 +124,7 @@ pts = [v.co for v in cerebro.data.vertices]
 mn = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
 mx = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
 escala = 2.9 / (mx.z - mn.z)
-centro = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))  # base do tronco na origem
+centro = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))  # base do cérebro na origem
 cerebro.data.transform(Matrix.Rotation(math.radians(opt.giro), 4, 'Z') @ Matrix.Scale(escala, 4) @ Matrix.Translation(-centro))
 cerebro.data.update()
 for f in cerebro.data.polygons:
@@ -131,12 +134,12 @@ liso.factor = 0.6
 liso.iterations = 4
 cerebro.data.materials.clear()
 cerebro.data.materials.append(pele('cerebro', opt.cor_cerebro, 0.5, 0.25))
-# Proporções do print: as pontas dos dedos ficam ~0,5 cérebro à direita do centro do cérebro.
-# O tronco apoia na linha punho → juntas, no ponto com esse x.
+# Proporções do print: o cérebro fica sobre o meio da palma (pontas ~0,7 cérebro à direita do centro).
+# Fica acima da linha punho → juntas, no ponto com esse x.
 larg = max(v.co.x for v in cerebro.data.vertices) - min(v.co.x for v in cerebro.data.vertices)
-x_centro = pontas.x - 0.52 * larg
+x_centro = pontas.x - 0.72 * larg
 t = max(0.0, min(1.2, (x_centro - pulso.x) / (juntas.x - pulso.x)))
-cerebro.location = pulso.lerp(juntas, t) + normal * 0.05
+cerebro.location = pulso.lerp(juntas, t) + Vector((0, 0, opt.flutua))  # sem encostar: flutuando sobre a palma
 cerebro.rotation_euler = (math.radians(4), 0, 0)
 
 # ---------- Luz, câmera e render ----------

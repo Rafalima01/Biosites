@@ -47,14 +47,14 @@ export function Therapies(site) {
   });
 }
 
-/** Card do Instagram: faixa bege com o cérebro realista na mão, painel azul, selo saindo do card e papel rasgado. */
+/** Card do Instagram: faixa bege com o cérebro realista flutuando sobre a mão, painel azul, selo saindo do card e papel rasgado. */
 export function Content(site) {
   const { content: c } = site;
   const target = resolveAction(site, c.action);
   return renderTarget(target, {
     className: 'card card--conteudo reveal',
     label: c.title,
-    content: `<span class="card__fundo" aria-hidden="true"><span class="conteudo__painel"></span>${Art('cerebro-mao.webp', 'art--cerebro-mao', [520, 500])}</span>
+    content: `<span class="card__fundo" aria-hidden="true"><span class="conteudo__painel"></span>${Art('cerebro-mao.webp', 'art--cerebro-mao', [560, 600])}</span>
       <span class="selo">${Art('carinha-mao', 'art--selo')}<span>${c.badge.map(esc).join('<br>')}</span></span>
       <span class="card__texto">
         <span class="card__titulo card__titulo--display">${esc(c.title)}</span>
