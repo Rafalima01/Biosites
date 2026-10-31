@@ -36,6 +36,9 @@ Produtos com banco de dados e painel, além da vitrine.
 | --- | --- | --- |
 | **Calendário 3D (Blender)** | [`scripts/blender/calendario.py`](scripts/blender/calendario.py) | Gera o calendário 3D em PNG sem fundo, com qualquer número e as cores da marca (grafite e dourado por padrão). Precisa do Blender instalado; uso no topo do arquivo. |
 | **Selo 3D com tesoura (Blender)** | [`scripts/blender/selo.py`](scripts/blender/selo.py) | Placa laranja com tesoura em relevo, no mesmo estilo, luz e ângulo do calendário 3D. Cores por opção (`--placa`, `--tesoura`, `--dourado`). |
+| **Cérebro, margarida, mão, papel e tachinha (Blender)** | [`scripts/blender/`](scripts/blender) | Elementos realistas do Modelo 12: `cerebro.py`, `margarida.py`, `cerebro_mao.py`, `papel.py` (papel amassado e rasgado) e `tachinha.py`. Licenças e uso no topo de cada arquivo. |
+| **Recorte e WebP** | [`scripts/imagens/recorta.ps1`](scripts/imagens/recorta.ps1) e [`scripts/blender/webp.py`](scripts/blender/webp.py) | Recorta o render pelo fundo transparente e redimensiona; depois converte para WebP com as cores fiéis. |
+| **Skill `biosites`** | [`.claude/skills/biosites`](.claude/skills/biosites) | Manual e diário de aprendizados do Claude para criar, ajustar e publicar os bio sites. Atualizado ao fim de cada tarefa. |
 
 ## Clientes
 
