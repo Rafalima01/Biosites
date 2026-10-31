@@ -106,7 +106,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 09 · Delicado | `biosite-09-delicado` | https://biosite-09-delicado.vercel.app |
 | 10 · Barbearia | `biosite-10-barbearia` | https://biosite-10-barbearia.vercel.app |
 | 11 · Barbearia com agenda | `biosite-11-barbearia-agenda` | https://biosite-11-barbearia-agenda.vercel.app |
-| 12 · Psicologia | `biosite-12-psicologia` | ainda não criado |
+| 12 · Psicologia | `biosite-12-psicologia` | https://biosite-12-psicologia.vercel.app |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

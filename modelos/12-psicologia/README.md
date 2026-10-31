@@ -96,7 +96,8 @@ demonstração aparece no rodapé enquanto `demo: true`. Para uma cliente real, 
 
 ## Publicar na Vercel
 
-Projeto `biosite-12-psicologia` (ainda não criado) · Root Directory `modelos/12-psicologia`.
+Projeto `biosite-12-psicologia` · Root Directory `modelos/12-psicologia` ·
+Produção: https://biosite-12-psicologia.vercel.app
 
 Publique só quando a pasta mudar, a partir da raiz do repositório (depois do `git push`):
 `node scripts/publicar.mjs biosite-12-psicologia`.
