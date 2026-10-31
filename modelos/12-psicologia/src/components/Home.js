@@ -54,7 +54,7 @@ export function Content(site) {
   return renderTarget(target, {
     className: 'card card--conteudo reveal',
     label: c.title,
-    content: `<span class="card__fundo" aria-hidden="true"><span class="conteudo__painel"></span>${Art('cerebro-mao.webp', 'art--cerebro-mao', [560, 600])}</span>
+    content: `<span class="card__fundo" aria-hidden="true"><span class="conteudo__painel"></span>${Art('cerebro-mao.webp', 'art--cerebro-mao', [620, 556])}</span>
       <span class="selo">${Art('carinha-mao', 'art--selo')}<span>${c.badge.map(esc).join('<br>')}</span></span>
       <span class="card__texto">
         <span class="card__titulo card__titulo--display">${esc(c.title)}</span>

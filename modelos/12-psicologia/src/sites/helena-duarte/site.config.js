@@ -73,7 +73,7 @@ export default {
   content: {
     badge: ['Saúde Mental em', 'Primeiro Lugar'],
     title: 'Visite nosso Instagram',
-    text: 'Acesse nosso Instagram e encontre dicas e conteúdos sobre saúde mental e emocional.',
+    text: 'Acesse nosso Instagram e encontre dicas sobre saúde mental e emocional.',
     action: { type: 'channel', channel: 'instagram' },
   },
 

@@ -3,12 +3,12 @@
 #   - Cérebro: "3D model of the Brain", Nevit Dilmen, M.D. — NIH 3D, 3DPX-003765, licença CC BY-SA 4.0
 #     https://3d.nih.gov/entries/3DPX-003765 (GLB "3DModel of Brain NevitDilmen_NIH3D.glb").
 #     A imagem gerada é obra derivada: mantenha o crédito e a mesma licença (CC BY-SA 4.0).
-#   - Mão: "generic-hand" (right.glb) do pacote @webxr-input-profiles/assets (licença MIT)
-#     https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0.19/dist/profiles/generic-hand/right.glb
+#   - Mão: recortada da malha base do MakeHuman (makehuman/data/3dobjs/base.obj), licença CC0
+#     https://github.com/makehumancommunity/makehuman (os dedos são juntados e curvados aqui no script)
 #
 # Uso (na raiz do repositório):
 #   "C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" -b -P scripts/blender/cerebro_mao.py -- \
-#       --cerebro cerebro.glb --mao right.glb --tamanho 1200 --saida cerebro-mao.png
+#       --cerebro cerebro.glb --mao base.obj --tamanho 1200 --saida cerebro-mao.png
 #
 # Opções: --cor-cerebro e --cor-pele (hex), --corte (mm: o tronco abaixo disso é removido),
 #         --flutua (distância entre a palma e o cérebro, que fica flutuando sobre a mão),
@@ -58,55 +58,96 @@ def pele(nome, base, rugosidade, sss):
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 
-# ---------- Mão: palma para cima, dedos para a direita, polegar para trás ----------
-bpy.ops.import_scene.gltf(filepath=opt.mao)
-for o in list(sc.objects):
-    if o.type == 'MESH' and o.parent is None:  # esfera de referência que vem no arquivo
+# ---------- Mão (MakeHuman): recorte do antebraço direito, palma para cima, dedos para a direita ----------
+bpy.ops.wm.obj_import(filepath=opt.mao, use_split_groups=True)
+objs = {o.name: o for o in sc.objects}
+
+
+def media(o):
+    return sum((o.matrix_world @ v.co for v in o.data.vertices), Vector()) / len(o.data.vertices)
+
+
+# As juntas vêm como pequenos objetos "joint-*" na malha base: guarda a posição e apaga
+J = {n: media(o) for n, o in objs.items() if n.startswith('joint-r-')}
+mao = objs['body']
+for o in objs.values():
+    if o != mao:
         bpy.data.objects.remove(o)
-arm = next(o for o in sc.objects if o.type == 'ARMATURE')
-mao = next(o for o in sc.objects if o.type == 'MESH')
-# No arquivo: dedos para -Z, palma voltada para -X (o dorso para +X), polegar para +Y.
-# Fica: dedos para a direita, palma para cima, polegar para o lado da câmera.
-base = Matrix(((0, 0, -1, 0), (0, -1, 0, 0), (-1, 0, 0, 0), (0, 0, 0, 1)))
-inclina = Matrix.Rotation(math.radians(-18), 4, 'Y') @ Matrix.Rotation(math.radians(38), 4, 'X')  # palma à mostra
-arm.matrix_world = inclina @ base @ Matrix.Scale(30, 4)
-bpy.context.view_layer.update()
+mao.data.transform(mao.matrix_world)
+mao.matrix_world = Matrix.Identity(4)
+cot, pulso0, ponta0 = J['joint-r-elbow'], J['joint-r-hand'], J['joint-r-finger-3-4']
+eixo = ponta0 - cot
+bm = bmesh.new()
+bm.from_mesh(mao.data)
+fora = []
+for v in bm.verts:  # fica só o que está perto da linha cotovelo → ponta do dedo médio, da metade do antebraço em diante
+    t = (v.co - cot).dot(eixo) / eixo.length_squared
+    if t < 0.45 or (v.co - (cot + eixo * max(0.0, min(1.0, t)))).length > 0.85:
+        fora.append(v)
+bmesh.ops.delete(bm, geom=fora, context='VERTS')
+bm.to_mesh(mao.data)
+bm.free()
 
-# Pose (no espaço do arquivo): dedos juntos (giro em torno de X, a normal da palma) e levemente
-# curvados para dentro (giro em torno de Y, que atravessa a palma), como quem segura algo.
-bpy.context.view_layer.objects.active = arm
-bpy.ops.object.mode_set(mode='POSE')
+# Referencial da mão: dedos → +X, palma → +Z, polegar → -Y (lado da câmera); origem no punho
+d = (ponta0 - pulso0).normalized()
+lado = (J['joint-r-finger-2-1'] - J['joint-r-finger-5-1']).normalized()  # do mindinho para o indicador
+n = -d.cross(lado).normalized()  # na malha base a palma fica do lado oposto a d × lado
+lado = n.cross(d).normalized()
+R = Matrix((d, lado, n)).to_4x4()
+quadro = R @ Matrix.Translation(-pulso0)
+mao.data.transform(quadro)
+K1 = {k: quadro @ J[f'joint-r-finger-{k}-1'] for k in range(2, 6)}
+K4 = {k: quadro @ J[f'joint-r-finger-{k}-4'] for k in range(2, 6)}
 
 
-def girar(nome, graus, eixo):
-    pb = arm.pose.bones.get(nome)
-    if pb:
-        cabeca = pb.matrix.translation.copy()
-        pb.matrix = Matrix.Translation(cabeca) @ Matrix.Rotation(math.radians(graus), 4, eixo) @ Matrix.Translation(-cabeca) @ pb.matrix
-        bpy.context.view_layer.update()
+def suaviza(a, b, x):
+    x = max(0.0, min(1.0, (x - a) / (b - a)))
+    return x * x * (3 - 2 * x)
 
 
-for dedo, graus in (('index', -6), ('ring', 5), ('pinky', 11)):
-    girar(f'{dedo}-finger-phalanx-proximal', graus, Vector((1, 0, 0)))
-curva = {'phalanx-proximal': 12, 'phalanx-intermediate': 15, 'phalanx-distal': 10}
-for dedo in ('index-finger', 'middle-finger', 'ring-finger', 'pinky-finger'):
-    for parte, graus in curva.items():
-        girar(f'{dedo}-{parte}', graus, Vector((0, 1, 0)))  # pontas para -X: em direção à palma
-girar('thumb-metacarpal', 12, Vector((0, 0, 1)))
-bpy.ops.object.mode_set(mode='OBJECT')
-sub = mao.modifiers.new('suave', 'SUBSURF')
-sub.levels = sub.render_levels = 2
+def dir_xy(k):
+    v = K4[k] - K1[k]
+    return math.atan2(v.y, v.x)
+
+
+def posar(p, k, t):
+    """Junta o dedo k ao médio (70% da abertura) e curva para cima, aos poucos, a partir da junta da base."""
+    a = K1[k]
+    giro = -(dir_xy(k) - dir_xy(3)) * 0.7 * suaviza(-0.15, 0.2, t)
+    p = a + Matrix.Rotation(giro, 3, 'Z') @ (p - a)
+    curva = math.radians(26) * suaviza(0.0, 1.0, t)
+    return a + Matrix.Rotation(-curva, 3, 'Y') @ (p - a)  # -Y: as pontas sobem (em direção à palma)
+
+
+for v in mao.data.vertices:
+    melhor = None
+    for k in range(2, 6):
+        ab = K4[k] - K1[k]
+        t = (v.co - K1[k]).dot(ab) / ab.length_squared
+        if t < -0.15:
+            continue
+        dist = (v.co - (K1[k] + ab * max(0.0, min(1.0, t)))).length
+        if dist < 0.13 and (melhor is None or dist < melhor[0]):
+            melhor = (dist, k, t)
+    if melhor:
+        v.co = posar(v.co, melhor[1], melhor[2])
+pontas_mao = [posar(K4[k], k, 1.0) for k in range(2, 6)]
+
+# Tamanho, inclinação (punho embaixo à esquerda, palma à mostra para a câmera) e acabamento
+escala_mao = 6.0 / (ponta0 - pulso0).length
+inclina = Matrix.Rotation(math.radians(-18), 4, 'Y') @ Matrix.Rotation(math.radians(38), 4, 'X')
+final = inclina @ Matrix.Scale(escala_mao, 4)
+mao.data.transform(final)
 for f in mao.data.polygons:
     f.use_smooth = True
+sub = mao.modifiers.new('suave', 'SUBSURF')
+sub.levels = sub.render_levels = 2
 mao.data.materials.clear()
 mao.data.materials.append(pele('pele', opt.cor_pele, 0.45, 0.3))
 
-ossos = arm.pose.bones
-nos = [arm.matrix_world @ ossos[f'{d}-finger-phalanx-proximal'].head for d in ('index', 'middle', 'ring', 'pinky')]
-pulso = arm.matrix_world @ ossos['wrist'].head
-juntas = sum(nos, Vector()) / 4
-pontas = sum((arm.matrix_world @ ossos[f'{d}-finger-tip'].head for d in ('index', 'middle', 'ring', 'pinky')), Vector()) / 4
-normal = ((inclina @ base).to_3x3() @ Vector((-1, 0, 0))).normalized()
+pulso = final @ Vector((0, 0, 0))
+juntas = final @ (sum(K1.values(), Vector()) / 4)
+pontas = final @ (sum(pontas_mao, Vector()) / 4)
 
 # ---------- Cérebro de lado, flutuando sobre a palma ----------
 bpy.ops.import_scene.gltf(filepath=opt.cerebro)

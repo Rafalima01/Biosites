@@ -371,12 +371,12 @@ button.card {
   background: var(--azul);
 }
 
-/* O punho (corte reto do modelo) fica abaixo da borda de baixo do card, escondido */
+/* O antebraço sai pela borda esquerda do card (o corte do modelo fica escondido) */
 .art--cerebro-mao {
   z-index: 1;
-  left: 5cqw;
-  top: 5.4cqw;
-  width: 43.5cqw;
+  left: -1cqw;
+  top: 4cqw;
+  width: 46cqw;
   filter: drop-shadow(0 2cqw 2.4cqw rgba(20, 25, 45, 0.35));
 }
 
@@ -388,11 +388,11 @@ button.card {
 }
 
 .papel-real--faixa {
-  left: 40cqw;
+  left: 45cqw;
   top: 20cqw;
-  width: 57cqw;
+  width: 52cqw;
   min-height: 14.4cqw;
-  padding: 3cqw 5cqw 3cqw 5cqw;
+  padding: 3cqw 4cqw;
   font-size: max(9px, 2.05cqw);
   line-height: 1.35;
   transform: rotate(-1deg);

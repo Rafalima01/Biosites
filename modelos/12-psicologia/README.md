@@ -38,8 +38,8 @@ Unsplash (licença gratuita), recortadas e entregues em webp pelo servidor de im
   pode ser usada comercialmente, desde que o crédito fique no site (`footer.credits`, mostrado no rodapé)
   e a imagem continue com a mesma licença.
 - **Cérebro na mão do card do Instagram** (`public/media/cerebro-mao.webp`): [`scripts/blender/cerebro_mao.py`](../../scripts/blender/cerebro_mao.py),
-  com o mesmo cérebro (CC BY-SA 4.0, mesmo crédito) e a mão "generic-hand" do pacote
-  [@webxr-input-profiles/assets](https://github.com/immersive-web/webxr-input-profiles) (licença MIT), posada no script.
+  com o mesmo cérebro (CC BY-SA 4.0, mesmo crédito) e a mão recortada da malha base do
+  [MakeHuman](https://github.com/makehumancommunity/makehuman) (licença CC0), com os dedos juntados e curvados no script.
 - **Papéis rasgados, bilhete e tachinha** (`papel-faixa.webp`, `papel-nota.webp`, `bilhete.webp`,
   `tachinha-real.webp`): feitos do zero por [`scripts/blender/papel.py`](../../scripts/blender/papel.py)
   e [`scripts/blender/tachinha.py`](../../scripts/blender/tachinha.py). O texto fica no HTML, por cima do papel.
