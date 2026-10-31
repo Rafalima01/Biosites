@@ -114,7 +114,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 11 · Barbearia com agenda | `biosite-11-barbearia-agenda` | https://biosite-11-barbearia-agenda.vercel.app |
 | 12 · Psicologia | `biosite-12-psicologia` | https://biosite-12-psicologia.vercel.app |
 | 13 · Imobiliária | `biosite-13-imobiliaria` | https://biosite-13-imobiliaria.vercel.app |
-| Agência · site Vertex | `vertexlabs-site` | ainda não criado |
+| Agência · site Vertex | `vertexlabs-site` | https://vertexlabs-site-green.vercel.app |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

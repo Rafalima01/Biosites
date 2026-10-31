@@ -12,7 +12,7 @@ export const agencia = {
   instagram: 'https://www.instagram.com/vertexlabs.io/',
   slogan: 'Construímos o que ainda não existe.',
   bio: 'Bio sites sob medida para quem vende pelo Instagram.',
-  site: 'https://vertexlabs-site.vercel.app',
+  site: 'https://vertexlabs-site-green.vercel.app',
   orcamento: zap('Olá, Vertex! Vim pelo site e quero um bio site para o meu negócio.'),
 };
 

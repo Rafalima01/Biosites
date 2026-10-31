@@ -111,8 +111,8 @@ export default {
   links: [
     {
       title: { pt: 'Site da Vertex', en: 'Vertex website' },
-      text: { pt: 'Conheça a agência, os serviços e o processo.', en: 'Meet the agency, our services and process.' },
-      action: { type: 'url', href: '' }, // Preencha com o site quando estiver no ar
+      text: { pt: 'Os 13 modelos de bio site, clientes no ar e como funciona.', en: 'Our 13 bio site models, live clients and how it works.' },
+      action: { type: 'url', href: 'https://vertexlabs-site-green.vercel.app' }, // agencia/vertex-site
     },
     {
       title: { pt: 'Portfólio completo', en: 'Full portfolio' },

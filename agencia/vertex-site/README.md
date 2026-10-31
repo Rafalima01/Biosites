@@ -48,6 +48,5 @@ O card final da vitrine ("o próximo pode ser o seu") se ajusta sozinho ao núme
 
 ## Publicar na Vercel
 
-Projeto `vertexlabs-site` (ainda não criado) · Root Directory `agencia/vertex-site`.
-Depois de publicar, ative o item "01 Site da Vertex" no bio site da agência (`agencia/vertex-labs`), que está como
-"Em breve", apontando para o endereço deste site.
+Projeto `vertexlabs-site` · Root Directory `agencia/vertex-site` · Produção: https://vertexlabs-site-green.vercel.app
+O item "01 Site da Vertex" do bio site da agência (`agencia/vertex-labs`) aponta para este endereço.
