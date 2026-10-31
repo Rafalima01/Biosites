@@ -74,7 +74,8 @@ dados, as fotos e os imóveis e desligue `demo`.
 
 ## Publicar na Vercel
 
-Projeto `biosite-13-imobiliaria` (ainda não criado) · Root Directory `modelos/13-imobiliaria`.
+Projeto `biosite-13-imobiliaria` · Root Directory `modelos/13-imobiliaria` ·
+Produção: https://biosite-13-imobiliaria.vercel.app
 
 Publique só quando a pasta mudar, a partir da raiz do repositório (depois do `git push`):
 `node scripts/publicar.mjs biosite-13-imobiliaria`.
