@@ -10,7 +10,7 @@ fundo, Ψ + nome + "Psicóloga · CRP", título "Agendamento Online" e botão ma
 com balões 3D de coração na divisa; card "Saúde Mental" com a frase enorme em marrom, o cérebro
 realista na frente das letras, três margaridas realistas saindo pelas bordas do card e "Terapias &
 Abordagens" (abre `/servicos/`); card do Instagram (no print, "Visite nosso Blog") com faixa bege e painel
-azul, o cérebro realista de lado apoiado numa mão, selo azul "Saúde Mental em Primeiro Lugar" saindo pela
+azul, o cérebro realista de lado flutuando sobre a palma de uma mão, selo azul "Saúde Mental em Primeiro Lugar" saindo pela
 borda de cima e texto em papel rasgado realista; card "Estamos Localizados" com cérebro em traço ao
 fundo, bilhete com o esboço do cérebro preso por tachinha vermelha, "Atendemos até às 19h" em papel
 rasgado saindo pela borda e carinhas 3D nos cantos. Os três cards de baixo usam medidas em `cqw`
