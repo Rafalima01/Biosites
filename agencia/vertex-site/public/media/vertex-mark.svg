@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 270 1214 774" role="img" aria-label="Vertex Labs">
+  <defs>
+    <linearGradient id="vx-a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffa114"/>
+      <stop offset=".55" stop-color="#ff2a12"/>
+      <stop offset="1" stop-color="#d9061f"/>
+    </linearGradient>
+    <linearGradient id="vx-c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff7e12"/>
+      <stop offset=".35" stop-color="#ff2e12"/>
+      <stop offset=".7" stop-color="#ec0b20"/>
+      <stop offset="1" stop-color="#b9041a"/>
+    </linearGradient>
+    <linearGradient id="vx-c-shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a0010" stop-opacity="0"/>
+      <stop offset=".55" stop-color="#7a0010" stop-opacity="0"/>
+      <stop offset="1" stop-color="#7a0010" stop-opacity=".35"/>
+    </linearGradient>
+    <filter id="vx-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="-14" dy="10" stdDeviation="16" flood-color="#5a0008" flood-opacity=".45"/>
+    </filter>
+  </defs>
+  <!-- Peça superior esquerda -->
+  <path fill="url(#vx-a)" d="M74 292H306c38 0 70 17 92 47l157 220c26 37 0 81-45 81H310c-36 0-66-16-86-45L49 345c-18-27 1-53 25-53z"/>
+  <!-- Peça inferior (parcialmente sob o traço principal) -->
+  <path fill="url(#vx-a)" d="M398 688H640L585 1010c-30 8-62-4-82-30L365 768c-22-34 0-80 33-80z"/>
+  <!-- Traço principal -->
+  <g filter="url(#vx-shadow)">
+    <path fill="url(#vx-c)" d="M942 292h238c36 0 52 33 30 61L702 986c-48 58-142 57-190 2-40-46-40-104-4-152L860 330c20-25 50-38 82-38z"/>
+    <path fill="url(#vx-c-shade)" d="M942 292h238c36 0 52 33 30 61L702 986c-48 58-142 57-190 2-40-46-40-104-4-152L860 330c20-25 50-38 82-38z"/>
+  </g>
+</svg>

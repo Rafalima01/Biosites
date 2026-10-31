@@ -56,6 +56,7 @@ Projetos reais, copiados de um modelo para uma pasta própria em `clientes/` (ca
 | Projeto | Pasta | Descrição |
 | --- | --- | --- |
 | **Vertex Labs** | [`agencia/vertex-labs`](agencia/vertex-labs) | Bio site da própria agência: orçamento, serviços e portfólio com os modelos acima. PT/EN e tema claro/escuro. |
+| **Vertex Labs · site** | [`agencia/vertex-site`](agencia/vertex-site) | Site da agência e vitrine dos bio sites: no celular abre como bio site, no tablet e no computador como site completo. 13 modelos com prints reais e filtros, clientes no ar, agenda online, comparação e dúvidas. |
 
 ## Anúncios
 
@@ -113,6 +114,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 11 · Barbearia com agenda | `biosite-11-barbearia-agenda` | https://biosite-11-barbearia-agenda.vercel.app |
 | 12 · Psicologia | `biosite-12-psicologia` | https://biosite-12-psicologia.vercel.app |
 | 13 · Imobiliária | `biosite-13-imobiliaria` | https://biosite-13-imobiliaria.vercel.app |
+| Agência · site Vertex | `vertexlabs-site` | ainda não criado |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

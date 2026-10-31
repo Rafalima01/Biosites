@@ -3,6 +3,21 @@
 Registro cronológico do que foi aprendido em cada tarefa (o mais novo em cima). Regra geral que surgir
 aqui deve ir também para o SKILL.md ou para a referência certa.
 
+## 2026-10-31 · Site da agência (agencia/vertex-site)
+
+- Pedido sem referência e "sem cara de IA": usar a identidade que a marca já tem (post do Instagram: concreto,
+  preto, laranja chapado, condensada em caixa-alta, linhas técnicas, cantos retos) evitou o visual genérico
+  (degradê roxo, vidro fosco, emoji, cantos muito arredondados). Copy só com fatos; nada de número inventado.
+- "Bio site no celular, site no computador": uma página só, com `.so-celular`/`.so-tela` e as mesmas seções
+  adaptadas (no celular: perfil + atalhos, vitrine em carrossel; na tela: menu, abertura, grade).
+- Prints dos modelos para vitrine: Edge headless a 500 px com `--force-device-scale-factor=2` dos sites
+  publicados (abaixo de 500 px ele ignora a largura). Foto que demora (modelo 03) precisa de
+  `--virtual-time-budget` maior. Print comprido (500×2600) + animação `translateY(calc(-100% + 100cqh))`
+  dentro da moldura dá o efeito de "site rolando sozinho" sem iframe (os modelos bloqueiam iframe:
+  `X-Frame-Options: SAMEORIGIN`).
+- Conferir o computador em tamanho real: Edge headless com janela bem alta e o print cortado em partes
+  (o painel do app reduz demais). Grade com sobra na última fileira → card de chamada ocupando o resto.
+
 ## 2026-10-31 · Modelo 13 · Imobiliária
 
 - Perguntar antes (topo, fotos, destinos) evitou retrabalho: o usuário pediu topo "no estilo", fotos grátis
