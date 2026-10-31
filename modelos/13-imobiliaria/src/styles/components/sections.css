@@ -1,0 +1,172 @@
+/* Sobre mim */
+.sobre {
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.sobre__foto {
+  overflow: hidden;
+  border-radius: var(--raio-sm);
+  background: var(--cinza);
+  aspect-ratio: 4 / 5;
+}
+
+.sobre__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+}
+
+.sobre__texto {
+  display: grid;
+  gap: 10px;
+  font-size: 13.5px;
+}
+
+.temas {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.temas li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--cinza);
+  color: var(--tinta-suave);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* Como funciona */
+.passos {
+  display: grid;
+  gap: 16px;
+}
+
+.passos__lista {
+  display: grid;
+  gap: 14px;
+}
+
+.passo {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.passo__n {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.passo strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--tinta);
+}
+
+.passo span span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Atendimento online e presencial */
+.local {
+  display: grid;
+  gap: 16px;
+}
+
+.local__grade {
+  display: grid;
+  gap: 18px;
+  font-size: 13.5px;
+}
+
+.local__grade p {
+  margin-bottom: 10px;
+}
+
+.local__rotulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--azul-solido);
+}
+
+.horas li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.horas li:last-child {
+  border-bottom: 0;
+}
+
+.horas .fechado {
+  color: var(--muted);
+}
+
+@media (min-width: 560px) {
+  .local__grade {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .local__grade > div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Chamada final */
+.cta {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 30px 20px;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--cinza-grad);
+  box-shadow: var(--sombra);
+  text-align: center;
+}
+
+.cta__titulo {
+  font-weight: 700;
+  font-size: clamp(22px, 6.4vw, 26px);
+  color: var(--tinta);
+}
+
+.cta__texto {
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+
+.art--chave-cta {
+  top: -8px;
+  right: 12px;
+  width: 54px;
+  transform: rotate(16deg);
+  filter: drop-shadow(0 6px 8px rgba(10, 30, 70, 0.3));
+}

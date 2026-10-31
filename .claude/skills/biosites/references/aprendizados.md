@@ -3,6 +3,24 @@
 Registro cronológico do que foi aprendido em cada tarefa (o mais novo em cima). Regra geral que surgir
 aqui deve ir também para o SKILL.md ou para a referência certa.
 
+## 2026-10-31 · Modelo 13 · Imobiliária
+
+- Perguntar antes (topo, fotos, destinos) evitou retrabalho: o usuário pediu topo "no estilo", fotos grátis
+  recortadas e catálogo numa página `/imoveis/`.
+- Folha de contato (miniaturas numeradas numa imagem só) para escolher fotos gastou muito menos que abrir
+  uma a uma. O Pexels tinha o "corretor sorrindo segurando casinha" que o Unsplash não tinha.
+- Recorte automático local funcionou bem; precisa da limpeza de alfa. Ícones 3D a partir de SVG no
+  Blender saíram em poucos ciclos medindo com prints de depuração (posição/dimensão) em vez de renders.
+- Corretor: CRECI no topo, no rodapé e no catálogo (o check exige). Valores de imóveis podem aparecer.
+- Copiar o modelo mais parecido (12, com cards em cqw) e renomear tokens (marrom→tinta etc.) foi rápido.
+
+## 2026-10-31 · Economia de tokens (pedido do usuário)
+
+- O usuário quer que o limite de uso renda mais. O gasto grande do Modelo 12 veio de: refazer cards
+  adaptados, dezenas de prints em branco com o painel oculto, renders abertos um a um em tamanho cheio,
+  saídas longas (JSON da Vercel, logs do Blender) e uma conversa muito longa. Regras na seção
+  "Economia de contexto" do SKILL.md.
+
 ## 2026-10-31 · Modelo 12 · Psicologia (do print ao ar)
 
 - **O usuário quer o print idêntico.** A primeira versão "adaptada" (emojis 3D no lugar de objetos realistas,

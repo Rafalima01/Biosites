@@ -37,3 +37,7 @@ https://sistema-agendamento-sand.vercel.app. Mudança no banco: o usuário roda 
 - Imagens: System.Drawing no PowerShell (recorte, montagem lado a lado para comparar).
 - Texto com barras invertidas (regex): use a ferramenta Edit, não `node -e`/heredoc.
 - No Bash, `"$W\\$1"` come o `$`; para laços com caminhos do Windows prefira o PowerShell.
+- PowerShell não diferencia maiúsculas: `$W` e `$w` são a mesma variável. `WebClient` falha em sites HTTPS
+  modernos (GitHub): baixe com `curl`. Lista passada a script com `-File` não vira array: chame com `& script @(...)`.
+- Nos scripts de PowerShell, use `$ErrorActionPreference = 'Stop'`: sem isso um erro vira dezenas de linhas repetidas.
+- `sed` com barra invertida ou `\d` perde o caractere: para isso use a ferramenta Edit.

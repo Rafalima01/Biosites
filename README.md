@@ -20,6 +20,7 @@ nome próprio e pasta separada em `modelos/`, e é publicado na Vercel como um p
 | 10 | **Barbearia** | [`modelos/10-barbearia`](modelos/10-barbearia) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | Foto do barbeiro com tom quente e linha laranja, fundo cobre com ferramentas em traço preto, nome em serifa + manuscrita e cards grafite com borda laranja e botão em pílula (calendário 3D em grafite e dourado com o dia de hoje, estilo, serviços com selo, espaço), sobre, cortes da semana, o espaço com horários e página de serviços. Sem sistema: tudo agenda pelo WhatsApp com o nome do serviço. DM Serif Display, Great Vibes e Poppins. |
 | 11 | **Barbearia com agenda** | [`modelos/11-barbearia-agenda`](modelos/11-barbearia-agenda) | Marcos Ferraz · Ferraz Barber Club (marca fictícia) | O Modelo 10 com o agendamento online do Sistema de Agendamento: página `/agendar/` com horários livres, sinal de 30% por Pix e agendamento gravado no painel (studio de demonstração `ferraz-barber`), na identidade da barbearia. O 10 é a versão básica, este é a versão com agenda. |
 | 12 | **Psicologia** | [`modelos/12-psicologia`](modelos/12-psicologia) | Helena Duarte · Psicóloga · CRP 00/00000 (marca fictícia) | Para psicólogas e terapeutas: cards bege e azul-marinho com elementos 3D suaves (cérebro, margaridas, balões com coração), Ψ grande ao fundo, papel rasgado e polaroid. Sem agenda: tudo abre o WhatsApp. Mostra o CRP e não divulga valores (Código de Ética do CFP). |
+| 13 | **Imobiliária** | [`modelos/13-imobiliaria`](modelos/13-imobiliaria) | Rafael Monteiro · Corretor de Imóveis · CRECI 00000-F (marca fictícia) | Para corretores e imobiliárias: cards azul, laranja, cinza e claro com fotos recortadas saindo pela borda e ícones 3D (consultoria, catálogo, contato, visitas), topo com CRECI e página `/imoveis/` com catálogo (venda e locação, cada imóvel abre o WhatsApp com o código). Sem agenda. |
 
 ## Sistemas
 
@@ -37,7 +38,8 @@ Produtos com banco de dados e painel, além da vitrine.
 | **Calendário 3D (Blender)** | [`scripts/blender/calendario.py`](scripts/blender/calendario.py) | Gera o calendário 3D em PNG sem fundo, com qualquer número e as cores da marca (grafite e dourado por padrão). Precisa do Blender instalado; uso no topo do arquivo. |
 | **Selo 3D com tesoura (Blender)** | [`scripts/blender/selo.py`](scripts/blender/selo.py) | Placa laranja com tesoura em relevo, no mesmo estilo, luz e ângulo do calendário 3D. Cores por opção (`--placa`, `--tesoura`, `--dourado`). |
 | **Cérebro, margarida, mão, papel e tachinha (Blender)** | [`scripts/blender/`](scripts/blender) | Elementos realistas do Modelo 12: `cerebro.py`, `margarida.py`, `cerebro_mao.py`, `papel.py` (papel amassado e rasgado) e `tachinha.py`. Licenças e uso no topo de cada arquivo. |
-| **Recorte e WebP** | [`scripts/imagens/recorta.ps1`](scripts/imagens/recorta.ps1) e [`scripts/blender/webp.py`](scripts/blender/webp.py) | Recorta o render pelo fundo transparente e redimensiona; depois converte para WebP com as cores fiéis. |
+| **Recorte, limpeza e WebP** | [`scripts/imagens/`](scripts/imagens) e [`scripts/blender/webp.py`](scripts/blender/webp.py) | `recorta.ps1` recorta pelo fundo transparente e redimensiona; `limpa-alfa.ps1` limpa restos de fundo de recortes automáticos; `webp.py` converte para WebP com as cores fiéis. |
+| **Ícones 3D e casa na ilha (Blender)** | [`scripts/blender/icone3d.py`](scripts/blender/icone3d.py), [`casa_ilha.py`](scripts/blender/casa_ilha.py) | Escudo com visto e selo do WhatsApp a partir de SVG, e casa sobre ilha de grama (Modelo 13). |
 | **Skill `biosites`** | [`.claude/skills/biosites`](.claude/skills/biosites) | Manual e diário de aprendizados do Claude para criar, ajustar e publicar os bio sites. Atualizado ao fim de cada tarefa. |
 
 ## Clientes
@@ -110,6 +112,7 @@ Antes de publicar, confira quais pastas mudaram (`git diff --stat`) e publique s
 | 10 · Barbearia | `biosite-10-barbearia` | https://biosite-10-barbearia.vercel.app |
 | 11 · Barbearia com agenda | `biosite-11-barbearia-agenda` | https://biosite-11-barbearia-agenda.vercel.app |
 | 12 · Psicologia | `biosite-12-psicologia` | https://biosite-12-psicologia.vercel.app |
+| 13 · Imobiliária | `biosite-13-imobiliaria` | ainda não criado |
 | Agência · Vertex Labs | `vertexlabs` | https://vertexlabs-omega.vercel.app |
 | Cliente · Jailane Ferreira | `biosite-jailane-ferreira` | https://biosite-jailane-ferreira.vercel.app |
 | Cliente · Mantha Beauty Studio | `biosite-mantha-beauty-studio` | https://biosite-mantha-beauty-studio.vercel.app |

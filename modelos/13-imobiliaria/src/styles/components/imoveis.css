@@ -1,0 +1,179 @@
+/* Página /imoveis/ (catálogo) */
+.topbar {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 16px 0;
+}
+
+.topbar__voltar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--branco);
+  border: 1px solid var(--line);
+  color: var(--azul-solido);
+}
+
+.topbar__nome {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: center;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--tinta);
+}
+
+.imoveis {
+  display: grid;
+  gap: 22px;
+  padding: 26px 16px 30px;
+}
+
+.layout--imoveis > .cta {
+  margin: 0 16px;
+}
+
+.imoveis__topo {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.imoveis__sub {
+  max-width: 460px;
+  color: var(--muted);
+}
+
+.imoveis__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 18px;
+}
+
+.imovel {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+  text-align: left;
+  transition: transform var(--dur) var(--ease);
+}
+
+.imovel:hover {
+  transform: translateY(-2px);
+}
+
+.imovel__foto {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 11;
+}
+
+.imovel__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imovel__negocio {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.imovel__negocio--venda {
+  background: var(--azul);
+}
+
+.imovel__negocio--locacao {
+  background: var(--laranja);
+}
+
+.imovel__corpo {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px 16px;
+}
+
+.imovel__codigo {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.imovel__titulo {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--tinta);
+}
+
+.imovel__local {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.imovel__dados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--tinta-suave);
+}
+
+.imovel__dados li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.imovel__dados svg {
+  color: var(--azul-solido);
+}
+
+.imovel__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.imovel__preco {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--azul-tinta);
+}
+
+.imovel__ir {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--verde);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}

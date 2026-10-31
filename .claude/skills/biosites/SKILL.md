@@ -54,6 +54,29 @@ Detalhes de publicação, sistemas e ferramentas do Windows: [references/publica
    encostando na borda ou coberto por elemento, imagens carregadas.
 7. `npm run check` e `npm run build`, README do modelo atualizado, commit e push.
 
+## Economia de contexto (o limite de uso é do usuário)
+
+O que mais gastou no Modelo 12, e como evitar:
+
+- **Decidir antes de construir.** Pergunte de uma vez o que muda o trabalho (destinos dos botões, com ou
+  sem agenda, se há print do topo). E já comece realista se o print é realista: a versão "adaptada" com
+  emojis foi refeita inteira.
+- **Um modelo por conversa.** Conversa longa relê tudo a cada mensagem; a skill guarda o conhecimento.
+  Ao terminar um modelo, sugira continuar o próximo numa conversa nova.
+- **Imagens são caras.** Teste renders em 500–600 px; junte variações lado a lado numa só imagem
+  (System.Drawing) em vez de abrir uma por uma; use `zoom` numa região em vez de print da página inteira.
+- **Meça com JavaScript antes de olhar.** Vazamento lateral, texto encostando, fonte carregada: confira
+  `scrollWidth`, `getBoundingClientRect` e `document.fonts.check` e só tire print no fim.
+- **Print em branco:** veja `document.visibilityState` antes de repetir prints (painel em segundo plano).
+- **Saída enxuta:** filtre logs (`grep -E "Saved|Error"`, `Select-String`) e respostas JSON grandes
+  (a da Vercel tem centenas de linhas); leia arquivos por trecho (`grep -n`, `sed -n`), não inteiros.
+- **Scripts parametrizados:** ajuste por opção de linha de comando (`--flutua`, `--giro`) em vez de
+  reescrever o arquivo a cada tentativa; descubra a orientação de um modelo 3D com vistas rápidas
+  (workbench) antes de montar a cena.
+- **Modelo e esforço:** tarefas mecânicas (copiar modelo, textos, README, publicar) cabem no Sonnet ou em
+  esforço menor; o Opus vale para casar visual com print e para o Blender. Quem troca é o usuário, no
+  seletor de modelo do app.
+
 ## Regras por segmento
 
 - **Psicologia (CFP):** nome e **CRP** visíveis; **sem preços** (preço como propaganda é vedado). O check

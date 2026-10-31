@@ -1,0 +1,355 @@
+/* Topo e os quatro cards do print (consultoria, catálogo, contato, visitas).
+ * Medidas dos cards em cqw (% da largura do card), tiradas do print, para manter as proporções em qualquer
+ * largura. O que sai pela borda (fotos recortadas, ícones 3D) fica fora de .card__fundo, que recorta no raio. */
+
+/* ---------- Topo ---------- */
+.topo {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 24px 20px 20px;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+}
+
+.topo::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 6px;
+  background: linear-gradient(90deg, #7b4bdc 0%, #2e86d8 50%, #f2801f 100%);
+}
+
+.topo__foto {
+  width: 104px;
+  height: 104px;
+  padding: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f2801f, #2e86d8);
+}
+
+.topo__foto img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 0;
+  background: var(--azul);
+  transform: scale(1.9); /* a foto é de corpo inteiro: aproxima no rosto */
+  transform-origin: 50% 6%;
+}
+
+.topo__foto {
+  overflow: hidden;
+}
+
+.topo__papel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e5731a;
+}
+
+.topo__nome {
+  font-size: clamp(22px, 6.4vw, 26px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--tinta);
+}
+
+.topo__creci {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.topo__titulo {
+  grid-column: 1 / -1;
+  font-size: clamp(19px, 5.4vw, 22px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--azul-tinta);
+}
+
+.topo__frase {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.topo__botao {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+/* ---------- Cards: base ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 30px; /* folga para o que sai pelo topo dos cards */
+  padding-top: 26px;
+}
+
+.card {
+  position: relative;
+  display: block;
+  width: 100%; /* com aspect-ratio o grid não estica a largura sozinho */
+  aspect-ratio: 2.48 / 1;
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  isolation: isolate;
+  container-type: inline-size;
+  transition: transform var(--dur) var(--ease);
+}
+
+a.card:hover,
+button.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Destino ainda não configurado: o card vira um botão que avisa (mesma aparência) */
+button.card {
+  text-align: left;
+}
+
+.card__fundo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.card__texto {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  right: 3cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.8cqw;
+}
+
+.card__titulo {
+  display: grid;
+  font-size: 5.7cqw;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.card__apoio {
+  font-size: max(9.5px, 2.35cqw);
+  line-height: 1.4;
+}
+
+.card__apoio strong {
+  font-weight: 700;
+}
+
+/* Foto recortada que sai pelo topo e é cortada na borda de baixo do card */
+.recorte {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.recorte__img {
+  position: static;
+  width: 100%;
+  filter: drop-shadow(0 1.5cqw 2cqw rgba(10, 30, 60, 0.3));
+}
+
+.art {
+  z-index: 4;
+  filter: drop-shadow(0 1.4cqw 1.8cqw rgba(10, 30, 70, 0.35));
+}
+
+/* ---------- 1. Consultoria (azul) ---------- */
+.card--consultoria {
+  background: var(--azul);
+  color: #fff;
+}
+
+.recorte--casa {
+  left: 8cqw;
+  top: -5cqw;
+  width: 34cqw;
+}
+
+.art--coracao {
+  top: -6.5cqw;
+  right: 2.5cqw;
+  width: 15cqw;
+  transform: rotate(12deg);
+}
+
+.card--consultoria .card__texto {
+  left: 45cqw;
+}
+
+.card__titulo--destaque span:last-child {
+  color: var(--verde-claro);
+}
+
+.card--consultoria .card__apoio {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.card--consultoria .card__apoio strong {
+  color: #fff;
+}
+
+/* ---------- 2. Catálogo (laranja + azul) ---------- */
+.card--catalogo {
+  background: var(--azul);
+  color: #fff;
+}
+
+.catalogo__painel {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 54cqw;
+  border-radius: var(--raio);
+  background: var(--laranja);
+  box-shadow: 1cqw 0 3cqw -1cqw rgba(10, 30, 70, 0.35);
+}
+
+.art--casa-ilha {
+  left: 3cqw;
+  top: 2cqw;
+  width: 49cqw;
+  z-index: 2;
+}
+
+.art--escudo {
+  top: -5.5cqw;
+  right: 8cqw;
+  width: 14cqw;
+}
+
+.card--catalogo .card__texto {
+  left: 60cqw;
+}
+
+/* ---------- 3. Contato e WhatsApp (cinza) ---------- */
+.card--contato {
+  background: var(--cinza-grad);
+  color: var(--tinta);
+}
+
+.recorte--telefone {
+  left: 0;
+  top: -4.5cqw;
+  width: 50cqw;
+  border-bottom-left-radius: var(--raio);
+}
+
+.art--zap1 {
+  top: -3cqw;
+  left: 31cqw;
+  width: 10cqw;
+}
+
+.art--zap2 {
+  top: -5cqw;
+  right: 1cqw;
+  width: 9cqw;
+}
+
+.card--contato .card__texto {
+  left: 51cqw;
+}
+
+.card--contato .card__titulo {
+  grid-template-columns: auto auto;
+  justify-content: start;
+  column-gap: 2.5cqw;
+  color: var(--verde);
+}
+
+.card--contato .card__titulo > span:not(.contato__icone) {
+  grid-column: 1;
+}
+
+.contato__icone {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: end;
+  display: grid;
+}
+
+.contato__icone svg {
+  width: 9cqw;
+  height: 9cqw;
+}
+
+.card--contato .card__apoio {
+  color: var(--muted);
+}
+
+/* ---------- 4. Agendamentos e visitas (claro) ---------- */
+.card--visitas {
+  background: linear-gradient(135deg, #f7f8fa 0%, #e3e6ea 100%);
+  color: var(--tinta);
+}
+
+.visitas__aerea {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  filter: grayscale(0.35);
+  -webkit-mask-image: linear-gradient(to left, #000 35%, transparent);
+  mask-image: linear-gradient(to left, #000 35%, transparent);
+}
+
+.art--casa-branca {
+  left: 2cqw;
+  top: -4cqw;
+  width: 54cqw;
+  z-index: 2;
+}
+
+.art--chave {
+  top: -7cqw;
+  right: 3cqw;
+  width: 16cqw;
+  transform: rotate(-18deg);
+  filter: grayscale(1) brightness(1.15) contrast(1.05) drop-shadow(0 1.4cqw 1.8cqw rgba(10, 30, 70, 0.35));
+}
+
+.visitas__legenda {
+  position: absolute;
+  z-index: 3;
+  left: 4cqw;
+  bottom: 4cqw;
+  width: 50cqw;
+  font-size: max(9px, 2.25cqw);
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.visitas__legenda strong {
+  color: var(--tinta);
+}
+
+.card--visitas .card__texto {
+  left: 59cqw;
+}
+
+.card__titulo--grande {
+  font-size: 7cqw;
+  line-height: 1.04;
+  color: var(--verde);
+}

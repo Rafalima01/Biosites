@@ -1,0 +1,41 @@
+/*
+ * Tokens de design do Modelo 13 · Imobiliária (azul, laranja e verde sobre cinza-claro, como no print).
+ * Cada corretor pode sobrescrever qualquer variável em `theme.tokens` no seu site.config.js.
+ */
+:root {
+  /* Fundo e superfícies */
+  --bg: #eef1f5;
+  --branco: #ffffff;
+  --cinza: #e6e8eb;
+  --cinza-grad: linear-gradient(135deg, #eceef1 0%, #dfe2e6 100%);
+
+  /* Azul (cards de consultoria e catálogo) */
+  --azul: linear-gradient(135deg, #1c5cb4 0%, #2e86d8 100%);
+  --azul-solido: #1f5fae;
+  --azul-claro: #cfe2fb;
+  --azul-tinta: #143f7c;
+
+  /* Laranja e verde (destaques) */
+  --laranja: linear-gradient(135deg, #f2801f 0%, #f7aa45 100%);
+  --verde: #2f9e47;
+  --verde-claro: #a6ea70;
+
+  /* Texto */
+  --ink: #1d2733;
+  --tinta: #17283d;
+  --tinta-suave: #2c3e55;
+  --muted: #5a6575;
+  --line: rgba(23, 40, 61, 0.12);
+
+  /* Tipografia */
+  --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Forma */
+  --raio: 22px;
+  --raio-sm: 14px;
+  --sombra: 0 18px 34px -22px rgba(20, 50, 100, 0.45);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 260ms;
+}

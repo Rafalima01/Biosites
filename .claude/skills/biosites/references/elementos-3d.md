@@ -8,6 +8,7 @@
 | **Fotos Unsplash** | Unsplash (grátis) | hotlink `images.unsplash.com/photo-...?...&fm=webp`, com `srcset` |
 | **Cérebro real (ressonância)** — Nevit Dilmen, NIH 3D 3DPX-003765 | **CC BY-SA 4.0**: crédito no site (`footer.credits`) e imagem derivada na mesma licença | o link direto do S3 dá AccessDenied; use a API: `https://3d.nih.gov/api/entries/3DPX-003765` lista os arquivos e `https://3d.nih.gov/api/submissions/<id>/runs/<run>/output-files/<fileId>` baixa (GLB de 24 MB: submissão 5558) |
 | **Corpo/mão humanos realistas** — malha base do MakeHuman | **CC0** | `raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/3dobjs/base.obj`; juntas vêm como objetos `joint-*` |
+| **Fotos Pexels** (pessoas de terno, corretor com casinha etc.: banco melhor que o Unsplash para "stock") | Pexels (grátis, uso comercial) | `images.pexels.com/photos/<id>/pexels-photo-<id>.jpeg?auto=compress&w=1200`; para achar ids, abra a busca no navegador e leia as `<img>` da página |
 | Calendário 3D (pacote 3dicons, premium) | do pacote | já extraído no Modelo 10 |
 
 Não serviram: mão "generic-hand" do WebXR (MIT, mas simples demais: deforma nas juntas — o usuário
@@ -25,6 +26,9 @@ precisa de login), Superhive (Blender Market).
 | `cerebro_mao.py` | cérebro de lado flutuando sobre a mão do MakeHuman (palma para cima) |
 | `papel.py` | papel amassado com bordas rasgadas e fibras (`--proporcao`, `--rasgo nenhum` = bilhete) |
 | `tachinha.py` | tachinha vermelha de mural |
+| `icone3d.py` | ícones 3D brilhantes a partir de SVG 24×24 (escudo com visto, selo do WhatsApp); fácil acrescentar outros no dicionário `DESENHOS` |
+| `casa_ilha.py` | casa branca sobre ilha de grama com árvores e arbustos floridos |
+| `../imagens/limpa-alfa.ps1` | limpa restos semitransparentes de recorte automático (pixels com alfa baixo somem) |
 | `../imagens/recorta.ps1` | recorta o PNG pelo alfa e redimensiona (System.Drawing) |
 | `webp.py` | converte PNG → WebP pelo Blender, com cores fiéis |
 
@@ -49,3 +53,20 @@ WebP fica 10–35 KB.
 - Contas de posição: use as proporções do print (ex.: pontas dos dedos a ~0,7 largura do cérebro à direita
   do centro) e calcule a posição no script, em vez de chutar.
 - Testes rápidos em 500–600 px com 24–32 amostras; final com 128.
+
+## Tirar o fundo de fotos (recorte automático)
+
+`@imgly/background-removal-node` roda um modelo de IA no próprio computador (sem site externo). Instale numa
+pasta temporária (não no repositório): `npm install @imgly/background-removal-node@1` e use
+`removeBackground(fileURL, { output: { format: 'image/png' }, model: 'medium' })`. Depois:
+`limpa-alfa.ps1` (corte 90–110) → `recorta.ps1` → `webp.py`. Sem a limpeza ficou um retângulo meio
+transparente atrás do corretor (restos do fundo).
+
+Foto recortada que "sai pelo topo" do card: um `span.recorte` absoluto com `top` negativo, `bottom: 0` e
+`overflow: hidden`; a imagem dentro dele ocupa a largura toda. Assim a cabeça passa da borda de cima e o
+corpo é cortado na borda de baixo.
+
+Armadilhas do `icone3d.py`: o importador de SVG põe um material preto próprio (limpe os slots antes de
+aplicar o seu) e fecha caminhos abertos (o visto virava triângulo: desligue `use_cyclic_u`). A borda
+arredondada (bevel) também engrossa a peça: some a espessura dela ao pôr a marca na frente.
+Materiais criados antes de `read_factory_settings()` somem: crie depois de reiniciar a cena.

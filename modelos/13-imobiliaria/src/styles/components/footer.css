@@ -1,0 +1,84 @@
+/* Rodapé */
+.rodape {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding: 32px 16px calc(28px + env(safe-area-inset-bottom));
+  background: var(--azul);
+  color: #fff;
+  text-align: center;
+}
+
+.rodape__marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.rodape__icone-marca {
+  display: grid;
+  color: var(--azul-claro);
+}
+
+.rodape__marca > span:last-child {
+  display: grid;
+}
+
+.rodape__marca strong {
+  font-size: 18px;
+}
+
+.rodape__marca span span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rodape__social {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.rodape__titulo {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.rodape__icones {
+  display: flex;
+  gap: 12px;
+}
+
+.rodape__icone {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  transition: background var(--dur) var(--ease);
+}
+
+.rodape__icone:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.rodape__copy,
+.rodape__demo {
+  max-width: 420px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rodape__demo {
+  font-style: italic;
+}
+
+.rodape__creditos {
+  max-width: 420px;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
